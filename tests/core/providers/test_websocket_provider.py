@@ -10,14 +10,14 @@ import websockets
 from tests.utils import (
     wait_for_ws,
 )
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     ProviderConnectionError,
     Web3ValidationError,
 )
-from web3.providers.websocket import (
+from bubble.providers.websocket import (
     WebsocketProvider,
 )
 
@@ -76,7 +76,7 @@ def test_no_args():
 
 def test_websocket_provider_timeout(w3):
     with pytest.raises(TimeoutError):
-        w3.eth.accounts
+        w3.bub.accounts
 
 
 def test_restricted_websocket_kwargs():

@@ -70,14 +70,14 @@ printing out new block hashes as they appear:
     >>> def new_block_callback(block_hash):
     ...     print(f"New Block: {block_hash}")
     ...
-    >>> new_block_filter = web3.eth.filter('latest')
+    >>> new_block_filter = web3.bub.filter('latest')
     >>> new_block_filter.watch(new_block_callback)
 
 In v4, that same logic:
 
 .. code-block:: python
 
-    >>> new_block_filter = web3.eth.filter('latest')
+    >>> new_block_filter = web3.bub.filter('latest')
     >>> for block_hash in new_block_filter.get_new_entries():
     ...     print(f"New Block: {block_hash}")
 

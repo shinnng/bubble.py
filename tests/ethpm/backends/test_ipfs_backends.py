@@ -81,7 +81,7 @@ def test_local_ipfs_backend(owned_manifest_path):
             "bzz://679bde3ccb6fb911db96a0ea1586c04899c6c0cc6d3426e9ee361137b270a463",
             False,
         ),
-        ("ercxxx://packages.eth/owned?version=1.0.0", False),
+        ("ercxxx://packages.bub/owned?version=1.0.0", False),
     ),
 )
 def test_base_ipfs_gateway_backend_correctly_handles_uri_schemes(uri, expected):

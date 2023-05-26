@@ -1,16 +1,16 @@
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3.providers.auto import (
+from bubble.providers.auto import (
     AutoProvider,
 )
-from web3.providers.eth_tester import (
-    EthereumTesterProvider,
+from bubble.providers.bub_tester import (
+    BubbleTesterProvider,
 )
 
 
 def test_set_provider(w3):
-    provider = EthereumTesterProvider()
+    provider = BubbleTesterProvider()
 
     w3.provider = provider
 

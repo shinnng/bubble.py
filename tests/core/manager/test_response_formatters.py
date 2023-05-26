@@ -4,12 +4,12 @@ from eth_utils.toolz import (
     identity,
 )
 
-from web3._utils.method_formatters import (
+from bubble._utils.method_formatters import (
     raise_block_not_found,
     raise_block_not_found_for_uncle_at_index,
     raise_transaction_not_found,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     BadResponseFormat,
     BlockNotFound,
     ContractLogicError,
@@ -31,18 +31,18 @@ UNEXPECTED_RESPONSE_FORMAT = {"jsonrpc": "2.0", "id": 1}
 ANOTHER_UNEXPECTED_RESP_FORMAT = {
     "name": "LimitError",
     "message": "You cannot query logs for more than 10000 blocks at once.",
-    "method": "eth_getLogs",
+    "method": "bub_getLogs",
 }
 METHOD_NOT_FOUND_RESP_FORMAT = {
     "jsonrpc": "2.0",
     "error": {
         "code": -32601,
-        "message": "the method eth_getTransactionByHash does not exist/is not "
+        "message": "the method bub_getTransactionByHash does not exist/is not "
         "available",
     },
 }
 ETH_TESTER_METHOD_NOT_FOUND_RESP_FORMAT = {
-    "error": "the method eth_getTransactionByHash does not exist/is not available",
+    "error": "the method bub_getTransactionByHash does not exist/is not available",
 }
 
 

@@ -5,10 +5,10 @@ from eth_utils import (
     decode_hex,
 )
 
-from web3.contract import (
+from bubble.contract import (
     Contract,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     FallbackNotFound,
 )
 
@@ -16,7 +16,7 @@ from web3.exceptions import (
 def test_class_construction_sets_class_vars(
     w3, math_contract_abi, math_contract_bytecode, math_contract_runtime
 ):
-    math_contract_factory = w3.eth.contract(
+    math_contract_factory = w3.bub.contract(
         abi=math_contract_abi,
         bytecode=math_contract_bytecode,
         bytecode_runtime=math_contract_runtime,
@@ -35,7 +35,7 @@ def test_error_to_instantiate_base_class():
 def test_abi_as_json_string(w3, math_contract_abi, some_address):
     abi_str = json.dumps(math_contract_abi)
 
-    math_contract_factory = w3.eth.contract(abi=abi_str)
+    math_contract_factory = w3.bub.contract(abi=abi_str)
     assert math_contract_factory.abi == math_contract_abi
 
     math = math_contract_factory(some_address)
@@ -45,7 +45,7 @@ def test_abi_as_json_string(w3, math_contract_abi, some_address):
 def test_error_to_call_non_existent_fallback(
     w3, math_contract_abi, math_contract_bytecode, math_contract_runtime
 ):
-    math_contract = w3.eth.contract(
+    math_contract = w3.bub.contract(
         abi=math_contract_abi,
         bytecode=math_contract_bytecode,
         bytecode_runtime=math_contract_runtime,

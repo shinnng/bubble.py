@@ -25,7 +25,7 @@ from ethpm.exceptions import (
 )
 
 if TYPE_CHECKING:
-    from web3 import Web3  # noqa: F401
+    from bubble import Web3  # noqa: F401
 
 
 def get_linked_deployments(deployments: Dict[str, Any]) -> Dict[str, Any]:
@@ -100,7 +100,7 @@ def validate_deployments_tx_receipt(
     for name, data in deployments.items():
         if "transaction" in data:
             tx_hash = data["transaction"]
-            tx_receipt = w3.eth.get_transaction_receipt(tx_hash)
+            tx_receipt = w3.bub.get_transaction_receipt(tx_hash)
             # tx_address will be None if contract created via contract factory
             tx_address = tx_receipt["contractAddress"]
 

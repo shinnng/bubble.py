@@ -22,25 +22,25 @@ from eth_utils.toolz import (
     valmap,
 )
 
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3._utils.contract_sources.contract_data._custom_contract_data import (
+from bubble._utils.contract_sources.contract_data._custom_contract_data import (
     EMITTER_ENUM,
 )
-from web3._utils.contract_sources.contract_data.emitter_contract import (
+from bubble._utils.contract_sources.contract_data.emitter_contract import (
     EMITTER_CONTRACT_ABI,
     EMITTER_CONTRACT_BYTECODE,
 )
-from web3._utils.contract_sources.contract_data.math_contract import (
+from bubble._utils.contract_sources.contract_data.math_contract import (
     MATH_CONTRACT_ABI,
     MATH_CONTRACT_BYTECODE,
 )
-from web3._utils.contract_sources.contract_data.offchain_lookup import (
+from bubble._utils.contract_sources.contract_data.offchain_lookup import (
     OFFCHAIN_LOOKUP_ABI,
     OFFCHAIN_LOOKUP_BYTECODE,
 )
-from web3._utils.contract_sources.contract_data.revert_contract import (
+from bubble._utils.contract_sources.contract_data.revert_contract import (
     REVERT_CONTRACT_ABI,
     REVERT_CONTRACT_BYTECODE,
 )
@@ -63,9 +63,9 @@ def graceful_kill_on_exit(proc):
 
 
 @contextlib.contextmanager
-def get_geth_process(geth_binary, datadir, genesis_file_path, geth_ipc_path, geth_port):
+def get_bub_process(bub_binary, datadir, genesis_file_path, bub_ipc_path, bub_port):
     init_datadir_command = (
-        geth_binary,
+        bub_binary,
         "--datadir",
         datadir,
         "init",
@@ -77,26 +77,26 @@ def get_geth_process(geth_binary, datadir, genesis_file_path, geth_ipc_path, get
         stderr=subprocess.PIPE,
     )
 
-    run_geth_command = (
-        geth_binary,
+    run_bub_command = (
+        bub_binary,
         "--datadir",
         datadir,
         "--ipcpath",
-        geth_ipc_path,
+        bub_ipc_path,
         "--ethash.dagsondisk",
         "1",
         "--gcmode",
         "archive",
         "--nodiscover",
         "--port",
-        geth_port,
+        bub_port,
         "--miner.etherbase",
         common.COINBASE[2:],
         "--rpc.enabledeprecatedpersonal",
     )
 
     popen_proc = subprocess.Popen(
-        run_geth_command,
+        run_bub_command,
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -108,7 +108,7 @@ def get_geth_process(geth_binary, datadir, genesis_file_path, geth_ipc_path, get
         output, errors = proc.communicate()
 
     print(
-        "Geth Process Exited:\n"
+        "Bub Process Exited:\n"
         f"stdout:{to_text(output)}\n\n"
         f"stderr:{to_text(errors)}\n\n"
     )
@@ -137,37 +137,37 @@ def generate_go_ethereum_fixture(destination_dir):
         with open(genesis_file_path, "w") as genesis_file:
             genesis_file.write(json.dumps(common.GENESIS_DATA))
 
-        geth_ipc_path_dir = stack.enter_context(common.tempdir())
-        geth_ipc_path = os.path.join(geth_ipc_path_dir, "geth.ipc")
+        bub_ipc_path_dir = stack.enter_context(common.tempdir())
+        bub_ipc_path = os.path.join(bub_ipc_path_dir, "bub.ipc")
 
-        geth_port = get_open_port()
-        geth_binary = common.get_geth_binary()
+        bub_port = get_open_port()
+        bub_binary = common.get_bub_binary()
 
-        with get_geth_process(
-            geth_binary=geth_binary,
+        with get_bub_process(
+            bub_binary=bub_binary,
             datadir=datadir,
             genesis_file_path=genesis_file_path,
-            geth_ipc_path=geth_ipc_path,
-            geth_port=geth_port,
+            bub_ipc_path=bub_ipc_path,
+            bub_port=bub_port,
         ):
-            common.wait_for_socket(geth_ipc_path)
-            w3 = Web3(Web3.IPCProvider(geth_ipc_path))
+            common.wait_for_socket(bub_ipc_path)
+            w3 = Web3(Web3.IPCProvider(bub_ipc_path))
             chain_data = setup_chain_state(w3)
-            # close geth by exiting context
+            # close bub by exiting context
             # must be closed before copying data dir
             verify_chain_state(w3, chain_data)
 
         # verify that chain state is still valid after closing
-        # and re-opening geth
-        with get_geth_process(
-            geth_binary=geth_binary,
+        # and re-opening bub
+        with get_bub_process(
+            bub_binary=bub_binary,
             datadir=datadir,
             genesis_file_path=genesis_file_path,
-            geth_ipc_path=geth_ipc_path,
-            geth_port=geth_port,
+            bub_ipc_path=bub_ipc_path,
+            bub_port=bub_port,
         ):
-            common.wait_for_socket(geth_ipc_path)
-            w3 = Web3(Web3.IPCProvider(geth_ipc_path))
+            common.wait_for_socket(bub_ipc_path)
+            w3 = Web3(Web3.IPCProvider(bub_ipc_path))
             verify_chain_state(w3, chain_data)
 
         static_data = {
@@ -182,28 +182,28 @@ def generate_go_ethereum_fixture(destination_dir):
 
 
 def verify_chain_state(w3, chain_data):
-    receipt = w3.eth.wait_for_transaction_receipt(chain_data["mined_txn_hash"])
-    latest = w3.eth.get_block("latest")
+    receipt = w3.bub.wait_for_transaction_receipt(chain_data["mined_txn_hash"])
+    latest = w3.bub.get_block("latest")
     assert receipt.blockNumber <= latest.number
 
 
 def mine_transaction_hash(w3, txn_hash):
-    w3.geth.miner.start(1)
+    w3.bub.miner.start(1)
     try:
-        return w3.eth.wait_for_transaction_receipt(txn_hash, timeout=120)
+        return w3.bub.wait_for_transaction_receipt(txn_hash, timeout=120)
     finally:
-        w3.geth.miner.stop()
+        w3.bub.miner.stop()
 
 
 def mine_block(w3):
-    origin_block_number = w3.eth.block_number
+    origin_block_number = w3.bub.block_number
 
     start_time = time.time()
-    w3.geth.miner.start(1)
+    w3.bub.miner.start(1)
     while time.time() < start_time + 120:
-        block_number = w3.eth.block_number
+        block_number = w3.bub.block_number
         if block_number > origin_block_number:
-            w3.geth.miner.stop()
+            w3.bub.miner.stop()
             return block_number
         else:
             time.sleep(0.1)
@@ -212,14 +212,14 @@ def mine_block(w3):
 
 
 def setup_chain_state(w3):
-    coinbase = w3.eth.coinbase
+    coinbase = w3.bub.coinbase
 
     assert is_same_address(coinbase, common.COINBASE)
 
     #
     # Math Contract
     #
-    math_contract_factory = w3.eth.contract(
+    math_contract_factory = w3.bub.contract(
         abi=MATH_CONTRACT_ABI,
         bytecode=MATH_CONTRACT_BYTECODE,
     )
@@ -229,7 +229,7 @@ def setup_chain_state(w3):
     #
     # Emitter Contract
     #
-    emitter_contract_factory = w3.eth.contract(
+    emitter_contract_factory = w3.bub.contract(
         abi=EMITTER_CONTRACT_ABI,
         bytecode=EMITTER_CONTRACT_BYTECODE,
     )
@@ -246,18 +246,18 @@ def setup_chain_state(w3):
         arg1=54321,
     ).transact(
         {
-            "from": w3.eth.coinbase,
+            "from": w3.bub.coinbase,
         }
     )
     print("TXN_HASH_WITH_LOG:", txn_hash_with_log)
     txn_receipt_with_log = mine_transaction_hash(w3, txn_hash_with_log)
-    block_with_log = w3.eth.get_block(txn_receipt_with_log["blockHash"])
+    block_with_log = w3.bub.get_block(txn_receipt_with_log["blockHash"])
     print("BLOCK_HASH_WITH_LOG:", block_with_log["hash"])
 
     #
     # Revert Contract
     #
-    revert_contract_factory = w3.eth.contract(
+    revert_contract_factory = w3.bub.contract(
         abi=REVERT_CONTRACT_ABI,
         bytecode=REVERT_CONTRACT_BYTECODE,
     )
@@ -267,31 +267,31 @@ def setup_chain_state(w3):
     revert_contract = revert_contract_factory(revert_deploy_receipt["contractAddress"])
 
     txn_hash_normal_function = revert_contract.functions.normalFunction().transact(
-        {"gas": 320000, "from": w3.eth.coinbase}
+        {"gas": 320000, "from": w3.bub.coinbase}
     )
     print("TXN_HASH_REVERT_NORMAL:", txn_hash_normal_function)
     txn_hash_revert_with_msg = revert_contract.functions.revertWithMessage().transact(
-        {"gas": 320000, "from": w3.eth.coinbase}
+        {"gas": 320000, "from": w3.bub.coinbase}
     )
     print("TXN_HASH_REVERT_WITH_MSG:", txn_hash_revert_with_msg)
     txn_receipt_revert_with_msg = common.mine_transaction_hash(
         w3, txn_hash_revert_with_msg
     )
-    block_hash_revert_with_msg = w3.eth.get_block(
+    block_hash_revert_with_msg = w3.bub.get_block(
         txn_receipt_revert_with_msg["blockHash"]
     )
     print("BLOCK_HASH_REVERT_WITH_MSG:", block_hash_revert_with_msg["hash"])
 
     txn_hash_revert_with_no_msg = (
         revert_contract.functions.revertWithoutMessage().transact(
-            {"gas": 320000, "from": w3.eth.coinbase}
+            {"gas": 320000, "from": w3.bub.coinbase}
         )
     )
     print("TXN_HASH_REVERT_WITH_NO_MSG:", txn_hash_revert_with_no_msg)
     txn_receipt_revert_with_no_msg = common.mine_transaction_hash(
         w3, txn_hash_revert_with_no_msg
     )
-    block_hash_revert_no_msg = w3.eth.get_block(
+    block_hash_revert_no_msg = w3.bub.get_block(
         txn_receipt_revert_with_no_msg["blockHash"]
     )
     print("BLOCK_HASH_REVERT_NO_MSG:", block_hash_revert_no_msg["hash"])
@@ -299,7 +299,7 @@ def setup_chain_state(w3):
     #
     # Offchain Lookup Contract
     #
-    offchain_lookup_factory = w3.eth.contract(
+    offchain_lookup_factory = w3.bub.contract(
         abi=OFFCHAIN_LOOKUP_ABI,
         bytecode=OFFCHAIN_LOOKUP_BYTECODE,
     )
@@ -313,7 +313,7 @@ def setup_chain_state(w3):
     #
     empty_block_number = mine_block(w3)
     print("MINED_EMPTY_BLOCK")
-    empty_block = w3.eth.get_block(empty_block_number)
+    empty_block = w3.bub.get_block(empty_block_number)
     assert is_dict(empty_block)
     assert not empty_block["transactions"]
     print("EMPTY_BLOCK_HASH:", empty_block["hash"])
@@ -321,23 +321,23 @@ def setup_chain_state(w3):
     #
     # Block with Transaction
     #
-    w3.geth.personal.unlock_account(coinbase, common.KEYFILE_PW)
-    w3.geth.miner.start(1)
-    mined_txn_hash = w3.eth.send_transaction(
+    w3.node.personal.unlock_account(coinbase, common.KEYFILE_PW)
+    w3.bub.miner.start(1)
+    mined_txn_hash = w3.bub.send_transaction(
         {
             "from": coinbase,
             "to": coinbase,
             "value": 1,
             "gas": 21000,
-            "gas_price": w3.eth.gas_price,
+            "gas_price": w3.bub.gas_price,
         }
     )
     mined_txn_receipt = mine_transaction_hash(w3, mined_txn_hash)
     print("MINED_TXN_HASH:", mined_txn_hash)
-    block_with_txn = w3.eth.get_block(mined_txn_receipt["blockHash"])
+    block_with_txn = w3.bub.get_block(mined_txn_receipt["blockHash"])
     print("BLOCK_WITH_TXN_HASH:", block_with_txn["hash"])
 
-    geth_fixture = {
+    bub_fixture = {
         "math_deploy_txn_hash": math_deploy_receipt["transactionHash"],
         "math_address": math_deploy_receipt["contractAddress"],
         "emitter_deploy_txn_hash": emitter_deploy_receipt["transactionHash"],
@@ -352,7 +352,7 @@ def setup_chain_state(w3):
         "block_hash_revert_with_msg": block_hash_revert_with_msg["hash"],
         "block_hash_revert_no_msg": block_hash_revert_no_msg["hash"],
     }
-    return geth_fixture
+    return bub_fixture
 
 
 if __name__ == "__main__":

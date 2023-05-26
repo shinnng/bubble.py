@@ -7,20 +7,20 @@ from eth_utils import (
     is_integer,
 )
 
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3._utils.module import (
+from bubble._utils.module import (
     attach_modules,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     Web3ValidationError,
 )
-from web3.module import (
+from bubble.module import (
     Module,
 )
-from web3.providers.eth_tester import (
-    EthereumTesterProvider,
+from bubble.providers.bub_tester import (
+    BubbleTesterProvider,
 )
 
 
@@ -29,68 +29,68 @@ class MockEth(Module):
         return 42
 
 
-class MockGeth(Module):
+class MockBub(Module):
     pass
 
 
-class MockGethAdmin(Module):
+class MockNodeAdmin(Module):
     def start_ws(self):
         return True
 
 
-class MockGethPersonal(Module):
+class MockNodePersonaler(Module):
     def unlock_account(self):
         return True
 
 
 def test_attach_modules():
     mods = {
-        "geth": (
-            MockGeth,
+        "bub": (
+            MockBub,
             {
-                "personal": MockGethPersonal,
-                "admin": MockGethAdmin,
+                "personal": MockNodePersonaler,
+                "admin": MockNodeAdmin,
             },
         ),
-        "eth": MockEth,
+        "bub": MockEth,
     }
-    w3 = Web3(EthereumTesterProvider(), modules={})
+    w3 = Web3(BubbleTesterProvider(), modules={})
     attach_modules(w3, mods)
-    assert w3.eth.block_number() == 42
-    assert w3.geth.personal.unlock_account() is True
-    assert w3.geth.admin.start_ws() is True
+    assert w3.bub.block_number() == 42
+    assert w3.node.personal.unlock_account() is True
+    assert w3.node.admin.start_ws() is True
 
 
 def test_attach_single_module_as_tuple():
-    w3 = Web3(EthereumTesterProvider(), modules={"eth": (MockEth,)})
-    assert w3.eth.block_number() == 42
+    w3 = Web3(BubbleTesterProvider(), modules={"bub": (MockEth,)})
+    assert w3.bub.block_number() == 42
 
 
 def test_attach_modules_multiple_levels_deep():
     mods = {
-        "eth": MockEth,
-        "geth": (
-            MockGeth,
+        "bub": MockEth,
+        "bub": (
+            MockBub,
             {
                 "personal": (
-                    MockGethPersonal,
+                    MockNodePersonaler,
                     {
-                        "admin": MockGethAdmin,
+                        "admin": MockNodeAdmin,
                     },
                 ),
             },
         ),
     }
-    w3 = Web3(EthereumTesterProvider(), modules={})
+    w3 = Web3(BubbleTesterProvider(), modules={})
     attach_modules(w3, mods)
-    assert w3.eth.block_number() == 42
-    assert w3.geth.personal.unlock_account() is True
-    assert w3.geth.personal.admin.start_ws() is True
+    assert w3.bub.block_number() == 42
+    assert w3.node.personal.unlock_account() is True
+    assert w3.node.personal.admin.start_ws() is True
 
 
 def test_attach_modules_with_wrong_module_format():
-    mods = {"eth": (MockEth, MockGeth, MockGethPersonal)}
-    w3 = Web3(EthereumTesterProvider, modules={})
+    mods = {"bub": (MockEth, MockBub, MockNodePersonaler)}
+    w3 = Web3(BubbleTesterProvider, modules={})
     with pytest.raises(
         Web3ValidationError, match="Module definitions can only have 1 or 2 elements"
     ):
@@ -99,11 +99,11 @@ def test_attach_modules_with_wrong_module_format():
 
 def test_attach_modules_with_existing_modules():
     mods = {
-        "eth": MockEth,
+        "bub": MockEth,
     }
-    w3 = Web3(EthereumTesterProvider, modules=mods)
+    w3 = Web3(BubbleTesterProvider, modules=mods)
     with pytest.raises(
-        AttributeError, match="The web3 object already has an attribute with that name"
+        AttributeError, match="The bubble object already has an attribute with that name"
     ):
         attach_modules(w3, mods)
 
@@ -112,7 +112,7 @@ def test_attach_external_modules_multiple_levels_deep(
     module1, module2, module3, module4
 ):
     w3 = Web3(
-        EthereumTesterProvider(),
+        BubbleTesterProvider(),
         external_modules={
             "module1": module1,
             "module2": (
@@ -132,9 +132,9 @@ def test_attach_external_modules_multiple_levels_deep(
     assert w3.is_connected()
 
     # assert instantiated with default modules
-    assert hasattr(w3, "geth")
-    assert hasattr(w3, "eth")
-    assert is_integer(w3.eth.chain_id)
+    assert hasattr(w3, "bub")
+    assert hasattr(w3, "bub")
+    assert is_integer(w3.bub.chain_id)
 
     # assert instantiated with module1
     assert hasattr(w3, "module1")
@@ -159,7 +159,7 @@ def test_attach_external_modules_that_do_not_inherit_from_module_class(
     module4_unique,
 ):
     w3 = Web3(
-        EthereumTesterProvider(),
+        BubbleTesterProvider(),
         external_modules={
             "module1": module1_unique,
             "module2": (
@@ -180,7 +180,7 @@ def test_attach_external_modules_that_do_not_inherit_from_module_class(
     assert hasattr(w3, "module1")
     assert w3.module1.a == "a"
     assert w3.module1.b() == "b"
-    assert w3.module1.return_eth_chain_id == w3.eth.chain_id
+    assert w3.module1.return_bub_chain_id == w3.bub.chain_id
 
     # assert module2 + submodules attached
     assert hasattr(w3, "module2")
@@ -193,9 +193,9 @@ def test_attach_external_modules_that_do_not_inherit_from_module_class(
     assert w3.module2.submodule1.submodule2.f == "f"
 
     # assert default modules intact
-    assert hasattr(w3, "geth")
-    assert hasattr(w3, "eth")
-    assert is_integer(w3.eth.chain_id)
+    assert hasattr(w3, "bub")
+    assert hasattr(w3, "bub")
+    assert is_integer(w3.bub.chain_id)
 
 
 def test_attach_modules_for_module_with_more_than_one_init_argument(
@@ -210,6 +210,6 @@ def test_attach_modules_for_module_with_more_than_one_init_argument(
         ),
     ):
         Web3(
-            EthereumTesterProvider(),
+            BubbleTesterProvider(),
             external_modules={"module_should_fail": module_many_init_args},
         )

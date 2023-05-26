@@ -4,7 +4,7 @@ from eth_utils import (
     is_same_address,
 )
 
-from web3._utils.events import (
+from bubble._utils.events import (
     get_event_data,
 )
 
@@ -17,14 +17,14 @@ def emitter(
     wait_for_block,
     address_conversion_func,
 ):
-    emitter_contract_factory = w3.eth.contract(**emitter_contract_data)
+    emitter_contract_factory = w3.bub.contract(**emitter_contract_data)
 
     wait_for_block(w3)
     deploy_txn_hash = emitter_contract_factory.constructor().transact({"gas": 10000000})
     deploy_receipt = wait_for_transaction(w3, deploy_txn_hash)
     contract_address = address_conversion_func(deploy_receipt["contractAddress"])
 
-    bytecode = w3.eth.get_code(contract_address)
+    bytecode = w3.bub.get_code(contract_address)
     assert bytecode == emitter_contract_factory.bytecode_runtime
     _emitter = emitter_contract_factory(address=contract_address)
     assert _emitter.address == contract_address

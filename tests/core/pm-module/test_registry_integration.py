@@ -14,10 +14,10 @@ from ethpm.contract import (
 from ethpm.exceptions import (
     EthPMException,
 )
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3.pm import (
+from bubble.pm import (
     SimpleRegistry,
     get_simple_registry_manifest,
 )
@@ -26,8 +26,8 @@ from web3.pm import (
 @pytest.fixture
 def fresh_w3():
     w3 = Web3(Web3.EthereumTesterProvider())
-    w3.eth.default_account = w3.eth.accounts[0]
-    w3.eth._default_contract_factory = LinkableContract
+    w3.bub.default_account = w3.bub.accounts[0]
+    w3.bub._default_contract_factory = LinkableContract
     w3.enable_unstable_package_management_api()
     return w3
 

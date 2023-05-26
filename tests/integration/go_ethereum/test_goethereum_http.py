@@ -8,23 +8,23 @@ from tests.integration.common import (
 from tests.utils import (
     get_open_port,
 )
-from web3 import (
+from bubble import (
     AsyncWeb3,
     Web3,
 )
-from web3._utils.module_testing.go_ethereum_admin_module import (
+from bubble._utils.module_testing.go_ethereum_admin_module import (
     GoEthereumAsyncAdminModuleTest,
 )
-from web3._utils.module_testing.go_ethereum_personal_module import (
+from bubble._utils.module_testing.go_ethereum_personal_module import (
     GoEthereumAsyncPersonalModuleTest,
 )
-from web3.providers.async_rpc import (
+from bubble.providers.async_rpc import (
     AsyncHTTPProvider,
 )
 
 from .common import (
     GoEthereumAdminModuleTest,
-    GoEthereumAsyncEthModuleTest,
+    GoEthereumAsyncBubModuleTest,
     GoEthereumAsyncNetModuleTest,
     GoEthereumAsyncTxPoolModuleTest,
     GoEthereumEthModuleTest,
@@ -49,33 +49,33 @@ def endpoint_uri(rpc_port):
     return f"http://localhost:{rpc_port}"
 
 
-def _geth_command_arguments(rpc_port, base_geth_command_arguments, geth_version):
-    yield from base_geth_command_arguments
-    if geth_version.major == 1:
+def _bub_command_arguments(rpc_port, base_bub_command_arguments, bub_version):
+    yield from base_bub_command_arguments
+    if bub_version.major == 1:
         yield from (
             "--http",
             "--http.port",
             rpc_port,
             "--http.api",
-            "admin,eth,net,web3,personal,miner,txpool",
+            "admin,bub,net,bubble,personal,miner,txpool",
             "--ipcdisable",
             "--allow-insecure-unlock",
             "--miner.etherbase",
             COINBASE[2:],
         )
     else:
-        raise AssertionError("Unsupported Geth version")
+        raise AssertionError("Unsupported Bub version")
 
 
 @pytest.fixture(scope="module")
-def geth_command_arguments(rpc_port, base_geth_command_arguments, get_geth_version):
-    return _geth_command_arguments(
-        rpc_port, base_geth_command_arguments, get_geth_version
+def bub_command_arguments(rpc_port, base_bub_command_arguments, get_bub_version):
+    return _bub_command_arguments(
+        rpc_port, base_bub_command_arguments, get_bub_version
     )
 
 
 @pytest.fixture(scope="module")
-def w3(geth_process, endpoint_uri):
+def w3(bub_process, endpoint_uri):
     wait_for_http(endpoint_uri)
     _w3 = Web3(Web3.HTTPProvider(endpoint_uri))
     return _w3
@@ -87,7 +87,7 @@ class TestGoEthereumTest(GoEthereumTest):
 
 class TestGoEthereumAdminModuleTest(GoEthereumAdminModuleTest):
     @pytest.mark.xfail(
-        reason="running geth with the --nodiscover flag doesn't allow peer addition"
+        reason="running bub with the --nodiscover flag doesn't allow peer addition"
     )
     def test_admin_peers(self, w3: "Web3") -> None:
         super().test_admin_peers(w3)
@@ -125,7 +125,7 @@ class TestGoEthereumTxPoolModuleTest(GoEthereumTxPoolModuleTest):
 
 
 @pytest_asyncio.fixture(scope="module")
-async def async_w3(geth_process, endpoint_uri):
+async def async_w3(bub_process, endpoint_uri):
     await wait_for_aiohttp(endpoint_uri)
     _w3 = AsyncWeb3(AsyncHTTPProvider(endpoint_uri))
     return _w3
@@ -134,7 +134,7 @@ async def async_w3(geth_process, endpoint_uri):
 class TestGoEthereumAsyncAdminModuleTest(GoEthereumAsyncAdminModuleTest):
     @pytest.mark.asyncio
     @pytest.mark.xfail(
-        reason="running geth with the --nodiscover flag doesn't allow peer addition"
+        reason="running bub with the --nodiscover flag doesn't allow peer addition"
     )
     async def test_admin_peers(self, async_w3: "AsyncWeb3") -> None:
         await super().test_admin_peers(async_w3)
@@ -162,7 +162,7 @@ class TestGoEthereumAsyncPersonalModuleTest(GoEthereumAsyncPersonalModuleTest):
     pass
 
 
-class TestGoEthereumAsyncEthModuleTest(GoEthereumAsyncEthModuleTest):
+class TestGoEthereumAsyncBubModuleTest(GoEthereumAsyncBubModuleTest):
     pass
 
 

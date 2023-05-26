@@ -27,21 +27,21 @@ from ethpm.exceptions import (
 from ethpm.validation.misc import (
     validate_empty_bytes,
 )
-from web3._utils.validation import (
+from bubble._utils.validation import (
     validate_address,
 )
-from web3.contract import (
+from bubble.contract import (
     Contract,
     ContractConstructor,
 )
 
 if TYPE_CHECKING:
-    from web3 import Web3  # noqa: F401
+    from bubble import Web3  # noqa: F401
 
 
 class LinkableContract(Contract):
     """
-    A subclass of web3.contract.Contract that is capable of handling
+    A subclass of bubble.contract.Contract that is capable of handling
     contract factories with link references in their package's manifest.
     """
 

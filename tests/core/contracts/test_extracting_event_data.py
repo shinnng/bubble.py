@@ -8,14 +8,14 @@ from eth_utils.toolz import (
     dissoc,
 )
 
-from web3._utils.events import (
+from bubble._utils.events import (
     get_event_data,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     LogTopicError,
     Web3ValidationError,
 )
-from web3.logs import (
+from bubble.logs import (
     DISCARD,
     IGNORE,
     STRICT,
@@ -43,14 +43,14 @@ def emitter(
     wait_for_block,
     address_conversion_func,
 ):
-    emitter_contract_factory = w3.eth.contract(**emitter_contract_data)
+    emitter_contract_factory = w3.bub.contract(**emitter_contract_data)
 
     wait_for_block(w3)
     deploy_txn_hash = emitter_contract_factory.constructor().transact({"gas": 30029121})
     deploy_receipt = wait_for_transaction(w3, deploy_txn_hash)
     contract_address = address_conversion_func(deploy_receipt["contractAddress"])
 
-    bytecode = w3.eth.get_code(contract_address)
+    bytecode = w3.bub.get_code(contract_address)
     assert bytecode == emitter_contract_factory.bytecode_runtime
     _emitter = emitter_contract_factory(address=contract_address)
     assert _emitter.address == contract_address
@@ -966,8 +966,8 @@ def test_get_all_entries_with_nested_tuple_event(w3, emitter):
     struct_args_filter = emitter.events.LogStructArgs.create_filter(fromBlock=0)
 
     tx_hash = emitter.functions.logStruct(1, (2, 3, (4,))).transact()
-    w3.eth.wait_for_transaction_receipt(tx_hash)
-    txn_receipt = w3.eth.get_transaction_receipt(tx_hash)
+    w3.bub.wait_for_transaction_receipt(tx_hash)
+    txn_receipt = w3.bub.get_transaction_receipt(tx_hash)
 
     entries = struct_args_filter.get_all_entries()
 
@@ -992,8 +992,8 @@ def test_get_all_entries_with_nested_tuple_event_non_strict(
     )
 
     tx_hash = non_strict_emitter.functions.logStruct(1, (2, 3, (4,))).transact()
-    w3_non_strict_abi.eth.wait_for_transaction_receipt(tx_hash)
-    txn_receipt = w3_non_strict_abi.eth.get_transaction_receipt(tx_hash)
+    w3_non_strict_abi.bub.wait_for_transaction_receipt(tx_hash)
+    txn_receipt = w3_non_strict_abi.bub.get_transaction_receipt(tx_hash)
 
     entries = struct_args_filter.get_all_entries()
 

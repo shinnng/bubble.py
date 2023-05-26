@@ -93,7 +93,7 @@ def emitter(
     wait_for_block,
     address_conversion_func,
 ):
-    emitter_contract_factory = w3.eth.contract(**emitter_contract_data)
+    emitter_contract_factory = w3.bub.contract(**emitter_contract_data)
     return _emitter_fixture_logic(
         w3,
         emitter_contract_factory,
@@ -277,7 +277,7 @@ async def async_emitter(
     async_wait_for_block,
     address_conversion_func,
 ):
-    async_emitter_contract_factory = async_w3.eth.contract(**emitter_contract_data)
+    async_emitter_contract_factory = async_w3.bub.contract(**emitter_contract_data)
 
     return await _async_emitter_fixture_logic(
         async_w3,

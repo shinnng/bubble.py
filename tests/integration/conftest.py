@@ -1,19 +1,19 @@
 import asyncio
 import pytest
 
-from web3._utils.contract_sources.contract_data.emitter_contract import (
+from bubble._utils.contract_sources.contract_data.emitter_contract import (
     EMITTER_CONTRACT_ABI,
     EMITTER_CONTRACT_BYTECODE,
 )
-from web3._utils.contract_sources.contract_data.math_contract import (
+from bubble._utils.contract_sources.contract_data.math_contract import (
     MATH_CONTRACT_ABI,
     MATH_CONTRACT_BYTECODE,
 )
-from web3._utils.contract_sources.contract_data.offchain_lookup import (
+from bubble._utils.contract_sources.contract_data.offchain_lookup import (
     OFFCHAIN_LOOKUP_ABI,
     OFFCHAIN_LOOKUP_BYTECODE,
 )
-from web3._utils.contract_sources.contract_data.revert_contract import (
+from bubble._utils.contract_sources.contract_data.revert_contract import (
     REVERT_CONTRACT_ABI,
     REVERT_CONTRACT_BYTECODE,
 )
@@ -40,7 +40,7 @@ def pytest_collection_modifyitems(items, config):
                 _ in item.fixturenames
                 for _ in ("unlocked_account", "unlocked_account_dual_type")
             )
-            # Leave offchain_lookup tests split between eth sync and async tests as
+            # Leave offchain_lookup tests split between bub sync and async tests as
             # those can conflict with each other as well.
             and "offchain_lookup" not in item.name
         ):
@@ -58,7 +58,7 @@ def pytest_collection_modifyitems(items, config):
 
 @pytest.fixture(scope="module")
 def math_contract_factory(w3):
-    contract_factory = w3.eth.contract(
+    contract_factory = w3.bub.contract(
         abi=MATH_CONTRACT_ABI, bytecode=MATH_CONTRACT_BYTECODE
     )
     return contract_factory
@@ -66,7 +66,7 @@ def math_contract_factory(w3):
 
 @pytest.fixture(scope="module")
 def emitter_contract_factory(w3):
-    contract_factory = w3.eth.contract(
+    contract_factory = w3.bub.contract(
         abi=EMITTER_CONTRACT_ABI, bytecode=EMITTER_CONTRACT_BYTECODE
     )
     return contract_factory
@@ -74,7 +74,7 @@ def emitter_contract_factory(w3):
 
 @pytest.fixture(scope="module")
 def revert_contract_factory(w3):
-    contract_factory = w3.eth.contract(
+    contract_factory = w3.bub.contract(
         abi=REVERT_CONTRACT_ABI, bytecode=REVERT_CONTRACT_BYTECODE
     )
     return contract_factory
@@ -82,7 +82,7 @@ def revert_contract_factory(w3):
 
 @pytest.fixture(scope="module")
 def offchain_lookup_contract_factory(w3):
-    contract_factory = w3.eth.contract(
+    contract_factory = w3.bub.contract(
         abi=OFFCHAIN_LOOKUP_ABI, bytecode=OFFCHAIN_LOOKUP_BYTECODE
     )
     return contract_factory
@@ -90,7 +90,7 @@ def offchain_lookup_contract_factory(w3):
 
 @pytest.fixture(scope="module")
 def async_offchain_lookup_contract_factory(async_w3):
-    contract_factory = async_w3.eth.contract(
+    contract_factory = async_w3.bub.contract(
         abi=OFFCHAIN_LOOKUP_ABI, bytecode=OFFCHAIN_LOOKUP_BYTECODE
     )
     return contract_factory

@@ -48,12 +48,12 @@ AMBIGUOUS_CONTRACT_ABI = [
 @pytest.fixture
 def string_contract(w3, string_contract_factory, address_conversion_func):
     deploy_txn = string_contract_factory.constructor("Caqalai").transact()
-    deploy_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    deploy_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert deploy_receipt is not None
     contract_address = address_conversion_func(deploy_receipt["contractAddress"])
     contract = string_contract_factory(address=contract_address)
     assert contract.address == contract_address
-    assert len(w3.eth.get_code(contract.address)) > 0
+    assert len(w3.bub.get_code(contract.address)) > 0
     return contract
 
 
@@ -124,7 +124,7 @@ map_repr = compose(list, curry(map, repr))
     ),
 )
 def test_find_or_get_functions_by_type(w3, method, args, repr_func, expected):
-    contract = w3.eth.contract(abi=AMBIGUOUS_CONTRACT_ABI)
+    contract = w3.bub.contract(abi=AMBIGUOUS_CONTRACT_ABI)
     function = getattr(contract, method)(*args)
     assert repr_func(function) == expected
 
@@ -171,7 +171,7 @@ def test_find_or_get_functions_by_type(w3, method, args, repr_func, expected):
     ),
 )
 def test_functions_error_messages(w3, method, args, expected_message, expected_error):
-    contract = w3.eth.contract(abi=AMBIGUOUS_CONTRACT_ABI)
+    contract = w3.bub.contract(abi=AMBIGUOUS_CONTRACT_ABI)
     with pytest.raises(expected_error, match=expected_message):
         getattr(contract, method)(*args)
 

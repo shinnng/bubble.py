@@ -22,7 +22,7 @@ from ethpm._utils.protobuf.ipfs_file_pb2 import (  # type: ignore
 )
 
 try:
-    # `ipfshttpclient` backend is optional. This is only imported if the "web3[ipfs]"
+    # `ipfshttpclient` backend is optional. This is only imported if the "bubble[ipfs]"
     # install extra is installed
     from base58 import (
         b58encode,

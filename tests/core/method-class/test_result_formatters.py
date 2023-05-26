@@ -4,19 +4,19 @@ from eth_utils.toolz import (
     compose,
 )
 
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3.method import (
+from bubble.method import (
     Method,
 )
-from web3.middleware.fixture import (
+from bubble.middleware.fixture import (
     construct_result_generator_middleware,
 )
-from web3.module import (
+from bubble.module import (
     Module,
 )
-from web3.providers import (
+from bubble.providers import (
     BaseProvider,
 )
 

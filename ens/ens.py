@@ -64,14 +64,14 @@ from ens.utils import (
 )
 
 if TYPE_CHECKING:
-    from web3 import Web3  # noqa: F401
-    from web3.contract import (  # noqa: F401
+    from bubble import Web3  # noqa: F401
+    from bubble.contract import (  # noqa: F401
         Contract,
     )
-    from web3.providers import (  # noqa: F401
+    from bubble.providers import (  # noqa: F401
         BaseProvider,
     )
-    from web3.types import (  # noqa: F401
+    from bubble.types import (  # noqa: F401
         Middleware,
         TxParams,
     )
@@ -98,7 +98,7 @@ class ENS(BaseENS):
     ) -> None:
         """
         :param provider: a single provider used to connect to Ethereum
-        :type provider: instance of `web3.providers.base.BaseProvider`
+        :type provider: instance of `bubble.providers.base.BaseProvider`
         :param hex-string addr: the address of the ENS registry on-chain.
             If not provided, ENS.py will default to the mainnet ENS
             registry address.
@@ -106,9 +106,9 @@ class ENS(BaseENS):
         self.w3 = init_web3(provider, middlewares)
 
         ens_addr = addr if addr else ENS_MAINNET_ADDR
-        self.ens = self.w3.eth.contract(abi=abis.ENS, address=ens_addr)
-        self._resolver_contract = self.w3.eth.contract(abi=abis.RESOLVER)
-        self._reverse_resolver_contract = self.w3.eth.contract(
+        self.ens = self.w3.bub.contract(abi=abis.ENS, address=ens_addr)
+        self._resolver_contract = self.w3.bub.contract(abi=abis.RESOLVER)
+        self._reverse_resolver_contract = self.w3.bub.contract(
             abi=abis.REVERSE_RESOLVER
         )
 
@@ -152,8 +152,8 @@ class ENS(BaseENS):
         The sender of the transaction must own the name, or
         its parent name.
 
-        Example: If the caller owns ``parentname.eth`` with no subdomains
-        and calls this method with ``sub.parentname.eth``,
+        Example: If the caller owns ``parentname.bub`` with no subdomains
+        and calls this method with ``sub.parentname.bub``,
         then ``sub`` will be created as part of this call.
 
         :param str name: ENS name to set up
@@ -161,7 +161,7 @@ class ENS(BaseENS):
             If ``None``, erase the record. If not specified, name will point
             to the owner's address.
         :param dict transact: the transaction configuration, like in
-            :meth:`~web3.eth.Eth.send_transaction`
+            :meth:`~bubble.bub.Bub.send_transaction`
         :raises InvalidName: if ``name`` has invalid syntax
         :raises UnauthorizedError: if ``'from'`` in `transact` does not own `name`
         """
@@ -218,7 +218,7 @@ class ENS(BaseENS):
         :param str name: ENS name that address will point to
         :param str address: to set up, in checksum format
         :param dict transact: the transaction configuration, like in
-            :meth:`~web3.eth.send_transaction`
+            :meth:`~bubble.bub.send_transaction`
         :raises AddressMismatch: if the name does not already point to the address
         :raises InvalidName: if `name` has invalid syntax
         :raises UnauthorizedError: if ``'from'`` in `transact` does not own `name`
@@ -257,7 +257,7 @@ class ENS(BaseENS):
     def owner(self, name: str) -> ChecksumAddress:
         """
         Get the owner of a name. Note that this may be different from the
-        deed holder in the '.eth' registrar. Learn more about the difference
+        deed holder in the '.bub' registrar. Learn more about the difference
         between deed and name ownership in the ENS `Managing Ownership docs
         <http://docs.ens.domains/en/latest/userguide.html#managing-ownership>`_
 
@@ -284,8 +284,8 @@ class ENS(BaseENS):
         If `new_owner` is not supplied, then this will assume you
         want the same owner as the parent domain.
 
-        If the caller owns ``parentname.eth`` with no subdomains
-        and calls this method with ``sub.parentname.eth``,
+        If the caller owns ``parentname.bub`` with no subdomains
+        and calls this method with ``sub.parentname.bub``,
         then ``sub`` will be created as part of this call.
 
         :param str name: ENS name to set up
@@ -293,7 +293,7 @@ class ENS(BaseENS):
             empty addr. If not specified, name will point to the parent domain
             owner's address.
         :param dict transact: the transaction configuration, like in
-            :meth:`~web3.eth.Eth.send_transaction`
+            :meth:`~bubble.bub.Bub.send_transaction`
         :raises InvalidName: if `name` has invalid syntax
         :raises UnauthorizedError: if ``'from'`` in `transact` does not own `name`
         :returns: the new owner's address
@@ -376,7 +376,7 @@ class ENS(BaseENS):
         :param str key: Name of the attribute to set
         :param str value: Value to set the attribute to
         :param dict transact: The transaction configuration, like in
-            :meth:`~web3.eth.Eth.send_transaction`
+            :meth:`~bubble.bub.Bub.send_transaction`
         :return: Transaction hash
         :rtype: HexBytes
         :raises UnsupportedFunction: If the resolver does not support
@@ -442,7 +442,7 @@ class ENS(BaseENS):
             transact = {}
         transact = deepcopy(transact)
         if is_none_or_zero_address(resolver_addr):
-            resolver_addr = self.address("resolver.eth")
+            resolver_addr = self.address("resolver.bub")
         namehash = raw_name_to_hash(name)
         if self.ens.caller.resolver(namehash) != resolver_addr:
             self.ens.functions.setResolver(namehash, resolver_addr).transact(transact)
@@ -485,7 +485,7 @@ class ENS(BaseENS):
         name: str,
         parent_owned: Optional[str] = None,
     ) -> None:
-        if not address_in(account, self.w3.eth.accounts):
+        if not address_in(account, self.w3.bub.accounts):
             raise UnauthorizedError(
                 f"in order to modify {name!r}, you must control account"
                 f" {account!r}, which owns {parent_owned or name!r}"
@@ -542,7 +542,7 @@ class ENS(BaseENS):
 
     def _reverse_registrar(self) -> "Contract":
         addr = self.ens.caller.owner(normal_name_to_hash(REVERSE_REGISTRAR_DOMAIN))
-        return self.w3.eth.contract(address=addr, abi=abis.REVERSE_REGISTRAR)
+        return self.w3.bub.contract(address=addr, abi=abis.REVERSE_REGISTRAR)
 
 
 def _resolver_supports_interface(resolver: "Contract", interface_id: HexStr) -> bool:

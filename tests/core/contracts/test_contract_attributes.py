@@ -1,6 +1,6 @@
 import pytest
 
-from web3.exceptions import (
+from bubble.exceptions import (
     ABIEventFunctionNotFound,
     ABIFunctionNotFound,
 )
@@ -13,7 +13,7 @@ def abi():
 
 @pytest.mark.parametrize("attribute", ("functions", "events", "caller"))
 def test_getattr(w3, abi, attribute):
-    contract = w3.eth.contract(abi=abi)
+    contract = w3.bub.contract(abi=abi)
     contract_attribute = getattr(contract, attribute)
     assert getattr(contract_attribute, "Increased")
 
@@ -27,7 +27,7 @@ def test_getattr(w3, abi, attribute):
     ),
 )
 def test_getattr_raises_error(w3, abi, attribute, error):
-    contract = w3.eth.contract(abi=abi)
+    contract = w3.bub.contract(abi=abi)
     contract_attribute = getattr(contract, attribute)
 
     with pytest.raises(error):
@@ -36,7 +36,7 @@ def test_getattr_raises_error(w3, abi, attribute, error):
 
 @pytest.mark.parametrize("attribute", ("functions", "events", "caller"))
 def test_hasattr(w3, abi, attribute):
-    contract = w3.eth.contract(abi=abi)
+    contract = w3.bub.contract(abi=abi)
     contract_attribute = getattr(contract, attribute)
 
     assert hasattr(contract_attribute, "Increased") is True

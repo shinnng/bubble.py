@@ -10,11 +10,11 @@ Filtering
 
     Most one-liners below assume ``w3`` to be a :class:`web3.Web3` instance.
 
-The :meth:`web3.eth.Eth.filter` method can be used to set up filters for:
+The :meth:`web3.bub.Bub.filter` method can be used to set up filters for:
 
-* Pending Transactions: ``w3.eth.filter("pending")``
+* Pending Transactions: ``w3.bub.filter("pending")``
 
-* New Blocks ``w3.eth.filter("latest")``
+* New Blocks ``w3.bub.filter("latest")``
 
 * Event Logs
 
@@ -28,13 +28,13 @@ The :meth:`web3.eth.Eth.filter` method can be used to set up filters for:
 
     .. code-block:: python
 
-        event_filter = w3.eth.filter({"address": contract_address})
+        event_filter = w3.bub.filter({"address": contract_address})
 
 * Attaching to an existing filter
 
     .. code-block:: python
 
-        existing_filter = w3.eth.filter(filter_id="0x0")
+        existing_filter = w3.bub.filter(filter_id="0x0")
 
 .. note ::
 
@@ -51,7 +51,7 @@ Filter Class
 
 .. py:attribute:: Filter.filter_id
 
-    The ``filter_id`` for this filter as returned by the ``eth_newFilter`` RPC
+    The ``filter_id`` for this filter as returned by the ``bub_newFilter`` RPC
     method when this filter was created.
 
 
@@ -60,7 +60,7 @@ Filter Class
     Retrieve new entries for this filter.
 
     Logs will be retrieved using the
-    :func:`web3.eth.Eth.get_filter_changes` which returns only new entries since the last
+    :func:`web3.bub.Bub.get_filter_changes` which returns only new entries since the last
     poll.
 
 
@@ -69,7 +69,7 @@ Filter Class
     Retrieve all entries for this filter.
 
     Logs will be retrieved using the
-    :func:`web3.eth.Eth.get_filter_logs` which returns all entries that match the given
+    :func:`web3.bub.Bub.get_filter_logs` which returns all entries that match the given
     filter.
 
 
@@ -94,29 +94,29 @@ Block and Transaction Filter Classes
 
 ``BlockFilter`` is a subclass of :class:`Filter`.
 
-You can setup a filter for new blocks using ``web3.eth.filter('latest')`` which
+You can setup a filter for new blocks using ``web3.bub.filter('latest')`` which
 will return a new :class:`BlockFilter` object.
 
     .. code-block:: python
 
-        new_block_filter = w3.eth.filter('latest')
+        new_block_filter = w3.bub.filter('latest')
         new_block_filter.get_new_entries()
 
     .. note::
 
         ``"safe"`` and ``"finalized"`` block identifiers are not yet supported for
-        ``eth_newBlockFilter``.
+        ``bub_newBlockFilter``.
 
 .. py:class:: TransactionFilter(...)
 
 ``TransactionFilter`` is a subclass of :class:`Filter`.
 
-You can setup a filter for new blocks using ``web3.eth.filter('pending')`` which
+You can setup a filter for new blocks using ``web3.bub.filter('pending')`` which
 will return a new :class:`TransactionFilter` object.
 
     .. code-block:: python
 
-        new_transaction_filter = w3.eth.filter('pending')
+        new_transaction_filter = w3.bub.filter('pending')
         new_transaction_filter.get_new_entries()
 
 
@@ -134,14 +134,14 @@ creating event log filters. Refer to the following example:
 
 See :meth:`web3.contract.Contract.events.your_event_name.create_filter()` documentation for more information.
 
-You can set up an event log filter like the one above with ``web3.eth.filter`` by supplying a
+You can set up an event log filter like the one above with ``web3.bub.filter`` by supplying a
 dictionary containing the standard filter parameters. Assuming that ``arg1`` is indexed, the
 equivalent filter creation would look like:
 
     .. code-block:: python
 
         event_signature_hash = web3.keccak(text="eventName(uint32)").hex()
-        event_filter = web3.eth.filter({
+        event_filter = web3.bub.filter({
             "address": myContract_address,
             "topics": [event_signature_hash,
                        "0x000000000000000000000000000000000000000000000000000000000000000a"],
@@ -159,12 +159,12 @@ In addition to being order-dependent, there are a few more points to recognize w
     - [A, B] "A in first position AND B in second position (and anything after)"
     - [[A, B], [A, B]] "(A OR B) in first position AND (A OR B) in second position (and anything after)"
 
-See the JSON-RPC documentation for `eth_newFilter <https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_newfilter>`_ more information on the standard filter parameters.
+See the JSON-RPC documentation for `bub_newFilter <https://ethereum.org/en/developers/docs/apis/json-rpc/#bub_newFilter>`_ more information on the standard filter parameters.
 
     .. note::
 
         Though ``"latest"`` and ``"safe"`` block identifiers are not yet part of the
-        specifications for ``eth_newFilter``, they are supported by web3.py and may or
+        specifications for ``bub_newFilter``, they are supported by web3.py and may or
         may not yield expected results depending on the node being accessed.
 
 Creating a log filter by either of the above methods will return a :class:`LogFilter` instance.
@@ -214,7 +214,7 @@ Synchronous
                 time.sleep(poll_interval)
 
         def main():
-            block_filter = w3.eth.filter('latest')
+            block_filter = w3.bub.filter('latest')
             log_loop(block_filter, 2)
 
         if __name__ == '__main__':
@@ -257,8 +257,8 @@ entries to a handler.
                     await asyncio.sleep(poll_interval)
 
             def main():
-                block_filter = w3.eth.filter('latest')
-                tx_filter = w3.eth.filter('pending')
+                block_filter = w3.bub.filter('latest')
+                tx_filter = w3.bub.filter('pending')
                 loop = asyncio.get_event_loop()
                 try:
                     loop.run_until_complete(
@@ -301,7 +301,7 @@ releasing the ``main`` function for other tasks.
 
 
             def main():
-                block_filter = w3.eth.filter('latest')
+                block_filter = w3.bub.filter('latest')
                 worker = Thread(target=log_loop, args=(block_filter, 5), daemon=True)
                 worker.start()
                     # .. do some other stuff

@@ -54,15 +54,15 @@ default = object()
 
 
 if TYPE_CHECKING:
-    from web3 import (  # noqa: F401
+    from bubble import (  # noqa: F401
         AsyncWeb3,
         Web3 as _Web3,
     )
-    from web3.providers import (  # noqa: F401
+    from bubble.providers import (  # noqa: F401
         AsyncBaseProvider,
         BaseProvider,
     )
-    from web3.types import (  # noqa: F401
+    from bubble.types import (  # noqa: F401
         ABIFunction,
         AsyncMiddleware,
         Middleware,
@@ -71,7 +71,7 @@ if TYPE_CHECKING:
 
 
 def Web3() -> Type["_Web3"]:
-    from web3 import (
+    from bubble import (
         Web3 as Web3Main,
     )
 
@@ -82,23 +82,23 @@ def init_web3(
     provider: "BaseProvider" = cast("BaseProvider", default),
     middlewares: Optional[Sequence[Tuple["Middleware", str]]] = None,
 ) -> "_Web3":
-    from web3 import (
+    from bubble import (
         Web3 as Web3Main,
     )
-    from web3.eth import (
-        Eth as EthMain,
+    from bubble.bub import (
+        Bub as EthMain,
     )
 
     if provider is default:
-        w3 = Web3Main(ens=None, modules={"eth": (EthMain)})
+        w3 = Web3Main(ens=None, modules={"bub": (EthMain)})
     else:
-        w3 = Web3Main(provider, middlewares, ens=None, modules={"eth": (EthMain)})
+        w3 = Web3Main(provider, middlewares, ens=None, modules={"bub": (EthMain)})
 
     return customize_web3(w3)
 
 
 def customize_web3(w3: "_Web3") -> "_Web3":
-    from web3.middleware import (
+    from bubble.middleware import (
         make_stalecheck_middleware,
     )
 
@@ -276,7 +276,7 @@ def is_valid_ens_name(ens_name: str) -> bool:
     return True
 
 
-# borrowed from similar method at `web3._utils.abi` due to circular dependency
+# borrowed from similar method at `bubble._utils.abi` due to circular dependency
 def get_abi_output_types(abi: "ABIFunction") -> List[str]:
     return (
         []
@@ -292,11 +292,11 @@ def init_async_web3(
     provider: "AsyncBaseProvider" = cast("AsyncBaseProvider", default),
     middlewares: Optional[Sequence[Tuple["AsyncMiddleware", str]]] = (),
 ) -> "AsyncWeb3":
-    from web3 import (
+    from bubble import (
         AsyncWeb3 as AsyncWeb3Main,
     )
-    from web3.eth import (
-        AsyncEth as AsyncEthMain,
+    from bubble.bub import (
+        AsyncBub as AsyncBubMain,
     )
 
     middlewares = list(middlewares)
@@ -309,14 +309,14 @@ def init_async_web3(
 
     if provider is default:
         async_w3 = AsyncWeb3Main(
-            middlewares=middlewares, ens=None, modules={"eth": (AsyncEthMain)}
+            middlewares=middlewares, ens=None, modules={"bub": (AsyncBubMain)}
         )
     else:
         async_w3 = AsyncWeb3Main(
             provider,
             middlewares=middlewares,
             ens=None,
-            modules={"eth": (AsyncEthMain)},
+            modules={"bub": (AsyncBubMain)},
         )
 
     return async_w3
@@ -325,7 +325,7 @@ def init_async_web3(
 async def _async_ens_stalecheck_middleware(
     make_request: Callable[["RPCEndpoint", Any], Any], w3: "AsyncWeb3"
 ) -> "Middleware":
-    from web3.middleware import (
+    from bubble.middleware import (
         async_make_stalecheck_middleware,
     )
 

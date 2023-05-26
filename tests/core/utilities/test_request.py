@@ -23,17 +23,17 @@ from requests.adapters import (
     HTTPAdapter,
 )
 
-from web3._utils import (
+from bubble._utils import (
     request,
 )
-from web3._utils.caching import (
+from bubble._utils.caching import (
     generate_cache_key,
 )
-from web3._utils.request import (
+from bubble._utils.request import (
     async_cache_and_return_session,
     cache_and_return_session,
 )
-from web3.utils.caching import (
+from bubble.utils.caching import (
     SimpleCache,
 )
 

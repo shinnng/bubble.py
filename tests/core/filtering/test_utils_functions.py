@@ -7,7 +7,7 @@ from eth_abi.exceptions import (
     ValueOutOfBounds,
 )
 
-from web3._utils.filters import (
+from bubble._utils.filters import (
     match_fn,
 )
 

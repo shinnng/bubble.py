@@ -46,7 +46,7 @@ Attributes
     .. code-block:: python
 
        >>> web3.client_version
-       'Geth/v1.4.11-stable-fed692f6/darwin/go1.7'
+       'Bub/v1.4.11-stable-fed692f6/darwin/go1.7'
 
 
 .. _overview_type_conversions:
@@ -313,7 +313,7 @@ Check Encodability
 
    .. code-block:: python
 
-        >>> from web3.auto.gethdev import w3
+        >>> from web3.auto.bubdev import w3
         >>> w3.is_encodable('bytes2', b'12')
         True
         >>> w3.is_encodable('bytes2', '0x1234')
@@ -332,7 +332,25 @@ Check Encodability
 
     .. doctest::
 
-        >>> from web3.auto.gethdev import w3
+        >>> from bubble.auto.bubdev import w3
+
+                >>> w3.is_encodable('bytes2', b'12')
+                True
+
+                >>>  # not of exact size bytes2
+                >>> w3.is_encodable('bytes2', b'1')
+                False
+
+                >>> w3.strict_bytes_type_checking = False
+
+                >>> # zero-padded, so encoded to: b'1\x00'
+                >>> w3.is_encodable('bytes2', b'1')
+                True
+
+                >>> # re-enable it
+                >>> w3.strict_bytes_type_checking = True
+                >>> w3.is_encodable('bytes2', b'1')
+                False
 
         >>> w3.is_encodable('bytes2', b'12')
         True
@@ -359,9 +377,9 @@ RPC API Modules
 Each ``Web3`` instance also exposes these namespaced API modules.
 
 
-.. py:attribute:: Web3.eth
+.. py:attribute:: web3.bub
 
-    See :doc:`./web3.eth`
+    See :doc:`./web3.bub`
 
 .. py:attribute:: Web3.miner
 
@@ -371,9 +389,9 @@ Each ``Web3`` instance also exposes these namespaced API modules.
 
     See :doc:`./web3.pm`
 
-.. py:attribute:: Web3.geth
+.. py:attribute:: Web3.bub
 
-    See :doc:`./web3.geth`
+    See :doc:`./web3.bub`
 
 
 These internal modules inherit from the ``web3.module.Module`` class which give them some configurations internal to the
@@ -388,16 +406,16 @@ To create a property instead, set ``is_property`` to ``True``.
 
 .. code-block:: python
 
-   >>> w3.eth.attach_methods({
+   >>> w3.bub.attach_methods({
    ...    'example_method': Method(
-   ...      'eth_example',
+   ...      'bub_example',
    ...       mungers=[...],
    ...       request_formatters=[...],
    ...       result_formatters=[...],
    ...       is_property=False,
    ...    ),
    ... })
-   >>> w3.eth.example_method()
+   >>> w3.bub.example_method()
 
 
 External Modules
@@ -414,7 +432,7 @@ make use of the parent ``Web3`` instance by accepting it as the first argument w
     ...         self.w3 = w3
     ...
     ...     def print_balance_of_shaq(self):
-    ...         print(self.w3.eth.get_balance('shaq.eth'))
+    ...         print(self.w3.bub.get_balance('shaq.eth'))
 
 
 .. warning:: Given the flexibility of external modules, use caution and only import modules from trusted third parties

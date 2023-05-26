@@ -49,13 +49,13 @@ pip install -e .\[dev\]
 
 #### Prerequisites for integration tests:
 
-##### geth (https://github.com/ethereum/go-ethereum/wiki/Installation-Instructions-for-FreeBSD)
+##### bub (https://github.com/ethereum/go-ethereum/wiki/Installation-Instructions-for-FreeBSD)
 
 ```
 pkg install go
 cd /tmp
 git clone https://github.com/ethereum/go-ethereum
 cd go-ethereum
-make geth
-cp build/bin/geth /usr/local/bin/
+make bub
+cp build/bin/bub /usr/local/bin/
 ```

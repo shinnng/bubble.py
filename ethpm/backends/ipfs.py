@@ -39,7 +39,7 @@ from ethpm.exceptions import (
 )
 
 try:
-    # `ipfshttpclient` backend is optional. This is only imported if the "web3[ipfs]"
+    # `ipfshttpclient` backend is optional. This is only imported if the "bubble[ipfs]"
     # install extra is installed
     import ipfshttpclient
 except ImportError:

@@ -13,11 +13,11 @@ from ens.utils import (
     init_async_web3,
     init_web3,
 )
-from web3.eth import (
-    AsyncEth,
+from bubble.bub import (
+    AsyncBub,
 )
-from web3.providers.eth_tester import (
-    AsyncEthereumTesterProvider,
+from bubble.providers.bub_tester import (
+    AsyncBubereumTesterProvider,
 )
 
 
@@ -31,7 +31,7 @@ def test_init_web3_adds_expected_middlewares():
     "name,expected",
     (
         # test some allowed cases
-        ("tester.eth", b"\x06tester\x03eth\x00"),
+        ("tester.bub", b"\x06tester\x03eth\x00"),
         (
             "a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p",
             b"\x01a\x01b\x01c\x01d\x01e\x01f\x01g\x01h\x01i\x01j\x01k\x01l\x01m\x01n\x01o\x01p\x00",  # noqa: E501
@@ -40,13 +40,13 @@ def test_init_web3_adds_expected_middlewares():
             "1.2.3.4.5.6.7.8.9.10",
             b"\x011\x012\x013\x014\x015\x016\x017\x018\x019\x0210\x00",
         ),
-        ("abc.123.def-456.eth", b"\x03abc\x03123\x07def-456\x03eth\x00"),
-        ("abc.123.def-456.eth", b"\x03abc\x03123\x07def-456\x03eth\x00"),
+        ("abc.123.def-456.bub", b"\x03abc\x03123\x07def-456\x03eth\x00"),
+        ("abc.123.def-456.bub", b"\x03abc\x03123\x07def-456\x03eth\x00"),
         (
-            "nhéééééé.eth",
+            "nhéééééé.bub",
             b"\x0enh\xc3\xa9\xc3\xa9\xc3\xa9\xc3\xa9\xc3\xa9\xc3\xa9\x03eth\x00",
         ),
-        ("🌈rainbow.eth", b"\x0b\xf0\x9f\x8c\x88rainbow\x03eth\x00"),
+        ("🌈rainbow.bub", b"\x0b\xf0\x9f\x8c\x88rainbow\x03eth\x00"),
         ("🐔🐔.tk", b"\x08\xf0\x9f\x90\x94\xf0\x9f\x90\x94\x02tk\x00"),
         # test that label length may be less than 255
         (f"{'a' * 255}.b", b"\xff" + (b"a" * 255) + b"\x01b\x00"),
@@ -122,8 +122,8 @@ def test_ens_encode_name_raises_ValidationError_on_label_lengths_over_63(
 
 def test_ens_encode_name_normalizes_name_before_encoding():
     assert ens_encode_name("Öbb.at") == ens_encode_name("öbb.at")
-    assert ens_encode_name("nhÉéÉéÉé.eth") == ens_encode_name("nhéééééé.eth")
-    assert ens_encode_name("TESTER.eth") == ens_encode_name("tester.eth")
+    assert ens_encode_name("nhÉéÉéÉé.bub") == ens_encode_name("nhéééééé.bub")
+    assert ens_encode_name("TESTER.bub") == ens_encode_name("tester.bub")
     assert ens_encode_name("test\u200btest.com") == ens_encode_name("testtest.com")
     assert ens_encode_name("O\u0308bb.at") == ens_encode_name("öbb.at")
 
@@ -141,16 +141,16 @@ async def test_init_async_web3_adds_expected_async_middlewares():
 @pytest.mark.asyncio
 async def test_init_async_web3_adds_async_eth():
     async_w3 = init_async_web3()
-    assert isinstance(async_w3.eth, AsyncEth)
+    assert isinstance(async_w3.bub, AsyncBub)
 
 
 @pytest.mark.asyncio
 async def test_init_async_web3_with_provider_argument_adds_async_eth():
-    async_w3 = init_async_web3(AsyncEthereumTesterProvider())
+    async_w3 = init_async_web3(AsyncBubereumTesterProvider())
 
-    assert isinstance(async_w3.provider, AsyncEthereumTesterProvider)
-    assert isinstance(async_w3.eth, AsyncEth)
+    assert isinstance(async_w3.provider, AsyncBubereumTesterProvider)
+    assert isinstance(async_w3.bub, AsyncBub)
 
-    latest_block = await async_w3.eth.get_block("latest")
+    latest_block = await async_w3.bub.get_block("latest")
     assert latest_block
     assert is_integer(latest_block["number"])

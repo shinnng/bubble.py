@@ -44,7 +44,7 @@ AttributeDict
 .. py:method:: web3.middleware.name_to_address_middleware
 
     This middleware converts Ethereum Name Service (ENS) names into the
-    address that the name points to. For example :meth:`w3.eth.send_transaction <web3.eth.Eth.send_transaction>` will
+    address that the name points to. For example :meth:`w3.bub.send_transaction <web3.bub.Bub.send_transaction>` will
     accept .eth names in the 'from' and 'to' fields.
 
     .. note::
@@ -59,7 +59,7 @@ Pythonic
 
     This converts arguments and returned values to python primitives,
     where appropriate. For example, it converts the raw hex string returned by the RPC call
-    ``eth_blockNumber`` into an ``int``.
+    ``bub_blockNumber`` into an ``int``.
 
 Gas Price Strategy
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,7 +82,7 @@ Buffered Gas Estimate
 
     This adds a gas estimate to transactions if ``gas`` is not present in the transaction
     parameters. Sets gas to:
-    ``min(w3.eth.estimate_gas + gas_buffer, gas_limit)``
+    ``min(w3.bub.estimate_gas + gas_buffer, gas_limit)``
     where the gas_buffer default is 100,000
 
 HTTPRequestRetry
@@ -94,7 +94,7 @@ HTTPRequestRetry
     requests that return the following errors: ``ConnectionError``, ``HTTPError``, ``Timeout``,
     ``TooManyRedirects``. Additionally there is a whitelist that only allows certain
     methods to be retried in order to not resend transactions, excluded methods are:
-    ``eth_sendTransaction``, ``personal_signAndSendTransaction``, ``personal_sendTransaction``.
+    ``bub_sendTransaction``, ``personal_signAndSendTransaction``, ``personal_sendTransaction``.
 
 .. _Modifying_Middleware:
 
@@ -109,7 +109,7 @@ Middleware Order
 ~~~~~~~~~~~~~~~~~~
 
 Think of the middleware as being layered in an onion, where you initiate a web3.py request at
-the outermost layer of the onion, and the Ethereum node (like geth) receives and responds
+the outermost layer of the onion, and the Ethereum node (like bub) receives and responds
 to the request inside the innermost layer of the onion. Here is a (simplified) diagram:
 
 .. code-block:: none
@@ -311,7 +311,7 @@ Stalecheck
 
     If the latest block in the blockchain is older than 2 days in this example, then the
     middleware will raise a ``StaleBlockchain`` exception on every call except
-    ``web3.eth.get_block()``.
+    ``web3.bub.get_block()``.
 
 
 Cache
@@ -364,16 +364,16 @@ All of the caching middlewares accept these common arguments.
     A ready to use version of this middleware can be found at
     ``web3.middlewares.latest_block_based_cache_middleware``.
 
-.. _geth-poa:
+.. _bub-poa:
 
 Proof of Authority
 ~~~~~~~~~~~~~~~~~~
 
 .. note::
     It's important to inject the middleware at the 0th layer of the middleware onion:
-    `w3.middleware_onion.inject(geth_poa_middleware, layer=0)`
+    `w3.middleware_onion.inject(node_poa_middleware, layer=0)`
 
-The ``geth_poa_middleware`` is required to connect to ``geth --dev`` or the Goerli 
+The ``node_poa_middleware`` is required to connect to ``bub --dev`` or the Goerli
 public network. It may also be needed for other EVM compatible blockchains like Polygon
 or BNB Chain (Binance Smart Chain).
 
@@ -386,45 +386,45 @@ http://web3py.readthedocs.io/en/stable/middleware.html#proof-of-authority
 for more details. The full extraData is: HexBytes('...')```
 
 
-The easiest way to connect to a default ``geth --dev`` instance which loads the middleware is:
+The easiest way to connect to a default ``bub --dev`` instance which loads the middleware is:
 
 
 .. code-block:: python
 
-    >>> from web3.auto.gethdev import w3
+    >>> from web3.auto.bubdev import w3
 
     # confirm that the connection succeeded
     >>> w3.client_version
-    'Geth/v1.7.3-stable-4bb3c89d/linux-amd64/go1.9'
+    'Bub/v1.7.3-stable-4bb3c89d/linux-amd64/go1.9'
 
-This example connects to a local ``geth --dev`` instance on Linux with a
+This example connects to a local ``bub --dev`` instance on Linux with a
 unique IPC location and loads the middleware:
 
 .. code-block:: python
 
     >>> from web3 import Web3, IPCProvider
 
-    # connect to the IPC location started with 'geth --dev --datadir ~/mynode'
-    >>> w3 = Web3(IPCProvider('~/mynode/geth.ipc'))
+    # connect to the IPC location started with 'bub --dev --datadir ~/mynode'
+    >>> w3 = Web3(IPCProvider('~/mynode/bub.ipc'))
 
-    >>> from web3.middleware import geth_poa_middleware
+    >>> from web3.middleware import node_poa_middleware
 
     # inject the poa compatibility middleware to the innermost layer (0th layer)
-    >>> w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+    >>> w3.middleware_onion.inject(node_poa_middleware, layer=0)
 
     # confirm that the connection succeeded
     >>> w3.client_version
-    'Geth/v1.7.3-stable-4bb3c89d/linux-amd64/go1.9'
+    'Bub/v1.7.3-stable-4bb3c89d/linux-amd64/go1.9'
 
-Why is ``geth_poa_middleware`` necessary?
+Why is ``node_poa_middleware`` necessary?
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 There is no strong community consensus on a single Proof-of-Authority (PoA) standard yet.
-Some nodes have successful experiments running, though. One is go-ethereum (geth),
+Some nodes have successful experiments running, though. One is go-ethereum (bub),
 which uses a prototype PoA for its development mode and the Goerli test network.
 
 Unfortunately, it does deviate from the yellow paper specification, which constrains the
-``extraData`` field in each block to a maximum of 32-bytes. Geth's PoA uses more than
+``extraData`` field in each block to a maximum of 32-bytes. Bub's PoA uses more than
 32 bytes, so this middleware modifies the block data a bit before returning it.
 
 .. _local-filter:
@@ -438,7 +438,16 @@ retrieved using JSON-RPC endpoints that don't rely on server state.
 
 .. doctest::
 
-    >>> from web3 import Web3, EthereumTesterProvider
+    >>> from bubble import Web3, BubbleTesterProvider
+            >>> w3 = Web3(EthereumTesterProvider())
+            >>> from bubble.middleware import local_filter_middleware
+            >>> w3.middleware_onion.add(local_filter_middleware)
+        >>> w3 = Web3(EthereumTesterProvider())
+        >>> from web3.middleware import local_filter_middleware
+        >>> w3.middleware_onion.add(local_filter_middleware)
+        >>> w3 = Web3(EthereumTesterProvider())
+        >>> from web3.middleware import local_filter_middleware
+        >>> w3.middleware_onion.add(local_filter_middleware)
     >>> w3 = Web3(EthereumTesterProvider())
     >>> from web3.middleware import local_filter_middleware
     >>> w3.middleware_onion.add(local_filter_middleware)
@@ -446,7 +455,7 @@ retrieved using JSON-RPC endpoints that don't rely on server state.
 .. code-block:: python
 
     #  Normal block and log filter apis behave as before.
-    >>> block_filter = w3.eth.filter("latest")
+    >>> block_filter = w3.bub.filter("latest")
 
     >>> log_filter = myContract.events.myEvent.build_filter().deploy()
 
@@ -456,7 +465,7 @@ Signing
 .. py:method:: web3.middleware.construct_sign_and_send_raw_middleware(private_key_or_account)
 
 This middleware automatically captures transactions, signs them, and sends them as raw transactions.
-The ``from`` field on the transaction, or ``w3.eth.default_account`` must be set to the address of the private key for
+The ``from`` field on the transaction, or ``w3.bub.default_account`` must be set to the address of the private key for
 this middleware to have any effect.
 
    * ``private_key_or_account`` A single private key or a tuple, list or set of private keys.
@@ -475,7 +484,7 @@ this middleware to have any effect.
    >>> from eth_account import Account
    >>> acct = Account.create('KEYSMASH FJAFJKLDSKF7JKFDJ 1530')
    >>> w3.middleware_onion.add(construct_sign_and_send_raw_middleware(acct))
-   >>> w3.eth.default_account = acct.address
+   >>> w3.bub.default_account = acct.address
 
 :ref:`Hosted nodes<local_vs_hosted>` (like Infura or Alchemy) only support signed transactions. This often results in ``send_raw_transaction`` being used repeatedly. Instead, we can automate this process with ``construct_sign_and_send_raw_middleware(private_key_or_account)``.
 
@@ -486,9 +495,9 @@ this middleware to have any effect.
     >>> from web3.middleware import construct_sign_and_send_raw_middleware
     >>> from eth_account import Account
     >>> import os
-    >>> acct = w3.eth.account.from_key(os.environ.get('PRIVATE_KEY'))
+    >>> acct = w3.bub.account.from_key(os.environ.get('PRIVATE_KEY'))
     >>> w3.middleware_onion.add(construct_sign_and_send_raw_middleware(acct))
-    >>> w3.eth.default_account = acct.address
+    >>> w3.bub.default_account = acct.address
 
 Now you can send a transaction from acct.address without having to build and sign each raw transaction.
 
@@ -504,13 +513,13 @@ Doing so will lead to validation issues.
    # dynamic fee transaction, introduced by EIP-1559:
    >>> dynamic_fee_transaction = {
    ...     'type': '0x2',  # optional - defaults to '0x2' when dynamic fee transaction params are present
-   ...     'from': acct.address,  # optional if w3.eth.default_account was set with acct.address
+   ...     'from': acct.address,  # optional if w3.bub.default_account was set with acct.address
    ...     'to': receiving_account_address,
    ...     'value': 22,
    ...     'maxFeePerGas': 2000000000,  # required for dynamic fee transactions
    ...     'maxPriorityFeePerGas': 1000000000,  # required for dynamic fee transactions
    ... }
-   >>> w3.eth.send_transaction(dynamic_fee_transaction)
+   >>> w3.bub.send_transaction(dynamic_fee_transaction)
 
 A legacy transaction still works in the same way as it did before EIP-1559 was introduced:
 
@@ -519,6 +528,6 @@ A legacy transaction still works in the same way as it did before EIP-1559 was i
    >>> legacy_transaction = {
    ...     'to': receiving_account_address,
    ...     'value': 22,
-   ...     'gasPrice': 123456,  # optional - if not provided, gas_price_strategy (if exists) or eth_gasPrice is used
+   ...     'gasPrice': 123456,  # optional - if not provided, gas_price_strategy (if exists) or bub_gasPricePerGas is used
    ... }
-   >>> w3.eth.send_transaction(legacy_transaction)
+   >>> w3.bub.send_transaction(legacy_transaction)

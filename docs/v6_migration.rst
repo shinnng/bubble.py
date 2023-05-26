@@ -103,10 +103,10 @@ The `Web3` class previously contained both sync and async methods. We've separat
 `dict` to `AttributeDict` conversion moved to middleware
 --------------------------------------------------------
 
-`Eth` module data returned as key-value pairs was previously automatically converted to
+`Bub` module data returned as key-value pairs was previously automatically converted to
 an `AttributeDict` by result formatters, which could cause problems with typing. This
 conversion has been moved to a default `attrdict_middleware` where it can be easily
-removed if necessary. See the `Eth module <web3.eth.html#web3.eth.Eth>`_ docs for more detail.
+removed if necessary. See the `Bub module <web3.bub.html#web3.bub.Bub>`_ docs for more detail.
 
 Other Misc Changes
 ------------------

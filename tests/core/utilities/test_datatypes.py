@@ -1,6 +1,6 @@
 import pytest
 
-from web3._utils.datatypes import (
+from bubble._utils.datatypes import (
     PropertyCheckingFactory,
 )
 

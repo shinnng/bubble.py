@@ -1,15 +1,15 @@
 import os
 import pytest
 
-from web3.providers import (
+from bubble.providers import (
     HTTPProvider,
     IPCProvider,
     WebsocketProvider,
 )
-from web3.providers.auto import (
+from bubble.providers.auto import (
     load_provider_from_environment,
 )
-from web3.providers.ipc import (
+from bubble.providers.ipc import (
     get_dev_ipc_path,
 )
 

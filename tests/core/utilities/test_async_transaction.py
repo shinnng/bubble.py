@@ -4,15 +4,15 @@ from eth_typing import (
     BlockNumber,
 )
 
-from web3._utils.async_transactions import (
+from bubble._utils.async_transactions import (
     fill_transaction_defaults,
     get_block_gas_limit,
     get_buffered_gas_estimate,
 )
-from web3._utils.utility_methods import (
+from bubble._utils.utility_methods import (
     none_in_dict,
 )
-from web3.constants import (
+from bubble.constants import (
     DYNAMIC_FEE_TXN_PARAMS,
 )
 
@@ -26,13 +26,13 @@ SIMPLE_CURRENT_TRANSACTION = {
 
 @pytest.mark.asyncio()
 async def test_get_block_gas_limit_with_block_number(async_w3):
-    gas_limit = await get_block_gas_limit(async_w3.eth, BlockNumber(0))
+    gas_limit = await get_block_gas_limit(async_w3.bub, BlockNumber(0))
     assert isinstance(gas_limit, int)
 
 
 @pytest.mark.asyncio()
 async def test_get_block_gas_limit_without_block_number(async_w3):
-    gas_limit = await get_block_gas_limit(async_w3.eth)
+    gas_limit = await get_block_gas_limit(async_w3.bub)
     assert isinstance(gas_limit, int)
 
 
@@ -41,9 +41,9 @@ async def test_get_buffered_gas_estimate(async_w3):
     txn_params = {
         "data": b"0x1",
     }
-    gas_estimate = await async_w3.eth.estimate_gas(txn_params)
+    gas_estimate = await async_w3.bub.estimate_gas(txn_params)
     gas_buffer = 100000
-    gas_limit = await get_block_gas_limit(async_w3.eth)  # type: ignore
+    gas_limit = await get_block_gas_limit(async_w3.bub)  # type: ignore
 
     buffered_gas_estimate = await get_buffered_gas_estimate(async_w3, txn_params)
     assert isinstance(buffered_gas_estimate, int)
@@ -54,15 +54,15 @@ async def test_get_buffered_gas_estimate(async_w3):
 async def test_fill_transaction_defaults_for_all_params(async_w3):
     default_transaction = await fill_transaction_defaults(async_w3, {})
 
-    block = await async_w3.eth.get_block("latest")
+    block = await async_w3.bub.get_block("latest")
     assert default_transaction == {
-        "chainId": await async_w3.eth.chain_id,
+        "chainId": await async_w3.bub.chain_id,
         "data": b"",
-        "gas": await async_w3.eth.estimate_gas({}),
+        "gas": await async_w3.bub.estimate_gas({}),
         "maxFeePerGas": (
-            await async_w3.eth.max_priority_fee + (2 * block["baseFeePerGas"])
+                await async_w3.bub.max_priority_fee + (2 * block["baseFeePerGas"])
         ),
-        "maxPriorityFeePerGas": await async_w3.eth.max_priority_fee,
+        "maxPriorityFeePerGas": await async_w3.bub.max_priority_fee,
         "value": 0,
     }
 
@@ -84,14 +84,14 @@ async def test_fill_transaction_defaults_for_zero_gas_price(async_w3):
     def gas_price_strategy(_w3, tx):
         return 0
 
-    async_w3.eth.set_gas_price_strategy(gas_price_strategy)
+    async_w3.bub.set_gas_price_strategy(gas_price_strategy)
 
     default_transaction = await fill_transaction_defaults(async_w3, {})
 
     assert default_transaction == {
-        "chainId": await async_w3.eth.chain_id,
+        "chainId": await async_w3.bub.chain_id,
         "data": b"",
-        "gas": await async_w3.eth.estimate_gas({}),
+        "gas": await async_w3.bub.estimate_gas({}),
         "value": 0,
         "gasPrice": 0,
     }

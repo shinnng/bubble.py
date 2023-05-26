@@ -1,19 +1,19 @@
 import pytest
 
-from web3 import (
+from bubble import (
     Web3,
     constants,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     Web3ValidationError,
 )
-from web3.gas_strategies.time_based import (
+from bubble.gas_strategies.time_based import (
     construct_time_based_gas_price_strategy,
 )
-from web3.middleware import (
+from bubble.middleware import (
     construct_result_generator_middleware,
 )
-from web3.providers.base import (
+from bubble.providers.base import (
     BaseProvider,
 )
 
@@ -153,8 +153,8 @@ def _get_block_by_something(method, params):
 def test_time_based_gas_price_strategy(strategy_params, expected):
     fixture_middleware = construct_result_generator_middleware(
         {
-            "eth_getBlockByHash": _get_block_by_something,
-            "eth_getBlockByNumber": _get_block_by_something,
+            "bub_getBlockByHash": _get_block_by_something,
+            "bub_getBlockByNumber": _get_block_by_something,
         }
     )
 
@@ -166,8 +166,8 @@ def test_time_based_gas_price_strategy(strategy_params, expected):
     time_based_gas_price_strategy = construct_time_based_gas_price_strategy(
         **strategy_params,
     )
-    w3.eth.set_gas_price_strategy(time_based_gas_price_strategy)
-    actual = w3.eth.generate_gas_price()
+    w3.bub.set_gas_price_strategy(time_based_gas_price_strategy)
+    actual = w3.bub.generate_gas_price()
     assert actual == expected
 
 
@@ -234,8 +234,8 @@ def test_time_based_gas_price_strategy_zero_sample(
     with pytest.raises(Web3ValidationError) as excinfo:
         fixture_middleware = construct_result_generator_middleware(
             {
-                "eth_getBlockByHash": _get_block_by_something,
-                "eth_getBlockByNumber": _get_block_by_something,
+                "bub_getBlockByHash": _get_block_by_something,
+                "bub_getBlockByNumber": _get_block_by_something,
             }
         )
 
@@ -246,6 +246,6 @@ def test_time_based_gas_price_strategy_zero_sample(
         time_based_gas_price_strategy_zero = construct_time_based_gas_price_strategy(
             **strategy_params_zero,
         )
-        w3.eth.set_gas_price_strategy(time_based_gas_price_strategy_zero)
-        w3.eth.generate_gas_price()
+        w3.bub.set_gas_price_strategy(time_based_gas_price_strategy_zero)
+        w3.bub.generate_gas_price()
     assert str(excinfo.value) == expected_exception_message

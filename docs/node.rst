@@ -56,8 +56,8 @@ Hosted node options can also be found at
 `ethereum.org <https://ethereum.org/en/developers/docs/nodes-and-clients/nodes-as-a-service/>`__.
 You can connect to a hosted node as if it were a local node,
 with a few caveats. It cannot (and *should not*) host private keys for
-you, meaning that some common methods like :meth:`w3.eth.send_transaction()
-<web3.eth.Eth.send_transaction>` are not directly available. To send transactions
+you, meaning that some common methods like :meth:`w3.bub.send_transaction()
+<web3.bub.Bub.send_transaction>` are not directly available. To send transactions
 to a hosted node, read about :ref:`eth-account`.
 
 Once you decide what node option you want, you need to choose which network to connect to.

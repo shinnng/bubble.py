@@ -4,16 +4,16 @@ from eth_abi import (
     abi,
 )
 
-from web3._utils.contract_sources.contract_data.offchain_lookup import (
+from bubble._utils.contract_sources.contract_data.offchain_lookup import (
     OFFCHAIN_LOOKUP_DATA,
 )
-from web3._utils.module_testing.module_testing_utils import (
+from bubble._utils.module_testing.module_testing_utils import (
     mock_offchain_lookup_request_response,
 )
-from web3._utils.type_conversion import (
+from bubble._utils.type_conversion import (
     to_hex_if_bytes,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     OffchainLookup,
     TooManyRequests,
     Web3ValidationError,
@@ -27,7 +27,7 @@ WEB3PY_AS_HEXBYTES = "0x00000000000000000000000000000000000000000000000000000000
 
 @pytest.fixture
 def offchain_lookup_contract_factory(w3):
-    return w3.eth.contract(**OFFCHAIN_LOOKUP_DATA)
+    return w3.bub.contract(**OFFCHAIN_LOOKUP_DATA)
 
 
 @pytest.fixture
@@ -45,7 +45,7 @@ def offchain_lookup_contract(
     deploy_receipt = wait_for_transaction(w3, deploy_txn_hash)
     contract_address = address_conversion_func(deploy_receipt["contractAddress"])
 
-    bytecode = w3.eth.get_code(contract_address)
+    bytecode = w3.bub.get_code(contract_address)
     assert bytecode == offchain_lookup_contract_factory.bytecode_runtime
     deployed_offchain_lookup = offchain_lookup_contract_factory(
         address=contract_address
@@ -70,7 +70,7 @@ def test_offchain_lookup_functionality(
     assert abi.decode(["string"], response)[0] == "web3py"
 
 
-def test_eth_call_offchain_lookup_raises_when_ccip_read_is_disabled(
+def test_bub_call_offchain_lookup_raises_when_ccip_read_is_disabled(
     w3, offchain_lookup_contract
 ):
     # test ContractFunction call
@@ -141,7 +141,7 @@ def test_offchain_lookup_raises_for_improperly_formatted_rest_request_response(
 
 
 @pytest.mark.parametrize("status_code_non_4xx_error", [100, 300, 500, 600])
-def test_eth_call_offchain_lookup_tries_next_url_for_non_4xx_error_status_and_tests_POST(  # noqa: E501
+def test_bub_call_offchain_lookup_tries_next_url_for_non_4xx_error_status_and_tests_POST(  # noqa: E501
     offchain_lookup_contract,
     monkeypatch,
     status_code_non_4xx_error,
@@ -177,7 +177,7 @@ def test_eth_call_offchain_lookup_tries_next_url_for_non_4xx_error_status_and_te
 
 
 @pytest.mark.parametrize("status_code_4xx_error", [400, 410, 450, 499])
-def test_eth_call_offchain_lookup_calls_raise_for_status_for_4xx_status_code(
+def test_bub_call_offchain_lookup_calls_raise_for_status_for_4xx_status_code(
     offchain_lookup_contract,
     monkeypatch,
     status_code_4xx_error,

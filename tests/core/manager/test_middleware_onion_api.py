@@ -1,9 +1,9 @@
 import pytest
 
-from web3.manager import (
+from bubble.manager import (
     RequestManager,
 )
-from web3.providers import (
+from bubble.providers import (
     BaseProvider,
 )
 

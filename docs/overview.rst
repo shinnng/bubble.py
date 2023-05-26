@@ -37,7 +37,7 @@ Examples
    >>> from web3 import Web3, AsyncWeb3
 
    # IPCProvider:
-   >>> w3 = Web3(Web3.IPCProvider('./path/to/geth.ipc'))
+   >>> w3 = Web3(Web3.IPCProvider('./path/to/bub.ipc'))
 
    # HTTPProvider:
    >>> w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
@@ -80,8 +80,8 @@ Accounts and Private Keys
 Private keys are required to approve any transaction made on your behalf. The manner in
 which your key is secured will determine how you create and send transactions in web3.py.
 
-A local node, like `Geth <https://geth.ethereum.org/>`_, may manage your keys for you.
-You can reference those keys using the :attr:`web3.eth.accounts <web3.eth.Eth.accounts>`
+A local node, like `Bub <https://bub.ethereum.org/>`_, may manage your keys for you.
+You can reference those keys using the :attr:`web3.bub.accounts <web3.bub.Bub.accounts>`
 property.
 
 A hosted node, like `Infura <https://infura.io/>`_, will have no knowledge of your keys.
@@ -131,46 +131,46 @@ Cryptographic Hashing
 - :meth:`Web3.solidity_keccak() <web3.Web3.solidity_keccak>`
 
 
-web3.eth API
+web3.bub API
 ~~~~~~~~~~~~
 
 The most commonly used APIs for interacting with Ethereum can be found under the
-``web3.eth`` namespace.  As a reminder, the :doc:`examples` page will demonstrate
+``web3.bub`` namespace.  As a reminder, the :doc:`examples` page will demonstrate
 how to use several of these methods.
 
 
 Fetching Data
 -------------
 
-Viewing account balances (:meth:`get_balance <web3.eth.Eth.get_balance>`), transactions
-(:meth:`get_transaction <web3.eth.Eth.get_transaction>`), and block data
-(:meth:`get_block <web3.eth.Eth.get_block>`) are some of the most common starting
+Viewing account balances (:meth:`get_balance <web3.bub.Bub.get_balance>`), transactions
+(:meth:`get_transaction <web3.bub.Bub.get_transaction>`), and block data
+(:meth:`get_block <web3.bub.Bub.get_block>`) are some of the most common starting
 points in web3.py.
 
 
 API
 ^^^
 
-- :meth:`web3.eth.get_balance() <web3.eth.Eth.get_balance>`
-- :meth:`web3.eth.get_block() <web3.eth.Eth.get_block>`
-- :meth:`web3.eth.get_block_transaction_count() <web3.eth.Eth.get_block_transaction_count>`
-- :meth:`web3.eth.get_code() <web3.eth.Eth.get_code>`
-- :meth:`web3.eth.get_proof() <web3.eth.Eth.get_proof>`
-- :meth:`web3.eth.get_storage_at() <web3.eth.Eth.get_storage_at>`
-- :meth:`web3.eth.get_transaction() <web3.eth.Eth.get_transaction>`
-- :meth:`web3.eth.get_transaction_by_block() <web3.eth.Eth.get_transaction_by_block>`
-- :meth:`web3.eth.get_transaction_count() <web3.eth.Eth.get_transaction_count>`
-- :meth:`web3.eth.get_uncle_by_block() <web3.eth.Eth.get_uncle_by_block>`
-- :meth:`web3.eth.get_uncle_count() <web3.eth.Eth.get_uncle_count>`
+- :meth:`web3.bub.get_balance() <web3.bub.Bub.get_balance>`
+- :meth:`web3.bub.get_block() <web3.bub.Bub.get_block>`
+- :meth:`web3.bub.get_block_transaction_count() <web3.bub.Bub.get_block_transaction_count>`
+- :meth:`web3.bub.get_code() <web3.bub.Bub.get_code>`
+- :meth:`web3.bub.get_proof() <web3.bub.Bub.get_proof>`
+- :meth:`web3.bub.get_storage_at() <web3.bub.Bub.get_storage_at>`
+- :meth:`web3.bub.get_transaction() <web3.bub.Bub.get_transaction>`
+- :meth:`web3.bub.get_transaction_by_block() <web3.bub.Bub.get_transaction_by_block>`
+- :meth:`web3.bub.get_transaction_count() <web3.bub.Bub.get_transaction_count>`
+- :meth:`web3.bub.get_uncle_by_block() <web3.bub.Bub.get_uncle_by_block>`
+- :meth:`web3.bub.get_uncle_count() <web3.bub.Bub.get_uncle_count>`
 
 
 Sending Transactions
 --------------------
 
 The most common use cases will be satisfied with
-:meth:`send_transaction <web3.eth.Eth.send_transaction>` or the combination of
-:meth:`sign_transaction <web3.eth.Eth.sign_transaction>` and
-:meth:`send_raw_transaction <web3.eth.Eth.send_raw_transaction>`. For more context,
+:meth:`send_transaction <web3.bub.Bub.send_transaction>` or the combination of
+:meth:`sign_transaction <web3.bub.Bub.sign_transaction>` and
+:meth:`send_raw_transaction <web3.bub.Bub.send_raw_transaction>`. For more context,
 see the full guide to :doc:`transactions`.
 
 .. note::
@@ -182,18 +182,18 @@ see the full guide to :doc:`transactions`.
 API
 ^^^
 
-- :meth:`web3.eth.send_transaction() <web3.eth.Eth.send_transaction>`
-- :meth:`web3.eth.sign_transaction() <web3.eth.Eth.sign_transaction>`
-- :meth:`web3.eth.send_raw_transaction() <web3.eth.Eth.send_raw_transaction>`
-- :meth:`web3.eth.replace_transaction() <web3.eth.Eth.replace_transaction>`
-- :meth:`web3.eth.modify_transaction() <web3.eth.Eth.modify_transaction>`
-- :meth:`web3.eth.wait_for_transaction_receipt() <web3.eth.Eth.wait_for_transaction_receipt>`
-- :meth:`web3.eth.get_transaction_receipt() <web3.eth.Eth.get_transaction_receipt>`
-- :meth:`web3.eth.sign() <web3.eth.Eth.sign>`
-- :meth:`web3.eth.sign_typed_data() <web3.eth.Eth.sign_typed_data>`
-- :meth:`web3.eth.estimate_gas() <web3.eth.Eth.estimate_gas>`
-- :meth:`web3.eth.generate_gas_price() <web3.eth.Eth.generate_gas_price>`
-- :meth:`web3.eth.set_gas_price_strategy() <web3.eth.Eth.set_gas_price_strategy>`
+- :meth:`web3.bub.send_transaction() <web3.bub.Bub.send_transaction>`
+- :meth:`web3.bub.sign_transaction() <web3.bub.Bub.sign_transaction>`
+- :meth:`web3.bub.send_raw_transaction() <web3.bub.Bub.send_raw_transaction>`
+- :meth:`web3.bub.replace_transaction() <web3.bub.Bub.replace_transaction>`
+- :meth:`web3.bub.modify_transaction() <web3.bub.Bub.modify_transaction>`
+- :meth:`web3.bub.wait_for_transaction_receipt() <web3.bub.Bub.wait_for_transaction_receipt>`
+- :meth:`web3.bub.get_transaction_receipt() <web3.bub.Bub.get_transaction_receipt>`
+- :meth:`web3.bub.sign() <web3.bub.Bub.sign>`
+- :meth:`web3.bub.sign_typed_data() <web3.bub.Bub.sign_typed_data>`
+- :meth:`web3.bub.estimate_gas() <web3.bub.Bub.estimate_gas>`
+- :meth:`web3.bub.generate_gas_price() <web3.bub.Bub.generate_gas_price>`
+- :meth:`web3.bub.set_gas_price_strategy() <web3.bub.Bub.set_gas_price_strategy>`
 
 
 .. _overview_contracts:
@@ -214,9 +214,9 @@ instance of the contract:
 
 .. code-block:: python
 
-   >>> ExampleContract = w3.eth.contract(abi=abi, bytecode=bytecode)
+   >>> ExampleContract = w3.bub.contract(abi=abi, bytecode=bytecode)
    >>> tx_hash = ExampleContract.constructor().transact()
-   >>> tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+   >>> tx_receipt = w3.bub.wait_for_transaction_receipt(tx_hash)
    >>> tx_receipt.contractAddress
    '0x8a22225eD7eD460D7ee3842bce2402B9deaD23D3'
 
@@ -225,7 +225,7 @@ contract are available on the ``functions`` namespace:
 
 .. code-block:: python
 
-   >>> deployed_contract = w3.eth.contract(address=tx_receipt.contractAddress, abi=abi)
+   >>> deployed_contract = w3.bub.contract(address=tx_receipt.contractAddress, abi=abi)
    >>> deployed_contract.functions.myFunction(42).transact()
 
 If you want to read data from a contract (or see the result of transaction locally,
@@ -249,7 +249,7 @@ For more, see the full :ref:`Contracts` documentation.
 API
 ^^^
 
-- :meth:`web3.eth.contract() <web3.eth.Eth.contract>`
+- :meth:`web3.bub.contract() <web3.bub.Bub.contract>`
 - :attr:`Contract.address <web3.contract.Contract.address>`
 - :attr:`Contract.abi <web3.contract.Contract.abi>`
 - :attr:`Contract.bytecode <web3.contract.Contract.bytecode>`
@@ -272,7 +272,7 @@ a contract, you can leverage web3.py filters.
 .. code-block:: python
 
    # Use case: filter for new blocks
-   >>> new_filter = web3.eth.filter('latest')
+   >>> new_filter = web3.bub.filter('latest')
 
    # Use case: filter for contract event "MyEvent"
    >>> new_filter = deployed_contract.events.MyEvent.create_filter(fromBlock='latest')
@@ -288,11 +288,11 @@ More complex patterns for creating filters and polling for logs can be found in 
 API
 ^^^
 
-- :meth:`web3.eth.filter() <web3.eth.Eth.filter>`
-- :meth:`web3.eth.get_filter_changes() <web3.eth.Eth.get_filter_changes>`
-- :meth:`web3.eth.get_filter_logs() <web3.eth.Eth.get_filter_logs>`
-- :meth:`web3.eth.uninstall_filter() <web3.eth.Eth.uninstall_filter>`
-- :meth:`web3.eth.get_logs() <web3.eth.Eth.get_logs>`
+- :meth:`web3.bub.filter() <web3.bub.Bub.filter>`
+- :meth:`web3.bub.get_filter_changes() <web3.bub.Bub.get_filter_changes>`
+- :meth:`web3.bub.get_filter_logs() <web3.bub.Bub.get_filter_logs>`
+- :meth:`web3.bub.uninstall_filter() <web3.bub.Bub.uninstall_filter>`
+- :meth:`web3.bub.get_logs() <web3.bub.Bub.get_logs>`
 - :meth:`Contract.events.your_event_name.create_filter() <web3.contract.Contract.events.your_event_name.create_filter>`
 - :meth:`Contract.events.your_event_name.build_filter() <web3.contract.Contract.events.your_event_name.build_filter>`
 - :meth:`Filter.get_new_entries() <web3.utils.filters.Filter.get_new_entries>`

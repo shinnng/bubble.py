@@ -4,33 +4,33 @@ from eth_tester.exceptions import (
     TransactionFailed,
 )
 
-from web3.providers.eth_tester.main import (
-    AsyncEthereumTesterProvider,
+from bubble.providers.bub_tester.main import (
+    AsyncBubereumTesterProvider,
 )
-from web3.types import (
+from bubble.types import (
     RPCEndpoint,
 )
 
 
 @pytest.mark.asyncio
 async def test_async_tester_provider_is_connected() -> None:
-    provider = AsyncEthereumTesterProvider()
+    provider = AsyncBubereumTesterProvider()
     connected = await provider.is_connected()
     assert connected
 
 
 @pytest.mark.asyncio
 async def test_async_tester_provider_creates_a_block() -> None:
-    provider = AsyncEthereumTesterProvider()
-    accounts = await provider.make_request("eth_accounts", [])
+    provider = AsyncBubereumTesterProvider()
+    accounts = await provider.make_request("bub_accounts", [])
     a, b = accounts["result"][:2]
-    current_block = await provider.make_request("eth_blockNumber", [])
+    current_block = await provider.make_request("bub_blockNumber", [])
     assert current_block["result"] == 0
     tx = await provider.make_request(
-        "eth_sendTransaction", [{"from": a, "to": b, "gas": 21000}]
+        "bub_sendTransaction", [{"from": a, "to": b, "gas": 21000}]
     )
     assert tx
-    current_block = await provider.make_request("eth_blockNumber", [])
+    current_block = await provider.make_request("bub_blockNumber", [])
     assert current_block["result"] == 1
 
 
@@ -52,16 +52,16 @@ async def test_async_tester_provider_creates_a_block() -> None:
         TransactionFailed(Exception("The error message.")),
     ),
 )
-async def test_async_tester_provider_properly_handles_eth_tester_error_messages(
+async def test_async_tester_provider_properly_handles_bub_tester_error_messages(
     mocker,
     exception_case,
 ):
     mocker.patch(
-        "eth_tester.main.EthereumTester.get_block_by_number", side_effect=exception_case
+        "bub_tester.main.EthereumTester.get_block_by_number", side_effect=exception_case
     )
 
-    provider = AsyncEthereumTesterProvider()
+    provider = AsyncBubereumTesterProvider()
     with pytest.raises(
         TransactionFailed, match="execution reverted: The error message."
     ):
-        await provider.make_request(RPCEndpoint("eth_blockNumber"), [])
+        await provider.make_request(RPCEndpoint("bub_blockNumber"), [])

@@ -13,19 +13,19 @@ from ethpm.exceptions import (
 from ethpm.tools import (
     get_ethpm_spec_manifest,
 )
-import web3
+import bubble
 
 
 def test_deployed_escrow_and_safe_send(escrow_manifest, w3):
     # Deploy a SafeSendLib
     safe_send_manifest = get_ethpm_spec_manifest("escrow", "v3.json")
     safe_send_contract_type = safe_send_manifest["contractTypes"]["SafeSendLib"]
-    SafeSend = w3.eth.contract(
+    SafeSend = w3.bub.contract(
         abi=safe_send_contract_type["abi"],
         bytecode=safe_send_contract_type["deploymentBytecode"]["bytecode"],
     )
     tx_hash = SafeSend.constructor().transact()
-    tx_receipt = w3.eth.get_transaction_receipt(tx_hash)
+    tx_receipt = w3.bub.get_transaction_receipt(tx_hash)
     safe_send_address = to_canonical_address(tx_receipt["contractAddress"])
 
     EscrowPackage = Package(escrow_manifest, w3)
@@ -38,7 +38,7 @@ def test_deployed_escrow_and_safe_send(escrow_manifest, w3):
     escrow_tx_hash = LinkedEscrowFactory.constructor(
         "0x4F5B11c860b37b68DE6D14Fb7e7b5f18A9A1bdC0"
     ).transact()
-    escrow_tx_receipt = w3.eth.wait_for_transaction_receipt(escrow_tx_hash)
+    escrow_tx_receipt = w3.bub.wait_for_transaction_receipt(escrow_tx_hash)
     escrow_address = escrow_tx_receipt.contractAddress
 
     # Cannot deploy with an unlinked factory
@@ -53,7 +53,7 @@ def test_deployed_escrow_and_safe_send(escrow_manifest, w3):
     contract_instance = LinkedEscrowFactory(escrow_address)
     assert EscrowFactory.needs_bytecode_linking is True
     assert LinkedEscrowFactory.needs_bytecode_linking is False
-    assert isinstance(contract_instance, web3.contract.Contract)
+    assert isinstance(contract_instance, bubble.contract.Contract)
     assert safe_send_address in LinkedEscrowFactory.bytecode
     assert safe_send_address in LinkedEscrowFactory.bytecode_runtime
     assert safe_send_address not in EscrowFactory.bytecode

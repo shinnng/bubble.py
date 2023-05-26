@@ -49,7 +49,7 @@ Features
 ~~~~~~~~
 
 - Add support for custom revert errors (`#2795 <https://github.com/ethereum/web3.py/issues/2795>`__)
-- Add the ``modify_transaction`` method to the ``AsyncEth`` class (`#2825 <https://github.com/ethereum/web3.py/issues/2825>`__)
+- Add the ``modify_transaction`` method to the ``AsyncBub`` class (`#2825 <https://github.com/ethereum/web3.py/issues/2825>`__)
 - add show_traceback flag to is_connected to allow user to see connection error reason (`#2912 <https://github.com/ethereum/web3.py/issues/2912>`__)
 - Add a ``data`` attribute on the ``ContractLogicError`` class that returns raw data returned by the node. (`#2922 <https://github.com/ethereum/web3.py/issues/2922>`__)
 - Add support via result formatters for ``reward`` type trace actions on tracing calls. (`#2929 <https://github.com/ethereum/web3.py/issues/2929>`__)
@@ -86,9 +86,9 @@ v6.2.0 (2023-04-12)
 Features
 ~~~~~~~~
 
-- Adds async version of `eth_getUncleCount` methods (`#2822 <https://github.com/ethereum/web3.py/issues/2822>`__)
-- Add the ``sign_transaction`` method to the ``AsyncEth`` class (`#2827 <https://github.com/ethereum/web3.py/issues/2827>`__)
-- Add the ``replace_transaction`` method to the ``AsyncEth`` class (`#2847 <https://github.com/ethereum/web3.py/issues/2847>`__)
+- Adds async version of `bub_getUncleCount` methods (`#2822 <https://github.com/ethereum/web3.py/issues/2822>`__)
+- Add the ``sign_transaction`` method to the ``AsyncBub`` class (`#2827 <https://github.com/ethereum/web3.py/issues/2827>`__)
+- Add the ``replace_transaction`` method to the ``AsyncBub`` class (`#2847 <https://github.com/ethereum/web3.py/issues/2847>`__)
 
 
 Bugfixes
@@ -112,20 +112,20 @@ Features
 
 - Add tracing functionality back in via the ``tracing`` module, add formatters for human-readable input and output, and attach this module to ``Web3`` on init / make it a default module. (`#2851 <https://github.com/ethereum/web3.py/issues/2851>`__)
 - Add result formatters for ``withdrawals_root`` and ``withdrawals`` as part of ``Shanghai`` hard fork support. (`#2868 <https://github.com/ethereum/web3.py/issues/2868>`__)
-- add eth_chainId to exception_retry_middleware whitelist (`#2892 <https://github.com/ethereum/web3.py/issues/2892>`__)
+- add bub_chainId to exception_retry_middleware whitelist (`#2892 <https://github.com/ethereum/web3.py/issues/2892>`__)
 
 
 Bugfixes
 ~~~~~~~~
 
-- Mark `test_async_eth_sign` with `@pytest.mark.asyncio` (`#2858 <https://github.com/ethereum/web3.py/issues/2858>`__)
+- Mark `test_async_bub_sign` with `@pytest.mark.asyncio` (`#2858 <https://github.com/ethereum/web3.py/issues/2858>`__)
 - fix readthedocs broken version selector (`#2883 <https://github.com/ethereum/web3.py/issues/2883>`__)
 
 
 Improved Documentation
 ~~~~~~~~~~~~~~~~~~~~~~
 
-- remove camelCased method deprecation notices from web3.eth docs (`#2882 <https://github.com/ethereum/web3.py/issues/2882>`__)
+- remove camelCased method deprecation notices from web3.bub docs (`#2882 <https://github.com/ethereum/web3.py/issues/2882>`__)
 - Add doc blurb about multiple HTTPProviders with the same URL (`#2889 <https://github.com/ethereum/web3.py/issues/2889>`__)
 - fix styling and external link formatting (`#2897 <https://github.com/ethereum/web3.py/issues/2897>`__)
 
@@ -136,8 +136,8 @@ Internal Changes - for web3.py Contributors
 - Bump pytest from 6.2.5 to 7+ because of CI ``DeprecationWarning`` (`#2863 <https://github.com/ethereum/web3.py/issues/2863>`__)
 - Require eth-abi v4 stable (`#2886 <https://github.com/ethereum/web3.py/issues/2886>`__)
 - remove unused docs dependencies and bump version of remaining (`#2890 <https://github.com/ethereum/web3.py/issues/2890>`__)
-- Update go-ethereum integration test fixture to use the latest version of geth - ``v1.11.5``. (`#2896 <https://github.com/ethereum/web3.py/issues/2896>`__)
-- Update ``geth_steps`` in CircleCI builds to pip install the proper version of ``py-geth``. (`#2898 <https://github.com/ethereum/web3.py/issues/2898>`__)
+- Update go-ethereum integration test fixture to use the latest version of bub - ``v1.11.5``. (`#2896 <https://github.com/ethereum/web3.py/issues/2896>`__)
+- Update ``bub_steps`` in CircleCI builds to pip install the proper version of ``py-bub``. (`#2898 <https://github.com/ethereum/web3.py/issues/2898>`__)
 - Update CircleCI windows orb path since it now uses python 3.11. (`#2899 <https://github.com/ethereum/web3.py/issues/2899>`__)
 - Bump go version used in CI jobs that install and run go-ethereum and parameterize the version in circleci config file for ease of configuration. (`#2900 <https://github.com/ethereum/web3.py/issues/2900>`__)
 
@@ -164,14 +164,14 @@ v6.0.0-beta.11 (2023-02-24)
 Features
 ~~~~~~~~
 
-- Add the ``sign`` method to the ``AsyncEth`` class (`#2833
+- Add the ``sign`` method to the ``AsyncBub`` class (`#2833
   <https://github.com/ethereum/web3.py/issues/2833>`__)
 
 
 Bugfixes
 ~~~~~~~~
 
-- More accurately define the ``eth_call`` return type as ``HexBytes`` since the
+- More accurately define the ``bub_call`` return type as ``HexBytes`` since the
   response is converted to ``HexBytes`` in the pythonic formatters and there
   are differences between ``HexBytes`` and ``bytes`` types. (`#2842
   <https://github.com/ethereum/web3.py/issues/2842>`__)
@@ -202,7 +202,7 @@ Internal Changes - for web3.py Contributors
   <https://github.com/ethereum/web3.py/issues/2838>`__)
 - Recompile test contracts with the new Solidity version ``0.8.19``. (`#2840
   <https://github.com/ethereum/web3.py/issues/2840>`__)
-- Update ``py-geth`` version and re-generate integration test fixture with geth
+- Update ``py-bub`` version and re-generate integration test fixture with bub
   ``v1.11.2``. (`#2841 <https://github.com/ethereum/web3.py/issues/2841>`__)
 
 
@@ -280,7 +280,7 @@ Breaking changes
   ContractFunction now there is no default. This was done to seperate the base
   class from the implementation. (`#2567
   <https://github.com/ethereum/web3.py/issues/2567>`__)
-- When calling a contract, use ``w3.eth.default_block`` if no block_identifier
+- When calling a contract, use ``w3.bub.default_block`` if no block_identifier
   is specified instead of ``latest``. (`#2777
   <https://github.com/ethereum/web3.py/issues/2777>`__)
 - Strict bytes type checking is now default for ``web3.py``. This change also
@@ -306,7 +306,7 @@ v6.0.0-beta.9 (2023-01-03)
 Features
 ~~~~~~~~
 
-- Add async ``w3.eth.get_block_transaction_count`` (`#2687
+- Add async ``w3.bub.get_block_transaction_count`` (`#2687
   <https://github.com/ethereum/web3.py/issues/2687>`__)
 - Support Python 3.11 (`#2699
   <https://github.com/ethereum/web3.py/issues/2699>`__)
@@ -336,7 +336,7 @@ Performance improvements
   <https://github.com/ethereum/web3.py/issues/2719>`__)
 - Remove unnecessary ``await`` for ``generate_gas_price()`` method as it does
   not need to be awaited. Move this method to ``BaseEth`` to be used directly
-  by both ``Eth`` and ``AsyncEth`` modules. (`#2735
+  by both ``Bub`` and ``AsyncBub`` modules. (`#2735
   <https://github.com/ethereum/web3.py/issues/2735>`__)
 
 
@@ -359,7 +359,7 @@ Deprecations and Removals
 - Removal of ``version`` module. (`#2729
   <https://github.com/ethereum/web3.py/issues/2729>`__)
 - Remove already-deprecated ``start_rpc`` and ``stop_rpc`` from the
-  ``w3.geth.admin`` module. (`#2731
+  ``w3.node.admin`` module. (`#2731
   <https://github.com/ethereum/web3.py/issues/2731>`__)
 
 
@@ -566,7 +566,7 @@ Bugfixes
 Documentation Updates
 ~~~~~~~~~~~~~~~~~~~~~
 
-- Update Proof of Authority middleware (`geth_poa_middleware`) documentation
+- Update Proof of Authority middleware (`node_poa_middleware`) documentation
   for better clarity. (`#2538
   <https://github.com/ethereum/web3.py/issues/2538>`__)
 - Add some missing supported async middlewares to docs. (`#2574
@@ -588,8 +588,8 @@ Documentation Updates
 Features
 ~~~~~~~~
 
-- Support for ``Account`` class access in ``AsyncEth`` via
-  ``async_w3.eth.account`` (`#2580
+- Support for ``Account`` class access in ``AsyncBub`` via
+  ``async_w3.bub.account`` (`#2580
   <https://github.com/ethereum/web3.py/issues/2580>`__)
 - Expose public abi utility methods: ``get_abi_output_names()`` and
   ``get_abi_input_names()`` (`#2596
@@ -619,7 +619,7 @@ Breaking Changes
 
 - sha3 and soliditySha3 were previously deprecated and now removed (`#2479
   <https://github.com/ethereum/web3.py/issues/2479>`__)
-- Remove deprecated methods from Geth, Parity and Net modules (`#2480
+- Remove deprecated methods from Bub, Parity and Net modules (`#2480
   <https://github.com/ethereum/web3.py/issues/2480>`__)
 - Provide better messaging to wrong arguments for contract functions,
   especially for ``tuple`` argument types. (`#2556
@@ -629,7 +629,7 @@ Breaking Changes
 Bugfixes
 ~~~~~~~~
 
-- Properly format ``block_number`` for ``eth_getTransactionCount`` when using
+- Properly format ``block_number`` for ``bub_getTransactionCount`` when using
   ``EthereumTesterProvider`` (`#1801
   <https://github.com/ethereum/web3.py/issues/1801>`__)
 - removed `Optional` type hints for `passphrase` arguments that aren't actually
@@ -642,11 +642,11 @@ Bugfixes
 Documentation Updates
 ~~~~~~~~~~~~~~~~~~~~~
 
-- Remove deprecated methods from Geth, Parity, and Net modules (`#2480
+- Remove deprecated methods from Bub, Parity, and Net modules (`#2480
   <https://github.com/ethereum/web3.py/issues/2480>`__)
 - replace double- with single-quotes to make f-string valid (`#2504
   <https://github.com/ethereum/web3.py/issues/2504>`__)
-- added geth personal_sign and personal_ec_recover documentation (`#2511
+- added bub personal_sign and personal_ec_recover documentation (`#2511
   <https://github.com/ethereum/web3.py/issues/2511>`__)
 
 
@@ -659,7 +659,7 @@ Features
 - Add a global flag on the provider for enabling / disabling CCIP Read for
   calls: ``global_ccip_read_enabled`` (defaults to ``True``). (`#2499
   <https://github.com/ethereum/web3.py/issues/2499>`__)
-- Deprecate Geth Admin StartRPC and StopRPC for StartHTTP and StopHTTP (`#2507
+- Deprecate Bub Admin StartRPC and StopRPC for StartHTTP and StopHTTP (`#2507
   <https://github.com/ethereum/web3.py/issues/2507>`__)
 - Added Async support for ENS (`#2547
   <https://github.com/ethereum/web3.py/issues/2547>`__)
@@ -701,7 +701,7 @@ v6.0.0-beta.3 (2022-06-01)
 Breaking Changes
 ~~~~~~~~~~~~~~~~
 
-- Removed deprecated methods from eth and geth (`#1416
+- Removed deprecated methods from eth and bub (`#1416
   <https://github.com/ethereum/web3.py/issues/1416>`__)
 
 
@@ -854,12 +854,12 @@ v5.28.0 (2022-02-09)
 Features
 ~~~~~~~~
 
-- Added Async functions for Geth Personal and Admin modules (`#1413
+- Added Async functions for Bub Personal and Admin modules (`#1413
   <https://github.com/ethereum/web3.py/issues/1413>`__)
-- async support for formatting, validation, and geth poa middlewares (`#2098
+- async support for formatting, validation, and bub poa middlewares (`#2098
   <https://github.com/ethereum/web3.py/issues/2098>`__)
-- Calculate a default ``maxPriorityFeePerGas`` using ``eth_feeHistory`` when
-  ``eth_maxPriorityFeePerGas`` is not available, since the latter is not a part
+- Calculate a default ``maxPriorityFeePerGas`` using ``bub_feeHistory`` when
+  ``bub_maxPriorityFeePerGas`` is not available, since the latter is not a part
   of the Ethereum JSON-RPC specs and only supported by certain clients. (`#2259
   <https://github.com/ethereum/web3.py/issues/2259>`__)
 - Allow NamedTuples in ABI inputs (`#2312
@@ -887,7 +887,7 @@ v5.27.0 (2022-01-31)
 Features
 ~~~~~~~~
 
-- Added Async functions for Geth TxPool (`#1413
+- Added Async functions for Bub TxPool (`#1413
   <https://github.com/ethereum/web3.py/issues/1413>`__)
 - external modules are no longer required to inherit from the
   ``web3.module.Module`` class (`#2304
@@ -925,7 +925,7 @@ Improved Documentation
   <https://github.com/ethereum/web3.py/issues/2303>`__)
 - add github link to the main docs landing page (`#2313
   <https://github.com/ethereum/web3.py/issues/2313>`__)
-- fix typos and update referenced `geth` version (`#2326
+- fix typos and update referenced `bub` version (`#2326
   <https://github.com/ethereum/web3.py/issues/2326>`__)
 
 
@@ -1004,8 +1004,8 @@ v5.25.0 (2021-11-19)
 Features
 ~~~~~~~~
 
-- Support for ``w3.eth.get_raw_transaction_by_block``, and async support for
-  ``w3.eth.get_raw_transaction_by_block`` (`#2209
+- Support for ``w3.bub.get_raw_transaction_by_block``, and async support for
+  ``w3.bub.get_raw_transaction_by_block`` (`#2209
   <https://github.com/ethereum/web3.py/issues/2209>`__)
 
 
@@ -1055,7 +1055,7 @@ Features
 Bugfixes
 ~~~~~~~~
 
-- Encode block_count as hex before making eth_feeHistory RPC call (`#2117
+- Encode block_count as hex before making bub_feeHistory RPC call (`#2117
   <https://github.com/ethereum/web3.py/issues/2117>`__)
 
 
@@ -1065,14 +1065,14 @@ Improved Documentation
 - Fix typo in AsyncHTTPProvider docs (`#2131
   <https://github.com/ethereum/web3.py/issues/2131>`__)
 - Update AsyncHTTPProvider doc Supported Methods to include
-  ``web3.eth.send_raw_transaction()``. (`#2135
+  ``web3.bub.send_raw_transaction()``. (`#2135
   <https://github.com/ethereum/web3.py/issues/2135>`__)
 - Improve messaging around usage and implementation questions, directing users
   to the appropriate channel (`#2138
   <https://github.com/ethereum/web3.py/issues/2138>`__)
 - Clarify some contract ``ValueError`` error messages. (`#2146
   <https://github.com/ethereum/web3.py/issues/2146>`__)
-- Updated docs for w3.eth.account.sign_transaction to reflect that transaction
+- Updated docs for w3.bub.account.sign_transaction to reflect that transaction
   type is no longer needed to successfully sign typed transactions and to
   illustrate how to structure an optional accessList parameter in a typed
   transaction (`#2157 <https://github.com/ethereum/web3.py/issues/2157>`__)
@@ -1112,14 +1112,14 @@ v5.23.0 (2021-08-12)
 Features
 ~~~~~~~~
 
-- Add support for eth_feeHistory RPC method (`#2038 <https://github.com/ethereum/web3.py/issues/2038>`__)
-- Add support for eth_maxPriorityFeePerGas RPC method (`#2100 <https://github.com/ethereum/web3.py/issues/2100>`__)
+- Add support for bub_feeHistory RPC method (`#2038 <https://github.com/ethereum/web3.py/issues/2038>`__)
+- Add support for bub_maxPriorityFeePerGas RPC method (`#2100 <https://github.com/ethereum/web3.py/issues/2100>`__)
 
 
 Bugfixes
 ~~~~~~~~
 
-- Hot fix for string interpolation issue with contract function call decoding exception to facilitate extracting a meaningful message from the eth_call response (`#2096 <https://github.com/ethereum/web3.py/issues/2096>`__)
+- Hot fix for string interpolation issue with contract function call decoding exception to facilitate extracting a meaningful message from the bub_call response (`#2096 <https://github.com/ethereum/web3.py/issues/2096>`__)
 - Bypass adding a ``gasPrice`` via the gas price strategy, if one is set, when EIP-1559 transaction params are used for ``send_transaction`` (`#2099 <https://github.com/ethereum/web3.py/issues/2099>`__)
 
 
@@ -1135,17 +1135,17 @@ v5.22.0 (2021-08-02)
 Features
 ~~~~~~~~
 
-- Add support for eth_getRawTransactionByHash RPC method (`#2039 <https://github.com/ethereum/web3.py/issues/2039>`__)
+- Add support for bub_getRawTransactionByHash RPC method (`#2039 <https://github.com/ethereum/web3.py/issues/2039>`__)
 - Add AsyncNet module (`#2044 <https://github.com/ethereum/web3.py/issues/2044>`__)
 - Add async ``eth.get_balance``, ``eth.get_code``, ``eth.get_transaction_count`` methods. (`#2056 <https://github.com/ethereum/web3.py/issues/2056>`__)
-- eth_signTransaction support for eip-1559 params 'maxFeePerGas' and 'maxPriorityFeePerGas' (`#2082 <https://github.com/ethereum/web3.py/issues/2082>`__)
-- Add support for async ``w3.eth.call``. (`#2083 <https://github.com/ethereum/web3.py/issues/2083>`__)
+- bub_signTransaction support for eip-1559 params 'maxFeePerGas' and 'maxPriorityFeePerGas' (`#2082 <https://github.com/ethereum/web3.py/issues/2082>`__)
+- Add support for async ``w3.bub.call``. (`#2083 <https://github.com/ethereum/web3.py/issues/2083>`__)
 
 
 Bugfixes
 ~~~~~~~~
 
-- If a transaction hash was passed as a string rather than a HexByte to ``w3.eth.wait_for_transaction_receipt``, and the time was exhausted before the transaction is in the chain, the error being raised was a TypeError instead of the correct TimeExhausted error. This is because the ``to_hex`` method in the TimeExhausted error message expects a primitive as the first argument, and a string doesn't qualify as a primitive. Fixed by converting the transaction_hash to HexBytes instead. (`#2068 <https://github.com/ethereum/web3.py/issues/2068>`__)
+- If a transaction hash was passed as a string rather than a HexByte to ``w3.bub.wait_for_transaction_receipt``, and the time was exhausted before the transaction is in the chain, the error being raised was a TypeError instead of the correct TimeExhausted error. This is because the ``to_hex`` method in the TimeExhausted error message expects a primitive as the first argument, and a string doesn't qualify as a primitive. Fixed by converting the transaction_hash to HexBytes instead. (`#2068 <https://github.com/ethereum/web3.py/issues/2068>`__)
 - Hot fix for a string interpolation issue in message when BadFunctionCallOutput is raised for call_contract_function() (`#2069 <https://github.com/ethereum/web3.py/issues/2069>`__)
 - ``fill_transaction_defaults()`` no longer sets a default ``gasPrice`` if 1559 fees are present in the transaction parameters. This fixes sign-and-send middleware issues with 1559 fees. (`#2092 <https://github.com/ethereum/web3.py/issues/2092>`__)
 
@@ -1180,8 +1180,8 @@ Bugfixes
 
   Split out null result formatters from the error formatters and added some tests. (`#2022 <https://github.com/ethereum/web3.py/issues/2022>`__)
 - Fix broken tests and use the new 1559 params for most of our test transactions. (`#2053 <https://github.com/ethereum/web3.py/issues/2053>`__)
-- Set a default maxFeePerGas value consistent with Geth (`#2055 <https://github.com/ethereum/web3.py/issues/2055>`__)
-- Fix bug in geth PoA middleware where a ``None`` response should throw a ``BlockNotFound`` error, but was instead throwing an ``AttributeError`` (`#2064 <https://github.com/ethereum/web3.py/issues/2064>`__)
+- Set a default maxFeePerGas value consistent with Bub (`#2055 <https://github.com/ethereum/web3.py/issues/2055>`__)
+- Fix bug in bub PoA middleware where a ``None`` response should throw a ``BlockNotFound`` error, but was instead throwing an ``AttributeError`` (`#2064 <https://github.com/ethereum/web3.py/issues/2064>`__)
 
 
 Improved Documentation
@@ -1196,7 +1196,7 @@ v5.20.1 (2021-07-01)
 Bugfixes
 ~~~~~~~~
 
-- Have the geth dev IPC auto connection check for the ``WEB3_PROVIDER_URI`` environment variable. (`#2023 <https://github.com/ethereum/web3.py/issues/2023>`__)
+- Have the bub dev IPC auto connection check for the ``WEB3_PROVIDER_URI`` environment variable. (`#2023 <https://github.com/ethereum/web3.py/issues/2023>`__)
 
 
 Improved Documentation
@@ -1204,7 +1204,7 @@ Improved Documentation
 
 - Remove reference to allowing multiple providers in docs (`#2018 <https://github.com/ethereum/web3.py/issues/2018>`__)
 - Update "Contract Deployment Example" docs to use ``py-solc-x`` as ``solc`` is no longer maintained. (`#2020 <https://github.com/ethereum/web3.py/issues/2020>`__)
-- Detail using unreleased Geth builds in CI (`#2037 <https://github.com/ethereum/web3.py/issues/2037>`__)
+- Detail using unreleased Bub builds in CI (`#2037 <https://github.com/ethereum/web3.py/issues/2037>`__)
 - Clarify that a missing trie node error could occur when using ``block_identifier`` with ``.call()``
   on a node that isn't running in archive mode (`#2048 <https://github.com/ethereum/web3.py/issues/2048>`__)
 
@@ -1223,12 +1223,12 @@ Features
 
 - Add new AsyncHTTPProvider. No middleware or session caching support yet.
 
-  Also adds async ``w3.eth.gas_price``, and async ``w3.isConnected()`` methods. (`#1978 <https://github.com/ethereum/web3.py/issues/1978>`__)
+  Also adds async ``w3.bub.gas_price``, and async ``w3.isConnected()`` methods. (`#1978 <https://github.com/ethereum/web3.py/issues/1978>`__)
 - Add ability for AsyncHTTPProvider to accept middleware
 
   Also adds async gas_price_strategy middleware, and moves gas estimate to middleware.
 
-  AsyncEthereumTesterProvider now inherits from AsyncBase (`#1999 <https://github.com/ethereum/web3.py/issues/1999>`__)
+  AsyncBubereumTesterProvider now inherits from AsyncBase (`#1999 <https://github.com/ethereum/web3.py/issues/1999>`__)
 - Support state_override in contract function call. (`#2005 <https://github.com/ethereum/web3.py/issues/2005>`__)
 
 
@@ -1258,7 +1258,7 @@ v5.19.0 (2021-04-28)
 Features
 ~~~~~~~~
 
-- Handle optional ``eth_call`` state override param. (`#1921 <https://github.com/ethereum/web3.py/issues/1921>`__)
+- Handle optional ``bub_call`` state override param. (`#1921 <https://github.com/ethereum/web3.py/issues/1921>`__)
 - Add list_storage_keys deprecate listStorageKeys (`#1944 <https://github.com/ethereum/web3.py/issues/1944>`__)
 - Add net_peers deprecate netPeers (`#1946 <https://github.com/ethereum/web3.py/issues/1946>`__)
 - Add trace_replay_transaction deprecate traceReplayTransaction (`#1949 <https://github.com/ethereum/web3.py/issues/1949>`__)
@@ -1275,7 +1275,7 @@ Features
 Improved Documentation
 ~~~~~~~~~~~~~~~~~~~~~~
 
-- Document ``eth_call`` state overrides. (`#1965 <https://github.com/ethereum/web3.py/issues/1965>`__)
+- Document ``bub_call`` state overrides. (`#1965 <https://github.com/ethereum/web3.py/issues/1965>`__)
 
 
 Misc
@@ -1290,21 +1290,21 @@ v5.18.0 (2021-04-08)
 Features
 ~~~~~~~~
 
-- Add ``w3.eth.modify_transaction`` deprecate ``w3.eth.modifyTransaction`` (`#1886 <https://github.com/ethereum/web3.py/issues/1886>`__)
-- Add ``w3.eth.get_transaction_receipt``, deprecate ``w3.eth.getTransactionReceipt`` (`#1893 <https://github.com/ethereum/web3.py/issues/1893>`__)
-- Add ``w3.eth.wait_for_transaction_receipt`` deprecate ``w3.eth.waitForTransactionReceipt`` (`#1896 <https://github.com/ethereum/web3.py/issues/1896>`__)
-- Add ``w3.eth.set_contract_factory`` deprecate ``w3.eth.setContractFactory`` (`#1900 <https://github.com/ethereum/web3.py/issues/1900>`__)
-- Add ``w3.eth.generate_gas_price`` deprecate ``w3.eth.generateGasPrice`` (`#1905 <https://github.com/ethereum/web3.py/issues/1905>`__)
-- Add ``w3.eth.set_gas_price_strategy`` deprecate ``w3.eth.setGasPriceStrategy`` (`#1906 <https://github.com/ethereum/web3.py/issues/1906>`__)
-- Add ``w3.eth.estimate_gas`` deprecate ``w3.eth.estimateGas`` (`#1913 <https://github.com/ethereum/web3.py/issues/1913>`__)
-- Add ``w3.eth.sign_typed_data`` deprecate ``w3.eth.signTypedData`` (`#1915 <https://github.com/ethereum/web3.py/issues/1915>`__)
-- Add ``w3.eth.get_filter_changes`` deprecate ``w3.eth.getFilterChanges`` (`#1916 <https://github.com/ethereum/web3.py/issues/1916>`__)
+- Add ``w3.bub.modify_transaction`` deprecate ``w3.bub.modifyTransaction`` (`#1886 <https://github.com/ethereum/web3.py/issues/1886>`__)
+- Add ``w3.bub.get_transaction_receipt``, deprecate ``w3.bub.getTransactionReceipt`` (`#1893 <https://github.com/ethereum/web3.py/issues/1893>`__)
+- Add ``w3.bub.wait_for_transaction_receipt`` deprecate ``w3.bub.waitForTransactionReceipt`` (`#1896 <https://github.com/ethereum/web3.py/issues/1896>`__)
+- Add ``w3.bub.set_contract_factory`` deprecate ``w3.bub.setContractFactory`` (`#1900 <https://github.com/ethereum/web3.py/issues/1900>`__)
+- Add ``w3.bub.generate_gas_price`` deprecate ``w3.bub.generateGasPrice`` (`#1905 <https://github.com/ethereum/web3.py/issues/1905>`__)
+- Add ``w3.bub.set_gas_price_strategy`` deprecate ``w3.bub.setGasPriceStrategy`` (`#1906 <https://github.com/ethereum/web3.py/issues/1906>`__)
+- Add ``w3.bub.estimate_gas`` deprecate ``w3.bub.estimateGas`` (`#1913 <https://github.com/ethereum/web3.py/issues/1913>`__)
+- Add ``w3.bub.sign_typed_data`` deprecate ``w3.bub.signTypedData`` (`#1915 <https://github.com/ethereum/web3.py/issues/1915>`__)
+- Add ``w3.bub.get_filter_changes`` deprecate ``w3.bub.getFilterChanges`` (`#1916 <https://github.com/ethereum/web3.py/issues/1916>`__)
 - Add ``eth.get_filter_logs``, deprecate ``eth.getFilterLogs`` (`#1919 <https://github.com/ethereum/web3.py/issues/1919>`__)
 - Add ``eth.uninstall_filter``, deprecate ``eth.uninstallFilter`` (`#1920 <https://github.com/ethereum/web3.py/issues/1920>`__)
-- Add ``w3.eth.get_logs`` deprecate ``w3.eth.getLogs`` (`#1925 <https://github.com/ethereum/web3.py/issues/1925>`__)
-- Add ``w3.eth.submit_hashrate`` deprecate ``w3.eth.submitHashrate`` (`#1926 <https://github.com/ethereum/web3.py/issues/1926>`__)
-- Add ``w3.eth.submit_work`` deprecate ``w3.eth.submitWork`` (`#1927 <https://github.com/ethereum/web3.py/issues/1927>`__)
-- Add ``w3.eth.get_work``, deprecate ``w3.eth.getWork`` (`#1934 <https://github.com/ethereum/web3.py/issues/1934>`__)
+- Add ``w3.bub.get_logs`` deprecate ``w3.bub.getLogs`` (`#1925 <https://github.com/ethereum/web3.py/issues/1925>`__)
+- Add ``w3.bub.submit_hashrate`` deprecate ``w3.bub.submitHashrate`` (`#1926 <https://github.com/ethereum/web3.py/issues/1926>`__)
+- Add ``w3.bub.submit_work`` deprecate ``w3.bub.submitWork`` (`#1927 <https://github.com/ethereum/web3.py/issues/1927>`__)
+- Add ``w3.bub.get_work``, deprecate ``w3.bub.getWork`` (`#1934 <https://github.com/ethereum/web3.py/issues/1934>`__)
 - Adds public get_block_number method. (`#1937 <https://github.com/ethereum/web3.py/issues/1937>`__)
 
 
@@ -1334,10 +1334,10 @@ Features
 ~~~~~~~~
 
 - Added ``get_transaction_count``, and deprecated ``getTransactionCount`` (`#1844 <https://github.com/ethereum/web3.py/issues/1844>`__)
-- Add ``w3.eth.send_transaction``, deprecate ``w3.eth.sendTransaction`` (`#1878 <https://github.com/ethereum/web3.py/issues/1878>`__)
-- Add ``web3.eth.sign_transaction``, deprecate ``web3.eth.signTransaction`` (`#1879 <https://github.com/ethereum/web3.py/issues/1879>`__)
-- Add ``w3.eth.send_raw_transaction``, deprecate ``w3.eth.sendRawTransaction`` (`#1880 <https://github.com/ethereum/web3.py/issues/1880>`__)
-- Add ``w3.eth.replace_transaction`` deprecate ``w3.eth.replaceTransaction`` (`#1882 <https://github.com/ethereum/web3.py/issues/1882>`__)
+- Add ``w3.bub.send_transaction``, deprecate ``w3.bub.sendTransaction`` (`#1878 <https://github.com/ethereum/web3.py/issues/1878>`__)
+- Add ``web3.bub.sign_transaction``, deprecate ``web3.bub.signTransaction`` (`#1879 <https://github.com/ethereum/web3.py/issues/1879>`__)
+- Add ``w3.bub.send_raw_transaction``, deprecate ``w3.bub.sendRawTransaction`` (`#1880 <https://github.com/ethereum/web3.py/issues/1880>`__)
+- Add ``w3.bub.replace_transaction`` deprecate ``w3.bub.replaceTransaction`` (`#1882 <https://github.com/ethereum/web3.py/issues/1882>`__)
 
 
 Improved Documentation
@@ -1382,7 +1382,7 @@ Improved Documentation
 - Document passing a struct into a contract function. (`#1860 <https://github.com/ethereum/web3.py/issues/1860>`__)
 - Add instance configuration troubleshooting docs. (`#1865 <https://github.com/ethereum/web3.py/issues/1865>`__)
 - Clarify nonce lookup in sendRawTransaction docs. (`#1866 <https://github.com/ethereum/web3.py/issues/1866>`__)
-- Updated docs for web3.eth methods: eth.getTransactionReceipt and eth.waitForTransactionReceipt (`#1868 <https://github.com/ethereum/web3.py/issues/1868>`__)
+- Updated docs for web3.bub methods: eth.getTransactionReceipt and eth.waitForTransactionReceipt (`#1868 <https://github.com/ethereum/web3.py/issues/1868>`__)
 
 
 v5.15.0 (2021-01-15)
@@ -1431,7 +1431,7 @@ Features
 ~~~~~~~~
 
 - Introduce experimental Ethereum 2.0 beacon node API (`#1758 <https://github.com/ethereum/web3.py/issues/1758>`__)
-- Add new get_balance method on Eth class. Deprecated getBalance. (`#1806 <https://github.com/ethereum/web3.py/issues/1806>`__)
+- Add new get_balance method on Bub class. Deprecated getBalance. (`#1806 <https://github.com/ethereum/web3.py/issues/1806>`__)
 
 
 Misc
@@ -1452,7 +1452,7 @@ Bugfixes
 Improved Documentation
 ~~~~~~~~~~~~~~~~~~~~~~
 
-- Document Geth and Parity/OpenEthereum fixture generation (`#1787 <https://github.com/ethereum/web3.py/issues/1787>`__)
+- Document Bub and Parity/OpenEthereum fixture generation (`#1787 <https://github.com/ethereum/web3.py/issues/1787>`__)
 
 
 Misc
@@ -1586,7 +1586,7 @@ Bugfixes
 Improved Documentation
 ~~~~~~~~~~~~~~~~~~~~~~
 
-- Add a :meth:`~web3.eth.Eth.getBalance` example and provide more context for using the `fromWei` and `toWei` utility methods. (`#1676 <https://github.com/ethereum/web3.py/issues/1676>`__)
+- Add a :meth:`~web3.bub.Bub.getBalance` example and provide more context for using the `fromWei` and `toWei` utility methods. (`#1676 <https://github.com/ethereum/web3.py/issues/1676>`__)
 - Overhaul the Overview documentation to provide a tour of major features. (`#1681 <https://github.com/ethereum/web3.py/issues/1681>`__)
 
 
@@ -1596,7 +1596,7 @@ v5.11.1 (2020-06-17)
 Bugfixes
 ~~~~~~~~
 
-- Added formatter rules for eth_tester middleware to allow :meth:`~web3.eth.Eth.getBalance` by using integer block numbers (`#1660 <https://github.com/ethereum/web3.py/issues/1660>`__)
+- Added formatter rules for eth_tester middleware to allow :meth:`~web3.bub.Bub.getBalance` by using integer block numbers (`#1660 <https://github.com/ethereum/web3.py/issues/1660>`__)
 - Fix type annotations within the ``eth.py`` module. Several arguments that defaulted to ``None`` were not declared ``Optional``. (`#1668 <https://github.com/ethereum/web3.py/issues/1668>`__)
 - Fix type annotation warning when using string URI to instantiate an HTTP or WebsocketProvider. (`#1669 <https://github.com/ethereum/web3.py/issues/1669>`__)
 - Fix type annotations within the ``web3`` modules. Several arguments that defaulted to ``None`` were not declared ``Optional``. (`#1670 <https://github.com/ethereum/web3.py/issues/1670>`__)
@@ -1678,9 +1678,9 @@ v5.8.0 (2020-04-23)
 Features
 ~~~~~~~~
 
-- Introduced ``list_wallets`` method to the ``GethPersonal`` class. (`#1516 <https://github.com/ethereum/web3.py/issues/1516>`__)
+- Introduced ``list_wallets`` method to the ``NodePersonaler`` class. (`#1516 <https://github.com/ethereum/web3.py/issues/1516>`__)
 - Added block_identifier parameter to `ContractConstructor.estimateGas` method. (`#1588 <https://github.com/ethereum/web3.py/issues/1588>`__)
-- Add snake_case methods to Geth and Parity Personal Modules.
+- Add snake_case methods to Bub and Parity Personal Modules.
 
   Deprecate camelCase methods. (`#1589 <https://github.com/ethereum/web3.py/issues/1589>`__)
 - Added new weighted keyword argument to the time based gas price strategy.
@@ -1737,7 +1737,7 @@ Features
 Bugfixes
 ~~~~~~~~
 
-- Fix return type of eth_getCode. Changed from Hexstr to HexBytes. (`#1601 <https://github.com/ethereum/web3.py/issues/1601>`__)
+- Fix return type of bub_getCode. Changed from Hexstr to HexBytes. (`#1601 <https://github.com/ethereum/web3.py/issues/1601>`__)
 
 
 Misc
@@ -1752,7 +1752,7 @@ v5.6.0 (2020-02-26)
 Features
 ~~~~~~~~
 
-- Add snake_case methods to Geth Miner class, deprecate camelCase methods (`#1579 <https://github.com/ethereum/web3.py/issues/1579>`__)
+- Add snake_case methods to Bub Miner class, deprecate camelCase methods (`#1579 <https://github.com/ethereum/web3.py/issues/1579>`__)
 - Add snake_case methods for the net module, deprecate camelCase methods (`#1581 <https://github.com/ethereum/web3.py/issues/1581>`__)
 - Add PEP561 type marker (`#1583 <https://github.com/ethereum/web3.py/issues/1583>`__)
 
@@ -1764,7 +1764,7 @@ Bugfixes
 
   Parity/OpenEthereum requires a replacement transaction's
   gas to be a minimum of 12.5% higher than the original
-  (vs. Geth's 10%). (`#1570 <https://github.com/ethereum/web3.py/issues/1570>`__)
+  (vs. Bub's 10%). (`#1570 <https://github.com/ethereum/web3.py/issues/1570>`__)
 
 
 v5.5.1 (2020-02-10)
@@ -1933,7 +1933,7 @@ Features
 ~~~~~~~~
 
 - Add ``enable_strict_bytes_type_checking`` flag to web3 instance (`#1419 <https://github.com/ethereum/web3.py/issues/1419>`__)
-- Move Geth Whisper methods to snake case and deprecate camel case methods (`#1433 <https://github.com/ethereum/web3.py/issues/1433>`__)
+- Move Bub Whisper methods to snake case and deprecate camel case methods (`#1433 <https://github.com/ethereum/web3.py/issues/1433>`__)
 
 
 Bugfixes
@@ -1966,13 +1966,13 @@ Bugfixes
 Improved Documentation
 ~~~~~~~~~~~~~~~~~~~~~~
 
-- Remove whitespace, move ``topics`` key -> ``topic`` in Geth docs (`#1425 <https://github.com/ethereum/web3.py/issues/1425>`__)
+- Remove whitespace, move ``topics`` key -> ``topic`` in Bub docs (`#1425 <https://github.com/ethereum/web3.py/issues/1425>`__)
 - Enforce stricter doc checking, turning warnings into errors to fail CI builds
   to catch issues quickly.
 
   Add missing ``web3.tools.rst`` to the table of contents and fix incorrectly formatted
   JSON example. (`#1437 <https://github.com/ethereum/web3.py/issues/1437>`__)
-- Add example using Geth POA Middleware with Infura Rinkeby Node (`#1444 <https://github.com/ethereum/web3.py/issues/1444>`__)
+- Add example using Bub POA Middleware with Infura Rinkeby Node (`#1444 <https://github.com/ethereum/web3.py/issues/1444>`__)
 
 
 Misc
@@ -2014,7 +2014,7 @@ Released August 1, 2019
 
 - Features
 
-  - ``web3.eth.chainId`` now returns an integer instead of hex
+  - ``web3.bub.chainId`` now returns an integer instead of hex
     - `#1394 <https://github.com/ethereum/web3.py/pull/1394>`_
 
 - Bugfixes
@@ -2085,7 +2085,7 @@ Released July 18,2019
 
 - Docs
 
-  - Clarify in docs the return of ``Eth.sendRawTransaction()`` as
+  - Clarify in docs the return of ``Bub.sendRawTransaction()`` as
     a HexBytes object, not a string.
     - `#1384 <https://github.com/ethereum/web3.py/pull/1384>`_
 
@@ -2100,7 +2100,7 @@ Released July 15, 2019
 
 - Features
 
-  - Add eth_getProof support
+  - Add bub_getProof support
     - `#1185 <https://github.com/ethereum/web3.py/pull/1185>`_
   - Implement web3.pm.get_local_package()
     - `#1372 <https://github.com/ethereum/web3.py/pull/1372>`_
@@ -2202,9 +2202,9 @@ Released April 15, 2019
   - Implement chainId endpoint
     - `#1295 <https://github.com/ethereum/web3.py/pull/1295>`_
   - Moved non-standard JSON-RPC endpoints to applicable
-    Parity/Geth docs. Deprecated ``web3.version`` for ``web3.api``
+    Parity/Bub docs. Deprecated ``web3.version`` for ``web3.api``
     - `#1290 <https://github.com/ethereum/web3.py/pull/1290>`_
-  - Moved Whisper endpoints to applicable Geth or Parity namespace
+  - Moved Whisper endpoints to applicable Bub or Parity namespace
     - `#1308 <https://github.com/ethereum/web3.py/pull/1308>`_
   - Added support for Goerli provider
     - `#1286 <https://github.com/ethereum/web3.py/pull/1286>`_
@@ -2226,7 +2226,7 @@ Released April 15, 2019
     - `#1331 <https://github.com/ethereum/web3.py/pull/1331>`_
   - Zip Fixture data
     - `#1307 <https://github.com/ethereum/web3.py/pull/1307>`_
-  - Update Geth version for integration tests
+  - Update Bub version for integration tests
     - `#1301 <https://github.com/ethereum/web3.py/pull/1301>`_
   - Remove unneeded testrpc
     - `#1322 <https://github.com/ethereum/web3.py/pull/1322>`_
@@ -2258,25 +2258,25 @@ Released March 20, 2019
 
   - Removed ``web3/utils`` directory in favor of ``web3/_utils``
     - `#1282 <https://github.com/ethereum/web3.py/pull/1282>`_
-  - Relocated personal RPC endpoints to Parity and Geth class
+  - Relocated personal RPC endpoints to Parity and Bub class
     - `#1211 <https://github.com/ethereum/web3.py/pull/1211>`_
-  - Deprecated ``web3.net.chainId()``, ``web3.eth.getCompilers()``,
-    and ``web3.eth.getTransactionFromBlock()``. Removed ``web3.eth.enableUnauditedFeatures()``
+  - Deprecated ``web3.net.chainId()``, ``web3.bub.getCompilers()``,
+    and ``web3.bub.getTransactionFromBlock()``. Removed ``web3.bub.enableUnauditedFeatures()``
     - `#1270 <https://github.com/ethereum/web3.py/pull/1270>`_
-  - Relocated eth_protocolVersion and web3_clientVersion
+  - Relocated bub_protocolVersionndingTransactionFilter and web3_clientVersion
     - `#1274 <https://github.com/ethereum/web3.py/pull/1274>`_
-  - Relocated ``web3.txpool`` to ``web3.geth.txpool``
+  - Relocated ``web3.txpool`` to ``web3.node.txpool``
     - `#1275 <https://github.com/ethereum/web3.py/pull/1275>`_
-  - Relocated admin module to Geth namespace
+  - Relocated admin module to Bub namespace
     - `#1288 <https://github.com/ethereum/web3.py/pull/1288>`_
-  - Relocated miner module to Geth namespace
+  - Relocated miner module to Bub namespace
     - `#1287 <https://github.com/ethereum/web3.py/pull/1287>`_
 
 - Features
 
-  - Implement ``eth_submitHashrate`` and ``eth_submitWork`` JSONRPC endpoints.
+  - Implement ``bub_submitHashrate`` and ``bub_submitWork`` JSONRPC endpoints.
     - `#1280 <https://github.com/ethereum/web3.py/pull/1280>`_
-  - Implement ``web3.eth.signTransaction``
+  - Implement ``web3.bub.signTransaction``
     - `#1277 <https://github.com/ethereum/web3.py/pull/1277>`_
 
 - Docs
@@ -2341,7 +2341,7 @@ Released February 13th, 2019
     - `#1173 <https://github.com/ethereum/web3.py/pull/1173>`_
   - Contract Caller API Implemented
     - `#1227 <https://github.com/ethereum/web3.py/pull/1227>`_
-  - Add Geth POA middleware to use Rinkeby with Infura Auto
+  - Add Bub POA middleware to use Rinkeby with Infura Auto
     - `#1234 <https://github.com/ethereum/web3.py/pull/1234>`_
   - Add manifest and input argument validation to ``pm.release_package()``
     - `#1237 <https://github.com/ethereum/web3.py/pull/1237>`_
@@ -2485,7 +2485,7 @@ Released December 13th, 2018
     - `#1109 <https://github.com/ethereum/web3.py/pull/1109>`_
   - Receipt timeout raises ``TimeExhausted``
     - `#1070 <https://github.com/ethereum/web3.py/pull/1070>`_
-  - Allow specification of block number for ``eth_estimateGas``
+  - Allow specification of block number for ``bub_estimateGas``
     - `#1046 <https://github.com/ethereum/web3.py/pull/1046>`_
 
 
@@ -2604,7 +2604,7 @@ Released Aug 24, 2018
 
   - Fix crash in time-based gas strategies with small number of transactions - `#983
     <https://github.com/ethereum/web3.py/pull/983>`_
-  - Fx crash when passing multiple addresses to :meth:`w3.eth.getLogs() <web3.eth.Eth.getLogs>` -
+  - Fx crash when passing multiple addresses to :meth:`w3.bub.getLogs() <web3.bub.Bub.getLogs>` -
     `#1005 <https://github.com/ethereum/web3.py/pull/1005>`_
 - Misc
 
@@ -2614,7 +2614,7 @@ Released Aug 24, 2018
     <https://github.com/ethereum/web3.py/pull/974>`_
   - Add a lot more filter tests - `#997
     <https://github.com/ethereum/web3.py/pull/997>`_
-  - Add more tests for filtering with ``None``. Note that geth & parity differ here. - `#985
+  - Add more tests for filtering with ``None``. Note that bub & parity differ here. - `#985
     <https://github.com/ethereum/web3.py/pull/985>`_
   - Follow-up on Parity bug that we reported upstream (`parity#7816
     <https://github.com/paritytech/parity-ethereum/issues/7816>`_): they resolved in 1.10. We
@@ -2638,7 +2638,7 @@ Released July 30, 2018
   - Improve estimation of gas prices
 - Bugfixes
 
-  - Can now use a block number with :meth:`~web3.eth.Eth.getCode` when connected to
+  - Can now use a block number with :meth:`~web3.bub.Bub.getCode` when connected to
     :class:`~web3.providers.eth_tester.EthereumTesterProvider` (without crashing)
 - Misc
 
@@ -2675,7 +2675,7 @@ Released June 21, 2018
   - Can send websocket connection parameters in :class:`~web3.providers.websocket.WebsocketProvider`
   - Two new auto-initialization options:
 
-    - ``from web3.auto.gethdev import w3``
+    - ``from web3.auto.bubdev import w3``
     - ``from web3.auto.infura import w3``
       (After setting the ``INFURA_API_KEY`` environment variable)
   - Alpha support for a new package management tool based on ethpm-spec, see :doc:`web3.pm`
@@ -2686,8 +2686,8 @@ Released June 21, 2018
 - Misc
 
   - Websockets dependency upgraded to v5
-  - Raise deprecation warning on :meth:`~web3.eth.Eth.getTransactionFromBlock`
-  - Fix docs for :meth:`~web3.eth.Eth.waitForTransactionReceipt`
+  - Raise deprecation warning on :meth:`~web3.bub.Bub.getTransactionFromBlock`
+  - Fix docs for :meth:`~web3.bub.Bub.waitForTransactionReceipt`
   - Developer Dockerfile now installs testing dependencies
 
 v4.3.0
@@ -2702,9 +2702,9 @@ Released June 6, 2018
     which is used by Vyper.
   - In-flight transaction-signing middleware: Use local keys as if they were hosted keys
     using the new ``sign_and_send_raw_middleware``
-  - New :meth:`~web3.eth.Eth.getUncleByBlock` API
-  - New name :meth:`~web3.eth.Eth.getTransactionByBlock`, which replaces the deprecated
-    :meth:`~web3.eth.Eth.getTransactionFromBlock`
+  - New :meth:`~web3.bub.Bub.getUncleByBlock` API
+  - New name :meth:`~web3.bub.Bub.getTransactionByBlock`, which replaces the deprecated
+    :meth:`~web3.bub.Bub.getTransactionFromBlock`
   - Add several new Parity trace functions
   - New API to resolve ambiguous function calls, for example:
 
@@ -2742,15 +2742,15 @@ Released May 9, 2018
 
 - Bugfixes
 
-  - When :meth:`getting a transaction <web3.eth.Eth.getTransaction>`
-    with data attached and trying to :meth:`modify it <web3.eth.Eth.modifyTransaction>`
+  - When :meth:`getting a transaction <web3.bub.Bub.getTransaction>`
+    with data attached and trying to :meth:`modify it <web3.bub.Bub.modifyTransaction>`
     (say, to increase the gas price), the data was not being reattached in
     the new transaction.
   - :meth:`web3.personal.sendTransaction` was crashing when using a transaction
     generated with ``buildTransaction()``
 - Misc
 
-  - Improved error message when connecting to a geth-style PoA network
+  - Improved error message when connecting to a bub-style PoA network
   - Improved error message when address is not checksummed
   - Started in on support for ``fixedMxN`` ABI arguments
   - Lots of documentation upgrades, including:
@@ -2766,7 +2766,7 @@ v4.2.0
 
 Released Apr 25, 2018
 
-- Removed audit warning and opt-in requirement for ``w3.eth.account``. See more in:
+- Removed audit warning and opt-in requirement for ``w3.bub.account``. See more in:
   :ref:`eth-account`
 - Added an API to look up contract functions: ``fn = contract.functions['function_name_here']``
 - Upgrade Whisper (shh) module to use v6 API
@@ -2791,7 +2791,7 @@ Released Apr 9, 2018
 
 - New :class:`~web3.providers.websocket.WebsocketProvider`.
   If you're looking for better performance than HTTP, check out websockets.
-- New :meth:`w3.eth.waitForTransactionReceipt() <web3.eth.Eth.waitForTransactionReceipt>`
+- New :meth:`w3.bub.waitForTransactionReceipt() <web3.bub.Bub.waitForTransactionReceipt>`
 - Added name collision detection to ConciseContract and ImplicitContract
 - Bugfix to allow fromBlock set to 0 in createFilter, like
   ``contract.events.MyEvent.createFilter(fromBlock=0, ...)``
@@ -2816,11 +2816,11 @@ Released Mar 27, 2018
 
 *This is intended to be the final release before the stable v4 release.*
 
-- Add support for geth 1.8 (fixed error on :meth:`~web3.eth.Eth.getTransactionReceipt`)
+- Add support for bub 1.8 (fixed error on :meth:`~web3.bub.Bub.getTransactionReceipt`)
 - You can now call a contract method at a specific block
   with the ``block_identifier`` keyword argument, see:
   :meth:`~web3.contract.ContractFunction.call`
-- In preparation for stable release, disable ``w3.eth.account`` by default,
+- In preparation for stable release, disable ``w3.bub.account`` by default,
   until a third-party audit is complete & resolved.
 - New API for contract deployment, which enables gas estimation, local signing, etc.
   See :meth:`~web3.contract.Contract.constructor`.
@@ -2836,7 +2836,7 @@ Released Mar 27, 2018
   :class:`web3.providers.eth_tester.EthereumTesterProvider`
 - A lot of documentation improvements
 - Test node integrations over a variety of providers
-- geth 1.8 test suite
+- bub 1.8 test suite
 
 
 v4.0.0-beta.12
@@ -2850,7 +2850,7 @@ v4.0.0-beta.11
 Released Feb 28, 2018
 
 - New methods to modify or replace pending transactions
-- A compatibility option for connecting to ``geth --dev`` -- see :ref:`geth-poa`
+- A compatibility option for connecting to ``bub --dev`` -- see :ref:`bub-poa`
 - A new :attr:`web3.net.chainId`
 - Create a filter object from an existing filter ID.
 - eth-utils v1.0.1 (stable) compatibility
@@ -2864,7 +2864,7 @@ Released Feb 21, 2018
 - bugfix: Compatibility with eth-utils v1-beta2
   (the incompatibility was causing fresh web3.py installs to fail)
 - bugfix: crash when sending the output of ``contract.functions.myFunction().buildTransaction()``
-  to :meth:`~web3.eth.Eth.sendTransaction`. Now, having a chainID key does not crash
+  to :meth:`~web3.bub.Bub.sendTransaction`. Now, having a chainID key does not crash
   sendTransaction.
 - bugfix: a TypeError when estimating gas like:
   ``contract.functions.myFunction().estimateGas()`` is fixed
@@ -2883,7 +2883,7 @@ Released Feb 8, 2018
 - Clearer error message when invalid keywords provided to contract constructor function
 - New docs for working with private keys + set up doctests
 - First parity integration tests
-- replace internal implementation of w3.eth.account with
+- replace internal implementation of w3.bub.account with
   :class:`eth_account.account.Account`
 
 v4.0.0-beta.8
@@ -2898,7 +2898,7 @@ v4.0.0-beta.7
 
 Released Jan 29, 2018
 
-- Support for :meth:`web3.eth.Eth.getLogs` in eth-tester with py-evm
+- Support for :meth:`web3.bub.Bub.getLogs` in eth-tester with py-evm
 - Process transaction receipts with Event ABI, using
   `Contract.events.myEvent(*args, **kwargs).processReceipt(transaction_receipt)`
   see :ref:`event-log-object` for the new type.
@@ -2937,7 +2937,7 @@ Released Dec 28, 2017
 * Improvements to working with eth-tester, using :class:`~web3.providers.eth_tester.EthereumTesterProvider`:
 
   * Bugfix the key names in event logging
-  * Add support for :meth:`~web3.eth.Eth.sendRawTransaction`
+  * Add support for :meth:`~web3.bub.Bub.sendRawTransaction`
 * :class:`~web3.providers.ipc.IPCProvider` now automatically retries on a broken connection, like when you restart your node
 * New gas price engine API, laying groundwork for more advanced gas pricing strategies
 
@@ -2950,7 +2950,7 @@ Released Dec 7, 2017
 * New automatic provider detection, for ``w3 = Web3()`` initialization
 * Set environment variable `WEB3_PROVIDER_URI` to suggest a provider for automatic detection
 * New API to set providers like: ``w3.providers = [IPCProvider()]``
-* Crashfix: :meth:`web3.eth.Eth.filter` when retrieving logs with the argument 'latest'
+* Crashfix: :meth:`web3.bub.Bub.filter` when retrieving logs with the argument 'latest'
 * Bump eth-tester to v0.1.0-beta.5, with bugfix for filtering by topic
 * Removed GPL lib ``pylru``, now believed to be in full MIT license compliance.
 
@@ -2972,7 +2972,7 @@ Released Dec 1, 2017
   * ``eth-keys``
   * ``eth-tester``
   * ``eth-utils``
-* Faster Travis CI builds, with cached geth binary
+* Faster Travis CI builds, with cached bub binary
 
 v4.0.0-beta.2
 -------------
@@ -2981,15 +2981,15 @@ Released Nov 22, 2017
 
 Bug Fixes:
 
-* :meth:`~web3.eth.Eth.sendRawTransaction` accepts raw bytes
-* :meth:`~web3.eth.Eth.contract` accepts an ENS name as contract address
+* :meth:`~web3.bub.Bub.sendRawTransaction` accepts raw bytes
+* :meth:`~web3.bub.Bub.contract` accepts an ENS name as contract address
 * :meth:`~web3.account.Account.signTransaction` returns the expected hash (*after* signing the transaction)
 * :class:`~web3.account.Account` methods can all be called statically, like: ``Account.sign(...)``
-* :meth:`~web3.eth.Eth.getTransactionReceipt` returns the ``status`` field as an ``int``
+* :meth:`~web3.bub.Bub.getTransactionReceipt` returns the ``status`` field as an ``int``
 * :meth:`Web3.soliditySha3` looks up ENS names if they are supplied with an "address" ABI
 * If running multiple threads with the same w3 instance, ``ValueError: Recursively called ...`` is no longer raised
 
-Plus, various python modernization code cleanups, and testing against geth 1.7.2.
+Plus, various python modernization code cleanups, and testing against bub 1.7.2.
 
 v4.0.0-beta.1
 -------------
@@ -3051,7 +3051,7 @@ v4.0.0-beta.1
 * New ``stalecheck_middleware``
 * Improvements to ``Web3.toHex`` and ``Web3.toText``.
 * Improvements to ``Web3.sha3`` signature.
-* Bugfixes for ``Web3.eth.sign`` api
+* Bugfixes for ``web3.bub.sign`` api
 
 
 3.13.5
@@ -3109,14 +3109,14 @@ v4.0.0-beta.1
 
 * All web3 apis which accept ``address`` parameters now enforce checksums if the address *looks* like it is checksummed.
 * Improvements to error messaging with when calling a contract on a node that may not be fully synced
-* Bugfix for ``web3.eth.syncing`` to correctly handle ``False``
+* Bugfix for ``web3.bub.syncing`` to correctly handle ``False``
 
 3.10.0
 ------
 
 * Web3 now returns ``web3.utils.datastructures.AttributeDict`` in places where it previously returned a normal ``dict``.
-* ``web3.eth.contract`` now performs validation on the ``address`` parameter.
-* Added ``web3.eth.getWork`` API
+* ``web3.bub.contract`` now performs validation on the ``address`` parameter.
+* Added ``web3.bub.getWork`` API
 
 3.9.0
 -----
@@ -3127,7 +3127,7 @@ v4.0.0-beta.1
 3.8.1
 -----
 
-* Bugfix for ``eth_sign`` double hashing input.
+* Bugfix for ``bub_sign`` double hashing input.
 * Removed deprecated ``DelegatedSigningManager``
 * Removed deprecate ``PrivateKeySigningManager``
 
@@ -3197,7 +3197,7 @@ v4.0.0-beta.1
 3.4.4
 -----
 
-* Bugfix for ``web3.eth.getTransaction`` when the hash is unknown.
+* Bugfix for ``web3.bub.getTransaction`` when the hash is unknown.
 
 3.4.3
 -----
@@ -3218,7 +3218,7 @@ v4.0.0-beta.1
 3.4.0
 -----
 
-* Bugfix for contract instances to respect ``web3.eth.defaultAccount``
+* Bugfix for contract instances to respect ``web3.bub.defaultAccount``
 * Better error reporting when ABI decoding fails for contract method response.
 
 3.3.0
@@ -3237,7 +3237,7 @@ v4.0.0-beta.1
 -----
 
 * Bugfix for contract transaction sending not respecting the
-  ``web3.eth.defaultAccount`` configuration.
+  ``web3.bub.defaultAccount`` configuration.
 
 3.1.0
 -----
@@ -3269,7 +3269,7 @@ v4.0.0-beta.1
 2.8.1
 -----
 
-* Bugfix for ``geth.ipc`` path on linux systems.
+* Bugfix for ``bub.ipc`` path on linux systems.
 
 2.8.0
 -----
@@ -3280,7 +3280,7 @@ v4.0.0-beta.1
       constructing with keyword arguments or positional arguments.
     * ``Contract.pastEvents`` now allows you to specify a ``fromBlock or
       ``toBlock.`` Previously these were forced to be ``'earliest'`` and
-      ``web3.eth.blockNumber`` respectively.
+      ``web3.bub.blockNumber`` respectively.
     * ``Contract.call``, ``Contract.transact`` and ``Contract.estimateGas`` are now
       callable as class methods as well as instance methods. When called this
       way, an address must be provided with the transaction parameter.
@@ -3352,7 +3352,7 @@ v4.0.0-beta.1
 -----
 
 * Pull in downstream updates to proper gevent usage.
-* Fix ``eth_sign``
+* Fix ``bub_sign``
 * Bugfix with contract operations mutating the transaction object that is passed in.
 * More explicit linting ignore statements.
 
@@ -3376,7 +3376,7 @@ v4.0.0-beta.1
 -----
 
 * Add ``eth.admin`` interface.
-* Bugfix: Format the return value of ``web3.eth.syncing``
+* Bugfix: Format the return value of ``web3.bub.syncing``
 * Bugfix: IPCProvider socket interactions are now more robust.
 
 1.6.0
@@ -3395,8 +3395,8 @@ v4.0.0-beta.1
 * transactions.
 * Contract Filters
 * Block, Transaction, and Log filters
-* ``web3.eth.txpool`` interface
-* ``web3.eth.mining`` interface
+* ``web3.node.txpool`` interface
+* ``web3.bub.mining`` interface
 * Fixes for encoding.
 
 1.4.0
@@ -3407,7 +3407,7 @@ v4.0.0-beta.1
 1.3.0
 -----
 
-* Partial implementation of the ``web3.eth.contract`` interface.
+* Partial implementation of the ``web3.bub.contract`` interface.
 
 1.2.0
 -----

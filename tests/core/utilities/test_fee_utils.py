@@ -4,11 +4,11 @@ from eth_utils import (
     is_integer,
 )
 
-from web3.middleware import (
+from bubble.middleware import (
     construct_error_generator_middleware,
     construct_result_generator_middleware,
 )
-from web3.types import (
+from bubble.types import (
     RPCEndpoint,
 )
 
@@ -35,14 +35,14 @@ from web3.types import (
     ),
     ids=["test-max", "test-min", "test-min-all-zero-fees", "test-non-zero-average"],
 )
-# Test fee_utils indirectly by mocking eth_feeHistory results
+# Test fee_utils indirectly by mocking bub_feeHistory results
 # and checking against expected output
 def test_fee_utils_indirectly(w3, fee_history_rewards, expected_max_prio_calc) -> None:
     fail_max_prio_middleware = construct_error_generator_middleware(
-        {RPCEndpoint("eth_maxPriorityFeePerGas"): lambda *_: ""}
+        {RPCEndpoint("bub_maxPriorityFeePerGas"): lambda *_: ""}
     )
     fee_history_result_middleware = construct_result_generator_middleware(
-        {RPCEndpoint("eth_feeHistory"): lambda *_: {"reward": fee_history_rewards}}
+        {RPCEndpoint("bub_feeHistory"): lambda *_: {"reward": fee_history_rewards}}
     )
 
     w3.middleware_onion.add(fail_max_prio_middleware, "fail_max_prio")
@@ -52,10 +52,10 @@ def test_fee_utils_indirectly(w3, fee_history_rewards, expected_max_prio_calc) -
 
     with pytest.warns(
         UserWarning,
-        match="There was an issue with the method eth_maxPriorityFeePerGas. "
-        "Calculating using eth_feeHistory.",
+        match="There was an issue with the method bub_maxPriorityFeePerGas. "
+        "Calculating using bub_feeHistory.",
     ):
-        max_priority_fee = w3.eth.max_priority_fee
+        max_priority_fee = w3.bub.max_priority_fee
         assert is_integer(max_priority_fee)
         assert max_priority_fee == expected_max_prio_calc
 

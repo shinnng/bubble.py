@@ -38,7 +38,7 @@ sudo apt-get -y install python3-venv
 
 cd ~
 git clone https://github.com/ethereum/web3.py.git
-cd web3.py
+cd bubble.py
 python3 -m venv venv
 . venv/bin/activate
 pip install --upgrade pip

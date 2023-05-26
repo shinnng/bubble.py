@@ -1,9 +1,9 @@
 import time
 
-from web3._utils.decorators import (
+from bubble._utils.decorators import (
     reject_recursive_repeats,
 )
-from web3._utils.threads import (
+from bubble._utils.threads import (
     spawn,
 )
 

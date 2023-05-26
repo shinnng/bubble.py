@@ -8,7 +8,7 @@ import requests
 from ens.utils import (
     ens_encode_name,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     OffchainLookup,
     Web3ValidationError,
 )
@@ -17,7 +17,7 @@ from web3.exceptions import (
 ENCODED_ADDR_CALLDATA = "0x3b3b57de42041b0018edd29d7c17154b0c671acc0502ea0b3693cafbeadf58e6beaaa16c"  # noqa: E501
 
 # This is one of the actual returned payloads from the GET request that
-# is triggered when resolving ``ns.address('offchainexample.eth')``
+# is triggered when resolving ``ns.address('offchainexample.bub')``
 # on mainnet. Since we got rid of the time expiration constraint for our
 # OffchainResolver.sol, this hash ends up working for our local test
 # case as well since the signer is able to be recovered.
@@ -124,29 +124,29 @@ class AsyncMockHttpBadFormatResponse:
 
 
 def test_offchain_resolution_with_get_request(ens, monkeypatch):
-    # mock GET response with real return data from 'offchainexample.eth' resolver
+    # mock GET response with real return data from 'offchainexample.bub' resolver
     def mock_get(*args, **kwargs):
         return MockHttpSuccessResponse("get", *args, **kwargs)
 
     monkeypatch.setattr(requests.Session, "get", mock_get)
 
-    assert ens.address("offchainexample.eth") == EXPECTED_RESOLVED_ADDRESS
+    assert ens.address("offchainexample.bub") == EXPECTED_RESOLVED_ADDRESS
 
 
 def test_offchain_resolution_with_post_request(ens, monkeypatch):
-    # mock POST response with real return data from 'offchainexample.eth' resolver
+    # mock POST response with real return data from 'offchainexample.bub' resolver
     def mock_post(*args, **kwargs):
         return MockHttpSuccessResponse("post", *args, **kwargs)
 
     monkeypatch.setattr(requests.Session, "post", mock_post)
 
-    assert ens.address("offchainexample.eth") == EXPECTED_RESOLVED_ADDRESS
+    assert ens.address("offchainexample.bub") == EXPECTED_RESOLVED_ADDRESS
 
 
 def test_offchain_resolution_raises_when_all_supplied_urls_fail(ens):
     # with no mocked responses, requests to all urls will fail
     with pytest.raises(Exception, match="Offchain lookup failed for supplied urls."):
-        ens.address("offchainexample.eth")
+        ens.address("offchainexample.bub")
 
 
 def test_offchain_resolution_with_improperly_formatted_http_response(ens, monkeypatch):
@@ -161,25 +161,25 @@ def test_offchain_resolution_with_improperly_formatted_http_response(ens, monkey
             "- missing 'data' field."
         ),
     ):
-        ens.address("offchainexample.eth")
+        ens.address("offchainexample.bub")
 
 
 def test_offchain_resolver_function_call_raises_with_ccip_read_disabled(
     ens, monkeypatch
 ):
-    offchain_resolver = ens.resolver("offchainexample.eth")
+    offchain_resolver = ens.resolver("offchainexample.bub")
 
     # should fail here with `ccip_read_enabled` flag set to False
     with pytest.raises(OffchainLookup):
         offchain_resolver.functions.resolve(
-            ens_encode_name("offchainexample.eth"),
+            ens_encode_name("offchainexample.bub"),
             ENCODED_ADDR_CALLDATA,
         ).call(ccip_read_enabled=False)
 
     # pass flag on specific call via ContractCaller is also an option
     with pytest.raises(OffchainLookup):
         offchain_resolver.caller(ccip_read_enabled=False).resolve(
-            ens_encode_name("offchainexample.eth"),
+            ens_encode_name("offchainexample.bub"),
             ENCODED_ADDR_CALLDATA,
         )
 
@@ -189,31 +189,31 @@ def test_offchain_resolver_function_call_raises_with_ccip_read_disabled(
 
 @pytest.mark.asyncio
 async def test_async_offchain_resolution_with_get_request(async_ens, monkeypatch):
-    # mock GET response with real return data from 'offchainexample.eth' resolver
+    # mock GET response with real return data from 'offchainexample.bub' resolver
     async def mock_get(*args, **kwargs):
         return AsyncMockHttpSuccessResponse("get", *args, **kwargs)
 
     monkeypatch.setattr(ClientSession, "get", mock_get)
 
-    assert await async_ens.address("offchainexample.eth") == EXPECTED_RESOLVED_ADDRESS
+    assert await async_ens.address("offchainexample.bub") == EXPECTED_RESOLVED_ADDRESS
 
 
 @pytest.mark.asyncio
 async def test_async_offchain_resolution_with_post_request(async_ens, monkeypatch):
-    # mock POST response with real return data from 'offchainexample.eth' resolver
+    # mock POST response with real return data from 'offchainexample.bub' resolver
     async def mock_post(*args, **kwargs):
         return AsyncMockHttpSuccessResponse("post", *args, **kwargs)
 
     monkeypatch.setattr(ClientSession, "post", mock_post)
 
-    assert await async_ens.address("offchainexample.eth") == EXPECTED_RESOLVED_ADDRESS
+    assert await async_ens.address("offchainexample.bub") == EXPECTED_RESOLVED_ADDRESS
 
 
 @pytest.mark.asyncio
 async def test_async_offchain_resolution_raises_when_all_supplied_urls_fail(async_ens):
     # with no mocked responses, requests to all urls will fail
     with pytest.raises(Exception, match="Offchain lookup failed for supplied urls."):
-        await async_ens.address("offchainexample.eth")
+        await async_ens.address("offchainexample.bub")
 
 
 @pytest.mark.asyncio
@@ -231,4 +231,4 @@ async def test_async_offchain_resolution_with_improperly_formatted_http_response
             "- missing 'data' field."
         ),
     ):
-        await async_ens.address("offchainexample.eth")
+        await async_ens.address("offchainexample.bub")

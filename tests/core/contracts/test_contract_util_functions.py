@@ -1,13 +1,13 @@
 import pytest
 
-from web3._utils.contracts import (
+from bubble._utils.contracts import (
     async_parse_block_identifier,
     async_parse_block_identifier_int,
     parse_block_identifier,
     parse_block_identifier_int,
     validate_payable,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     BlockNumberOutofRange,
 )
 
@@ -30,7 +30,7 @@ def test_parse_block_identifier_int_and_string(w3, block_identifier, expected_ou
 
 
 def test_parse_block_identifier_bytes_and_hex(w3):
-    block_0 = w3.eth.get_block(0)
+    block_0 = w3.bub.get_block(0)
     block_0_hash = block_0["hash"]
     # test retrieve by bytes
     block_id_by_hash = parse_block_identifier(w3, block_0_hash)
@@ -60,7 +60,7 @@ def test_parse_block_identifier_error(w3, block_identifier):
 #  although get_block() does not allow negative block identifiers. Support for
 #  negative block identifier will likely be removed in v5.
 def test_parse_block_identifier_int(w3):
-    last_num = w3.eth.get_block("latest").number
+    last_num = w3.bub.get_block("latest").number
     assert 0 == parse_block_identifier_int(w3, -1 - last_num)
 
 
@@ -96,7 +96,7 @@ async def test_async_parse_block_identifier_int_and_string(
 
 @pytest.mark.asyncio
 async def test_async_parse_block_identifier_bytes_and_hex(async_w3):
-    block_0 = await async_w3.eth.get_block(0)
+    block_0 = await async_w3.bub.get_block(0)
     block_0_hash = block_0["hash"]
     # test retrieve by bytes
     block_id_by_hash = await async_parse_block_identifier(async_w3, block_0_hash)
@@ -123,6 +123,6 @@ async def test_async_parse_block_identifier_error(async_w3, block_identifier):
 
 @pytest.mark.asyncio
 async def test_async_parse_block_identifier_int(async_w3):
-    latest_block = await async_w3.eth.get_block("latest")
+    latest_block = await async_w3.bub.get_block("latest")
     last_num = latest_block.number
     assert 0 == await async_parse_block_identifier_int(async_w3, -1 - last_num)

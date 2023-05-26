@@ -4,34 +4,34 @@ from aiohttp import (
     ClientSession,
 )
 
-from web3 import (
+from bubble import (
     AsyncWeb3,
 )
-from web3._utils import (
+from bubble._utils import (
     request,
 )
-from web3.eth import (
-    AsyncEth,
+from bubble.bub import (
+    AsyncBub,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     ProviderConnectionError,
 )
-from web3.geth import (
-    AsyncGeth,
-    AsyncGethAdmin,
-    AsyncGethPersonal,
-    AsyncGethTxPool,
+from bubble.node import (
+    AsyncNode,
+    AsyncNodeAdmin,
+    AsyncNodePersonal,
+    AsyncNodeTxPool,
 )
-from web3.middleware import (
+from bubble.middleware import (
     async_attrdict_middleware,
     async_buffered_gas_estimate_middleware,
     async_gas_price_strategy_middleware,
     async_validation_middleware,
 )
-from web3.net import (
+from bubble.net import (
     AsyncNet,
 )
-from web3.providers.async_rpc import (
+from bubble.providers.async_rpc import (
     AsyncHTTPProvider,
 )
 
@@ -70,12 +70,12 @@ def test_web3_with_async_http_provider_has_default_middlewares_and_modules() -> 
 
     # assert default modules
 
-    assert isinstance(async_w3.eth, AsyncEth)
+    assert isinstance(async_w3.bub, AsyncBub)
     assert isinstance(async_w3.net, AsyncNet)
-    assert isinstance(async_w3.geth, AsyncGeth)
-    assert isinstance(async_w3.geth.admin, AsyncGethAdmin)
-    assert isinstance(async_w3.geth.personal, AsyncGethPersonal)
-    assert isinstance(async_w3.geth.txpool, AsyncGethTxPool)
+    assert isinstance(async_w3.node, AsyncNode)
+    assert isinstance(async_w3.node.admin, AsyncNodeAdmin)
+    assert isinstance(async_w3.node.personal, AsyncNodePersonal)
+    assert isinstance(async_w3.node.txpool, AsyncNodeTxPool)
 
     # assert default middleware
 

@@ -1,7 +1,7 @@
-web3.eth API
+web3.bub API
 ============
 
-.. py:module:: web3.eth
+.. py:module:: web3.bub
 
 .. warning:: Whoa there, Binance Smart Chain user! web3.py is an Ethereum-specific library,
   which now defaults to "type 2" transactions as of the London network upgrade. BSC apparently
@@ -11,9 +11,9 @@ web3.eth API
   ``maxFeePerGas``, or ``maxPriorityFeePerGas``. If you have trouble beyond that, please find an
   appropriate BSC forum to raise your question.
 
-.. py:class:: Eth
+.. py:class:: Bub
 
-The ``web3.eth`` object exposes the following properties and methods to
+The ``web3.bub`` object exposes the following properties and methods to
 interact with the RPC APIs under the ``eth_`` namespace.
 
 By default, when a property or method returns a mapping of keys to values, it
@@ -23,7 +23,7 @@ you can find the latest block number in these two ways:
 
     .. code-block:: python
 
-        >>> block = web3.eth.get_block('latest')
+        >>> block = web3.bub.get_block('latest')
         AttributeDict({
           'hash': '0xe8ad537a261e6fff80d551d8d087ee0f2202da9b09b64d172a5f45e818eb472a',
           'number': 4022281,
@@ -44,37 +44,37 @@ This feature is available via the ``attrdict_middleware`` which is a default mid
 .. note::
     Accessing an ``AttributeDict`` property via attribute will break type hinting. If
     typing is crucial for your application, accessing via key / value, as well as
-    removing the ``attrdict_middleware`` altogether, may be desired.
+    removing the ``attrdict_middleware`` altobuber, may be desired.
 
 
 Properties
 ----------
 
-The following properties are available on the ``web3.eth`` namespace.
+The following properties are available on the ``web3.bub`` namespace.
 
 
-.. py:attribute:: Eth.default_account
+.. py:attribute:: Bub.default_account
 
     The ethereum address that will be used as the default ``from`` address for
     all transactions. Defaults to empty.
 
 
-.. py:attribute:: Eth.default_block
+.. py:attribute:: Bub.default_block
 
     The default block number that will be used for any RPC methods that accept
     a block identifier. Defaults to ``'latest'``.
 
 
-.. py:attribute:: Eth.syncing
+.. py:attribute:: Bub.syncing
 
-    * Delegates to ``eth_syncing`` RPC Method
+    * Delegates to ``bub_syncing`` RPC Method
 
     Returns either ``False`` if the node is not syncing or a dictionary
     showing sync status.
 
     .. code-block:: python
 
-        >>> web3.eth.syncing
+        >>> web3.bub.syncing
         AttributeDict({
             'currentBlock': 2177557,
             'highestBlock': 2211611,
@@ -84,113 +84,113 @@ The following properties are available on the ``web3.eth`` namespace.
         })
 
 
-.. py:attribute:: Eth.coinbase
+.. py:attribute:: Bub.coinbase
 
-    * Delegates to ``eth_coinbase`` RPC Method
+    * Delegates to ``bub_coinbase`` RPC Method
 
     Returns the current *Coinbase* address.
 
     .. code-block:: python
 
-        >>> web3.eth.coinbase
+        >>> web3.bub.coinbase
         '0xd3CdA913deB6f67967B99D67aCDFa1712C293601'
 
 
-.. py:attribute:: Eth.mining
+.. py:attribute:: Bub.mining
 
-    * Delegates to ``eth_mining`` RPC Method
+    * Delegates to ``bub_mining`` RPC Method
 
     Returns boolean as to whether the node is currently mining.
 
     .. code-block:: python
 
-        >>> web3.eth.mining
+        >>> web3.bub.mining
         False
 
 
-.. py:attribute:: Eth.hashrate
+.. py:attribute:: Bub.hashrate
 
-    * Delegates to ``eth_hashrate`` RPC Method
+    * Delegates to ``bub_hashrate`` RPC Method
 
     Returns the current number of hashes per second the node is mining with.
 
     .. code-block:: python
 
-        >>> web3.eth.hashrate
+        >>> web3.bub.hashrate
         906
 
 
-.. py:attribute:: Eth.max_priority_fee
+.. py:attribute:: Bub.max_priority_fee
 
-    * Delegates to ``eth_maxPriorityFeePerGas`` RPC Method
+    * Delegates to ``bub_maxPriorityFeePerGas`` RPC Method
 
     Returns a suggestion for a max priority fee for dynamic fee transactions in Wei.
 
     .. code-block:: python
 
-        >>> web3.eth.max_priority_fee
+        >>> web3.bub.max_priority_fee
         2000000000
 
 
-.. py:attribute:: Eth.gas_price
+.. py:attribute:: Bub.gas_price
 
-    * Delegates to ``eth_gasPrice`` RPC Method
+    * Delegates to ``bub_gasPricePerGas`` RPC Method
 
     Returns the current gas price in Wei.
 
     .. code-block:: python
 
-        >>> web3.eth.gas_price
+        >>> web3.bub.gas_price
         20000000000
 
 
-.. py:attribute:: Eth.accounts
+.. py:attribute:: Bub.accounts
 
-    * Delegates to ``eth_accounts`` RPC Method
+    * Delegates to ``bub_accounts`` RPC Method
 
     Returns the list of known accounts.
 
     .. code-block:: python
 
-        >>> web3.eth.accounts
+        >>> web3.bub.accounts
         ['0xd3CdA913deB6f67967B99D67aCDFa1712C293601']
 
 
-.. py:attribute:: Eth.block_number
+.. py:attribute:: Bub.block_number
 
-    * Delegates to ``eth_blockNumber`` RPC Method
+    * Delegates to ``bub_blockNumber`` RPC Method
 
     Returns the number of the most recent block
 
-    Alias for :meth:`~web3.eth.Eth.get_block_number`
+    Alias for :meth:`~web3.bub.Bub.get_block_number`
 
     .. code-block:: python
 
-        >>> web3.eth.block_number
+        >>> web3.bub.block_number
         2206939
 
 
-.. py:attribute:: Eth.protocol_version
+.. py:attribute:: Bub.protocol_version
 
-    * Delegates to ``eth_protocolVersion`` RPC Method
+    * Delegates to ``bub_protocolVersionndingTransactionFilter`` RPC Method
 
     Returns the id of the current Ethereum protocol version.
 
     .. code-block:: python
 
-       >>> web3.eth.protocol_version
+       >>> web3.bub.protocol_version
        '63'
 
 
-.. py:attribute:: Eth.chain_id
+.. py:attribute:: Bub.chain_id
 
-    * Delegates to ``eth_chainId`` RPC Method
+    * Delegates to ``bub_chainId`` RPC Method
 
     Returns an integer value for the currently configured "Chain Id" value introduced in `EIP-155 <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md>`_. Returns ``None`` if no Chain Id is available.
 
     .. code-block:: python
 
-       >>> web3.eth.chain_id
+       >>> web3.bub.chain_id
        61
 
    .. note::
@@ -210,12 +210,12 @@ The following properties are available on the ``web3.eth`` namespace.
 Methods
 -------
 
-The following methods are available on the ``web3.eth`` namespace.
+The following methods are available on the ``web3.bub`` namespace.
 
 
-.. py:method:: Eth.get_balance(account, block_identifier=eth.default_block)
+.. py:method:: Bub.get_balance(account, block_identifier=eth.default_block)
 
-    * Delegates to ``eth_getBalance`` RPC Method
+    * Delegates to ``bub_getBalance`` RPC Method
 
     Returns the balance of the given ``account`` at the block specified by
     ``block_identifier``.
@@ -224,25 +224,25 @@ The following methods are available on the ``web3.eth`` namespace.
 
     .. code-block:: python
 
-        >>> web3.eth.get_balance('0xd3CdA913deB6f67967B99D67aCDFa1712C293601')
+        >>> web3.bub.get_balance('0xd3CdA913deB6f67967B99D67aCDFa1712C293601')
         77320681768999138915
 
 
-.. py:method:: Eth.get_block_number()
+.. py:method:: Bub.get_block_number()
 
-    * Delegates to ``eth_blockNumber`` RPC Method
+    * Delegates to ``bub_blockNumber`` RPC Method
 
     Returns the number of the most recent block.
 
     .. code-block:: python
 
-        >>> web3.eth.get_block_number()
+        >>> web3.bub.get_block_number()
         2206939
 
 
-.. py:method:: Eth.get_storage_at(account, position, block_identifier=eth.default_block)
+.. py:method:: Bub.get_storage_at(account, position, block_identifier=eth.default_block)
 
-    * Delegates to ``eth_getStorageAt`` RPC Method
+    * Delegates to ``bub_getStorageAt`` RPC Method
 
     Returns the value from a storage position for the given ``account`` at the
     block specified by ``block_identifier``.
@@ -251,13 +251,13 @@ The following methods are available on the ``web3.eth`` namespace.
 
     .. code-block:: python
 
-        >>> web3.eth.get_storage_at('0x6C8f2A135f6ed072DE4503Bd7C4999a1a17F824B', 0)
+        >>> web3.bub.get_storage_at('0x6C8f2A135f6ed072DE4503Bd7C4999a1a17F824B', 0)
         '0x00000000000000000000000000000000000000000000000000120a0b063499d4'
 
 
-.. py:method:: Eth.get_proof(account, positions, block_identifier=eth.default_block)
+.. py:method:: Bub.get_proof(account, positions, block_identifier=eth.default_block)
 
-    * Delegates to ``eth_getProof`` RPC Method
+    * Delegates to ``bub_getProof`` RPC Method
 
     Returns the values from an array of storage positions for the given ``account`` at the
     block specified by ``block_identifier``.
@@ -266,7 +266,7 @@ The following methods are available on the ``web3.eth`` namespace.
 
     .. code-block:: python
 
-        >>> web3.eth.get_proof('0x6C8f2A135f6ed072DE4503Bd7C4999a1a17F824B', [0], 3391)
+        >>> web3.bub.get_proof('0x6C8f2A135f6ed072DE4503Bd7C4999a1a17F824B', [0], 3391)
         AttributeDict({
             'address': '0x4CB06C43fcdABeA22541fcF1F856A6a296448B6c',
             'accountProof': ['0xf90211a03841a7ddd65c70c94b8efa79190d00f0ab134b26f18dcad508f60a7e74559d0ba0464b07429a05039e22931492d6c6251a860c018ea390045d596b1ac11b5c7aa7a011f4b89823a03c9c4b5a8ab079ee1bc0e2a83a508bb7a5dc7d7fb4f2e95d3186a0b5f7c51c3b2d51d97f171d2b38a4df1a7c0acc5eb0de46beeff4d07f5ed20e19a0b591a2ce02367eda31cf2d16eca7c27fd44dbf0864b64ea8259ad36696eb2a04a02b646a7552b8392ae94263757f699a27d6e9176b4c06b9fc0a722f893b964795a02df05d68bceb88eebf68aafde61d10ab942097afc1c58b8435ffd3895358a742a0c2f16143c4d1db03276c433696dddb3e9f3b113bcd854b127962262e98f43147a0828820316cc02bfefd899aba41340659fd06df1e0a0796287ec2a4110239f6d2a050496598670b04df7bbff3718887fa36437d6d8c7afb4eff86f76c5c7097dcc4a0c14e9060c6b3784e35b9e6ae2ad2984142a75910ccc89eb89dc1e2f44b6c58c2a009804db571d0ce07913e1cbacc4f1dc4fb8265c936f5c612e3a47e91c64d8e9fa063d96f38b3cb51b1665c6641e25ffe24803f2941e5df79942f6a53b7169647e4a0899f71abb18c6c956118bf567fac629b75f7e9526873e429d3d8abb6dbb58021a00fd717235298742623c0b3cafb3e4bd86c0b5ab1f71097b4dd19f3d6925d758da0096437146c16097f2ccc1d3e910d65a4132803baee2249e72c8bf0bcaaeb37e580',
@@ -352,14 +352,14 @@ The following methods are available on the ``web3.eth`` namespace.
 
             return True
 
-        block = w3.eth.get_block(3391)
-        proof = w3.eth.get_proof('0x6C8f2A135f6ed072DE4503Bd7C4999a1a17F824B', [0, 1], 3391)
+        block = w3.bub.get_block(3391)
+        proof = w3.bub.get_proof('0x6C8f2A135f6ed072DE4503Bd7C4999a1a17F824B', [0, 1], 3391)
         assert verify_eth_get_proof(proof, block.stateRoot)
 
 
-.. py:method:: Eth.get_code(account, block_identifier=eth.default_block)
+.. py:method:: Bub.get_code(account, block_identifier=eth.default_block)
 
-    * Delegates to ``eth_getCode`` RPC Method
+    * Delegates to ``bub_getCode`` RPC Method
 
     Returns the bytecode for the given ``account`` at the block specified by
     ``block_identifier``.
@@ -369,21 +369,21 @@ The following methods are available on the ``web3.eth`` namespace.
     .. code-block:: python
 
         # For a contract address.
-        >>> web3.eth.get_code('0x6C8f2A135f6ed072DE4503Bd7C4999a1a17F824B')
+        >>> web3.bub.get_code('0x6C8f2A135f6ed072DE4503Bd7C4999a1a17F824B')
         '0x6060604052361561027c5760e060020a60003504630199.....'
         # For a private key address.
-        >>> web3.eth.get_code('0xd3CdA913deB6f67967B99D67aCDFa1712C293601')
+        >>> web3.bub.get_code('0xd3CdA913deB6f67967B99D67aCDFa1712C293601')
         '0x'
 
 
-.. py:method:: Eth.get_block(block_identifier=eth.default_block, full_transactions=False)
+.. py:method:: Bub.get_block(block_identifier=eth.default_block, full_transactions=False)
 
-    * Delegates to ``eth_getBlockByNumber`` or ``eth_getBlockByHash`` RPC Methods
+    * Delegates to ``bub_getBlockByNumber`` or ``bub_getBlockByHash`` RPC Methods
 
     Returns the block specified by ``block_identifier``.  Delegates to
-    ``eth_getBlockByNumber`` if ``block_identifier`` is an integer or one of
+    ``bub_getBlockByNumber`` if ``block_identifier`` is an integer or one of
     the predefined block parameters ``'latest', 'earliest', 'pending',
-    'safe', 'finalized'`` - otherwise delegates to ``eth_getBlockByHash``.
+    'safe', 'finalized'`` - otherwise delegates to ``bub_getBlockByHash``.
     Throws ``BlockNotFound`` error if the block is not found.
 
     If ``full_transactions`` is ``True`` then the ``'transactions'`` key will
@@ -392,7 +392,7 @@ The following methods are available on the ``web3.eth`` namespace.
 
     .. code-block:: python
 
-        >>> web3.eth.get_block(2000000)
+        >>> web3.bub.get_block(2000000)
         AttributeDict({
             'difficulty': 49824742724615,
             'extraData': '0xe4b883e5bda9e7a59ee4bb99e9b1bc',
@@ -416,42 +416,42 @@ The following methods are available on the ``web3.eth`` namespace.
         })
 
 
-.. py:method:: Eth.get_block_transaction_count(block_identifier)
+.. py:method:: Bub.get_block_transaction_count(block_identifier)
 
-    * Delegates to ``eth_getBlockTransactionCountByNumber`` or
-      ``eth_getBlockTransactionCountByHash`` RPC Methods
+    * Delegates to ``bub_getBlockTransactionCountByNumber`` or
+      ``bub_getBlockTransactionCountByHash`` RPC Methods
 
     Returns the number of transactions in the block specified by
     ``block_identifier``.  Delegates to
-    ``eth_getBlockTransactionCountByNumber`` if ``block_identifier`` is an
+    ``bub_getBlockTransactionCountByNumber`` if ``block_identifier`` is an
     integer or one of the predefined block parameters ``'latest', 'earliest',
     'pending', 'safe', 'finalized'``,
-    otherwise delegates to ``eth_getBlockTransactionCountByHash``.
+    otherwise delegates to ``bub_getBlockTransactionCountByHash``.
     Throws ``BlockNotFoundError`` if transactions are not found.
 
     .. code-block:: python
 
-        >>> web3.eth.get_block_transaction_count(46147)
+        >>> web3.bub.get_block_transaction_count(46147)
         1
-        >>> web3.eth.get_block_transaction_count('0x4e3a3754410177e6937ef1f84bba68ea139e8d1a2258c5f85db9f1cd715a1bdd')  # block 46147
+        >>> web3.bub.get_block_transaction_count('0x4e3a3754410177e6937ef1f84bba68ea139e8d1a2258c5f85db9f1cd715a1bdd')  # block 46147
         1
 
 
-.. py:method:: Eth.get_uncle_by_block(block_identifier, uncle_index)
+.. py:method:: Bub.get_uncle_by_block(block_identifier, uncle_index)
 
-    * Delegates to ``eth_getUncleByBlockHashAndIndex`` or
-      ``eth_getUncleByBlockNumberAndIndex`` RPC methods
+    * Delegates to ``bub_getUncleByBlockHashAndIndexctionReceipt`` or
+      ``bub_getUncleByBlockNumberAndIndex`` RPC methods
 
     Returns the uncle at the index specified by ``uncle_index``
     from the block specified by ``block_identifier``.  Delegates to
-    ``eth_getUncleByBlockNumberAndIndex`` if ``block_identifier`` is an
+    ``bub_getUncleByBlockNumberAndIndex`` if ``block_identifier`` is an
     integer or one of the predefined block parameters ``'latest', 'earliest',
     'pending'``, otherwise delegates to
-    ``eth_getUncleByBlockHashAndIndex``. Throws ``BlockNotFound`` if the block is not found.
+    ``bub_getUncleByBlockHashAndIndexctionReceipt``. Throws ``BlockNotFound`` if the block is not found.
 
     .. code-block:: python
 
-        >>> web3.eth.get_uncle_by_block(56160, 0)
+        >>> web3.bub.get_uncle_by_block(56160, 0)
         AttributeDict({
           'author': '0xbe4532e1b1db5c913cf553be76180c1777055403',
           'difficulty': '0x17dd9ca0afe',
@@ -477,42 +477,42 @@ The following methods are available on the ``web3.eth`` namespace.
         })
 
         # You can also refer to the block by hash:
-        >>> web3.eth.get_uncle_by_block('0x685b2226cbf6e1f890211010aa192bf16f0a0cba9534264a033b023d7367b845', 0)
+        >>> web3.bub.get_uncle_by_block('0x685b2226cbf6e1f890211010aa192bf16f0a0cba9534264a033b023d7367b845', 0)
         AttributeDict({
             ...
         })
 
 
-.. py:method:: Eth.get_uncle_count(block_identifier)
+.. py:method:: Bub.get_uncle_count(block_identifier)
 
-    * Delegates to ``eth_getUncleCountByBlockHash`` or
-      ``eth_getUncleCountByBlockNumber`` RPC methods
+    * Delegates to ``bub_getUncleCountByBlockHash`` or
+      ``bub_getUncleCountByBlockNumber`` RPC methods
 
     Returns the (integer) number of uncles associated with the block specified by ``block_identifier``.
-    Delegates to ``eth_getUncleCountByBlockNumber`` if ``block_identifier`` is an
+    Delegates to ``bub_getUncleCountByBlockNumber`` if ``block_identifier`` is an
     integer or one of the predefined block parameters ``'latest', 'earliest',
-    'pending'``, otherwise delegates to ``eth_getUncleCountByBlockHash``.
+    'pending'``, otherwise delegates to ``bub_getUncleCountByBlockHash``.
     Throws ``BlockNotFound`` if the block is not found.
 
     .. code-block:: python
 
-        >>> web3.eth.get_uncle_count(56160)
+        >>> web3.bub.get_uncle_count(56160)
         1
 
         # You can also refer to the block by hash:
-        >>> web3.eth.get_uncle_count('0x685b2226cbf6e1f890211010aa192bf16f0a0cba9534264a033b023d7367b845')
+        >>> web3.bub.get_uncle_count('0x685b2226cbf6e1f890211010aa192bf16f0a0cba9534264a033b023d7367b845')
         1
 
 
-.. py:method:: Eth.get_transaction(transaction_hash)
+.. py:method:: Bub.get_transaction(transaction_hash)
 
-    * Delegates to ``eth_getTransactionByHash`` RPC Method
+    * Delegates to ``bub_getTransactionByHash`` RPC Method
 
     Returns the transaction specified by ``transaction_hash``. If the transaction cannot be found throws :class:`web3.exceptions.TransactionNotFound`.
 
     .. code-block:: python
 
-        >>> web3.eth.get_transaction('0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060')
+        >>> web3.bub.get_transaction('0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060')
         AttributeDict({
             'blockHash': '0x4e3a3754410177e6937ef1f84bba68ea139e8d1a2258c5f85db9f1cd715a1bdd',
             'blockNumber': 46147,
@@ -530,9 +530,9 @@ The following methods are available on the ``web3.eth`` namespace.
         })
 
 
-.. py:method:: Eth.get_raw_transaction(transaction_hash)
+.. py:method:: Bub.get_raw_transaction(transaction_hash)
 
-    * Delegates to ``eth_getRawTransactionByHash`` RPC Method
+    * Delegates to ``bub_getRawTransactionByHash`` RPC Method
 
     Returns the raw form of transaction specified by ``transaction_hash``.
 
@@ -540,26 +540,26 @@ The following methods are available on the ``web3.eth`` namespace.
 
     .. code-block:: python
 
-        >>> web3.eth.get_raw_transaction('0x86fbfe56cce542ff0a2a2716c31675a0c9c43701725c4a751d20ee2ddf8a733d')
+        >>> web3.bub.get_raw_transaction('0x86fbfe56cce542ff0a2a2716c31675a0c9c43701725c4a751d20ee2ddf8a733d')
         HexBytes('0xf86907843b9aca0082520894dc544d1aa88ff8bbd2f2aec754b1f1e99e1812fd018086eecac466e115a0f9db4e25484b28f486b247a372708d4cd0643fc63e604133afac577f4cc1eab8a044841d84e799d4dc18ba146816a937e8a0be8bc296bd8bb8aea126de5e627e06')
 
 
-.. py:method:: Eth.get_transaction_by_block(block_identifier, transaction_index)
+.. py:method:: Bub.get_transaction_by_block(block_identifier, transaction_index)
 
-    * Delegates to ``eth_getTransactionByBlockNumberAndIndex`` or
-      ``eth_getTransactionByBlockHashAndIndex`` RPC Methods
+    * Delegates to ``bub_getTransactionByBlockNumberAndIndex`` or
+      ``bub_getTransactionByBlockHashAndIndex`` RPC Methods
 
     Returns the transaction at the index specified by ``transaction_index``
     from the block specified by ``block_identifier``.  Delegates to
-    ``eth_getTransactionByBlockNumberAndIndex`` if ``block_identifier`` is an
+    ``bub_getTransactionByBlockNumberAndIndex`` if ``block_identifier`` is an
     integer or one of the predefined block parameters ``'latest', 'earliest',
     'pending', 'safe', 'finalized'``, otherwise delegates to
-    ``eth_getTransactionByBlockHashAndIndex``.
+    ``bub_getTransactionByBlockHashAndIndex``.
     If a transaction is not found at specified arguments, throws :class:`web3.exceptions.TransactionNotFound`.
 
     .. code-block:: python
 
-        >>> web3.eth.get_transaction_by_block(46147, 0)
+        >>> web3.bub.get_transaction_by_block(46147, 0)
         AttributeDict({
             'blockHash': '0x4e3a3754410177e6937ef1f84bba68ea139e8d1a2258c5f85db9f1cd715a1bdd',
             'blockNumber': 46147,
@@ -575,7 +575,7 @@ The following methods are available on the ``web3.eth`` namespace.
             'transactionIndex': 0,
             'value': 31337,
         })
-        >>> web3.eth.get_transaction_by_block('0x4e3a3754410177e6937ef1f84bba68ea139e8d1a2258c5f85db9f1cd715a1bdd', 0)
+        >>> web3.bub.get_transaction_by_block('0x4e3a3754410177e6937ef1f84bba68ea139e8d1a2258c5f85db9f1cd715a1bdd', 0)
         AttributeDict({
             'blockHash': '0x4e3a3754410177e6937ef1f84bba68ea139e8d1a2258c5f85db9f1cd715a1bdd',
             'blockNumber': 46147,
@@ -593,40 +593,40 @@ The following methods are available on the ``web3.eth`` namespace.
         })
 
 
-.. py:method:: Eth.get_raw_transaction_by_block(block_identifier, transaction_index)
+.. py:method:: Bub.get_raw_transaction_by_block(block_identifier, transaction_index)
 
-    * Delegates to ``eth_getRawTransactionByBlockNumberAndIndex`` or
-      ``eth_getRawTransactionByBlockHashAndIndex`` RPC Methods
+    * Delegates to ``bub_getRawTransactionByBlockNumberAndIndex`` or
+      ``bub_getRawTransactionByBlockHashAndIndex`` RPC Methods
 
     Returns the raw transaction at the index specified by ``transaction_index``
     from the block specified by ``block_identifier``.  Delegates to
-    ``eth_getRawTransactionByBlockNumberAndIndex`` if ``block_identifier`` is an
+    ``bub_getRawTransactionByBlockNumberAndIndex`` if ``block_identifier`` is an
     integer or one of the predefined block parameters ``'latest', 'earliest',
     'pending', 'safe', 'finalized'``, otherwise delegates to
-    ``eth_getRawTransactionByBlockHashAndIndex``.
+    ``bub_getRawTransactionByBlockHashAndIndex``.
     If a transaction is not found at specified arguments, throws :class:`web3.exceptions.TransactionNotFound`.
 
     .. code-block:: python
 
-        >>> web3.eth.get_raw_transaction_by_block('latest', 0)
+        >>> web3.bub.get_raw_transaction_by_block('latest', 0)
         HexBytes('0x02f87582053901843b9aca00843b9aca008301d8a894e2dfcfa89a45abdc3de91f7a2844b276b8451d2e888ac7230489e8000080c001a028dcd2e11682288c00237f377280bc6a478a6b27e9c2d745262152add1b1dfcba04e7a33b7ce2a37fc3cd3af7bdc7d7beff721664d56508defa188df35afd77c2c')
-        >>> web3.eth.get_raw_transaction_by_block(2, 0)
+        >>> web3.bub.get_raw_transaction_by_block(2, 0)
         HexBytes('0x02f87582053901843b9aca00843b9aca008301d8a894e2dfcfa89a45abdc3de91f7a2844b276b8451d2e888ac7230489e8000080c001a028dcd2e11682288c00237f377280bc6a478a6b27e9c2d745262152add1b1dfcba04e7a33b7ce2a37fc3cd3af7bdc7d7beff721664d56508defa188df35afd77c2c')
-        >>> web3.eth.get_raw_transaction_by_block('0xca609fb606a04ce6aaec76415cd0b9d8c2bc83ad2a4d17db7fd403ee7d97bf40', 0)
+        >>> web3.bub.get_raw_transaction_by_block('0xca609fb606a04ce6aaec76415cd0b9d8c2bc83ad2a4d17db7fd403ee7d97bf40', 0)
         HexBytes('0x02f87582053901843b9aca00843b9aca008301d8a894e2dfcfa89a45abdc3de91f7a2844b276b8451d2e888ac7230489e8000080c001a028dcd2e11682288c00237f377280bc6a478a6b27e9c2d745262152add1b1dfcba04e7a33b7ce2a37fc3cd3af7bdc7d7beff721664d56508defa188df35afd77c2c')
 
-.. py:method:: Eth.wait_for_transaction_receipt(transaction_hash, timeout=120, poll_latency=0.1)
+.. py:method:: Bub.wait_for_transaction_receipt(transaction_hash, timeout=120, poll_latency=0.1)
 
     Waits for the transaction specified by ``transaction_hash`` to be included in a block, then
     returns its transaction receipt.
 
     Optionally, specify a ``timeout`` in seconds. If timeout elapses before the transaction
-    is added to a block, then :meth:`~Eth.wait_for_transaction_receipt` raises a
+    is added to a block, then :meth:`~Bub.wait_for_transaction_receipt` raises a
     :class:`web3.exceptions.TimeExhausted` exception.
 
     .. code-block:: python
 
-        >>> web3.eth.wait_for_transaction_receipt('0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060')
+        >>> web3.bub.wait_for_transaction_receipt('0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060')
         # If transaction is not yet in a block, time passes, while the thread sleeps...
         # ...
         # Then when the transaction is added to a block, its receipt is returned:
@@ -646,9 +646,9 @@ The following methods are available on the ``web3.eth`` namespace.
         })
 
 
-.. py:method:: Eth.get_transaction_receipt(transaction_hash)
+.. py:method:: Bub.get_transaction_receipt(transaction_hash)
 
-    * Delegates to ``eth_getTransactionReceipt`` RPC Method
+    * Delegates to ``bub_getTransactionReceipt`` RPC Method
 
     Returns the transaction receipt specified by ``transaction_hash``.  If the transaction cannot be found throws :class:`web3.exceptions.TransactionNotFound`.
 
@@ -656,12 +656,12 @@ The following methods are available on the ``web3.eth`` namespace.
 
     .. code-block:: python
 
-        >>> web3.eth.get_transaction_receipt('0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060')  # not yet mined
+        >>> web3.bub.get_transaction_receipt('0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060')  # not yet mined
         Traceback # ... etc ...
         TransactionNotFound: Transaction with hash: 0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060 not found.
 
         # wait for it to be mined....
-        >>> web3.eth.get_transaction_receipt('0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060')
+        >>> web3.bub.get_transaction_receipt('0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060')
         AttributeDict({
             'blockHash': '0x4e3a3754410177e6937ef1f84bba68ea139e8d1a2258c5f85db9f1cd715a1bdd',
             'blockNumber': 46147,
@@ -678,9 +678,9 @@ The following methods are available on the ``web3.eth`` namespace.
         })
 
 
-.. py:method:: Eth.get_transaction_count(account, block_identifier=web3.eth.default_block)
+.. py:method:: Bub.get_transaction_count(account, block_identifier=web3.bub.default_block)
 
-    * Delegates to ``eth_getTransactionCount`` RPC Method
+    * Delegates to ``bub_getTransactionCount`` RPC Method
 
     Returns the number of transactions that have been sent from ``account`` as
     of the block specified by ``block_identifier``.
@@ -689,20 +689,20 @@ The following methods are available on the ``web3.eth`` namespace.
 
     .. code-block:: python
 
-        >>> web3.eth.get_transaction_count('0xd3CdA913deB6f67967B99D67aCDFa1712C293601')
+        >>> web3.bub.get_transaction_count('0xd3CdA913deB6f67967B99D67aCDFa1712C293601')
         340
 
 
-.. py:method:: Eth.send_transaction(transaction)
+.. py:method:: Bub.send_transaction(transaction)
 
-    * Delegates to ``eth_sendTransaction`` RPC Method
+    * Delegates to ``bub_sendTransaction`` RPC Method
 
     Signs and sends the given ``transaction``
 
     The ``transaction`` parameter should be a dictionary with the following fields.
 
     * ``from``: ``bytes or text``, checksum address or ENS name - (optional, default:
-      ``web3.eth.defaultAccount``) The address the transaction is sent from.
+      ``web3.bub.defaultAccount``) The address the transaction is sent from.
     * ``to``: ``bytes or text``, checksum address or ENS name - (optional when creating new
       contract) The address the transaction is directed to.
     * ``gas``: ``integer`` - (optional) Integer of the gas
@@ -726,26 +726,26 @@ The following methods are available on the ``web3.eth`` namespace.
 
     If the ``transaction`` specifies a ``data`` value but does not specify
     ``gas`` then the ``gas`` value will be populated using the
-    :meth:`~web3.eth.Eth.estimate_gas()` function with an additional buffer of ``100000``
+    :meth:`~web3.bub.Bub.estimate_gas()` function with an additional buffer of ``100000``
     gas up to the ``gasLimit`` of the latest block.  In the event that the
-    value returned by :meth:`~web3.eth.Eth.estimate_gas()` method is greater than the
+    value returned by :meth:`~web3.bub.Bub.estimate_gas()` method is greater than the
     ``gasLimit`` a ``ValueError`` will be raised.
 
 
     .. code-block:: python
 
         # simple example (web3.py and / or client determines gas and fees, typically defaults to a dynamic fee transaction post London fork)
-        >>> web3.eth.send_transaction({
+        >>> web3.bub.send_transaction({
           'to': '0xd3CdA913deB6f67967B99D67aCDFa1712C293601',
-          'from': web3.eth.coinbase,
+          'from': web3.bub.coinbase,
           'value': 12345
         })
 
         # Dynamic fee transaction, introduced by EIP-1559:
         HexBytes('0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331')
-        >>> web3.eth.send_transaction({
+        >>> web3.bub.send_transaction({
           'to': '0xd3CdA913deB6f67967B99D67aCDFa1712C293601',
-          'from': web3.eth.coinbase,
+          'from': web3.bub.coinbase,
           'value': 12345,
           'gas': 21000,
           'maxFeePerGas': web3.to_wei(250, 'gwei'),
@@ -755,9 +755,9 @@ The following methods are available on the ``web3.eth`` namespace.
 
         # Legacy transaction (less efficient)
         HexBytes('0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331')
-        >>> web3.eth.send_transaction({
+        >>> web3.bub.send_transaction({
           'to': '0xd3CdA913deB6f67967B99D67aCDFa1712C293601',
-          'from': web3.eth.coinbase,
+          'from': web3.bub.coinbase,
           'value': 12345,
           'gas': 21000,
           'gasPrice': web3.to_wei(50, 'gwei'),
@@ -765,17 +765,17 @@ The following methods are available on the ``web3.eth`` namespace.
         HexBytes('0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331')
 
 
-.. py:method:: Eth.sign_transaction(transaction)
+.. py:method:: Bub.sign_transaction(transaction)
 
-    * Delegates to ``eth_signTransaction`` RPC Method.
+    * Delegates to ``bub_signTransaction`` RPC Method.
 
     Returns a transaction that's been signed by the node's private key, but not yet submitted.
-    The signed tx can be submitted with ``Eth.send_raw_transaction``
+    The signed tx can be submitted with ``Bub.send_raw_transaction``
 
     .. code-block:: python
 
-        >>> signed_txn = w3.eth.sign_transaction(dict(
-            nonce=w3.eth.get_transaction_count(w3.eth.coinbase),
+        >>> signed_txn = w3.bub.sign_transaction(dict(
+            nonce=w3.bub.get_transaction_count(w3.bub.coinbase),
             maxFeePerGas=2000000000,
             maxPriorityFeePerGas=1000000000,
             gas=100000,
@@ -787,16 +787,16 @@ The following methods are available on the ``web3.eth`` namespace.
         b"\xf8d\x80\x85\x040\xe24\x00\x82R\x08\x94\xdcTM\x1a\xa8\x8f\xf8\xbb\xd2\xf2\xae\xc7T\xb1\xf1\xe9\x9e\x18\x12\xfd\x01\x80\x1b\xa0\x11\r\x8f\xee\x1d\xe5=\xf0\x87\x0en\xb5\x99\xed;\xf6\x8f\xb3\xf1\xe6,\x82\xdf\xe5\x97lF|\x97%;\x15\xa04P\xb7=*\xef \t\xf0&\xbc\xbf\tz%z\xe7\xa3~\xb5\xd3\xb7=\xc0v\n\xef\xad+\x98\xe3'"  # noqa: E501
 
 
-.. py:method:: Eth.send_raw_transaction(raw_transaction)
+.. py:method:: Bub.send_raw_transaction(raw_transaction)
 
-    * Delegates to ``eth_sendRawTransaction`` RPC Method
+    * Delegates to ``bub_sendRawTransaction`` RPC Method
 
     Sends a signed and serialized transaction. Returns the transaction hash as a HexBytes object.
 
     .. code-block:: python
 
-        >>> signed_txn = w3.eth.account.sign_transaction(dict(
-            nonce=w3.eth.get_transaction_count(public_address_of_senders_account),
+        >>> signed_txn = w3.bub.account.sign_transaction(dict(
+            nonce=w3.bub.get_transaction_count(public_address_of_senders_account),
             maxFeePerGas=3000000000,
             maxPriorityFeePerGas=2000000000,
             gas=100000,
@@ -808,20 +808,20 @@ The following methods are available on the ``web3.eth`` namespace.
           ),
           private_key_for_senders_account,
         )
-        >>> w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+        >>> w3.bub.send_raw_transaction(signed_txn.rawTransaction)
         HexBytes('0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331')
 
 
-.. py:method:: Eth.replace_transaction(transaction_hash, new_transaction)
+.. py:method:: Bub.replace_transaction(transaction_hash, new_transaction)
 
-    * Delegates to ``eth_sendTransaction`` RPC Method
+    * Delegates to ``bub_sendTransaction`` RPC Method
 
     Sends a transaction that replaces the transaction with ``transaction_hash``.
 
     The ``transaction_hash`` must be the hash of a pending transaction.
 
     The ``new_transaction`` parameter should be a dictionary with transaction fields
-    as required by :meth:`~web3.eth.Eth.send_transaction`. It will be used to entirely
+    as required by :meth:`~web3.bub.Bub.send_transaction`. It will be used to entirely
     replace the transaction of ``transaction_hash`` without using any of the pending
     transaction's values.
 
@@ -854,50 +854,50 @@ The following methods are available on the ``web3.eth`` namespace.
 
     .. code-block:: python
 
-        >>> tx = web3.eth.send_transaction({
+        >>> tx = web3.bub.send_transaction({
                 'to': '0xd3CdA913deB6f67967B99D67aCDFa1712C293601',
-                'from': web3.eth.coinbase,
+                'from': web3.bub.coinbase,
                 'value': 1000
             })
         HexBytes('0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331')
-        >>> web3.eth.replace_transaction('0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331', {
+        >>> web3.bub.replace_transaction('0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331', {
                 'to': '0xd3CdA913deB6f67967B99D67aCDFa1712C293601',
-                'from': web3.eth.coinbase,
+                'from': web3.bub.coinbase,
                 'value': 2000
             })
         HexBytes('0x4177e670ec6431606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1528989')
 
 
-.. py:method:: Eth.modify_transaction(transaction_hash, **transaction_params)
+.. py:method:: Bub.modify_transaction(transaction_hash, **transaction_params)
 
-    * Delegates to ``eth_sendTransaction`` RPC Method
+    * Delegates to ``bub_sendTransaction`` RPC Method
 
     Sends a transaction that modifies the transaction with ``transaction_hash``.
 
     ``transaction_params`` are keyword arguments that correspond to valid transaction
-    parameters as required by :meth:`~web3.eth.Eth.send_transaction`. The parameter values
+    parameters as required by :meth:`~web3.bub.Bub.send_transaction`. The parameter values
     will override the pending transaction's values to create the replacement transaction
     to send.
 
-    The same validation and defaulting rules of :meth:`~web3.eth.Eth.replace_transaction` apply.
+    The same validation and defaulting rules of :meth:`~web3.bub.Bub.replace_transaction` apply.
 
     This method returns the transaction hash of the newly modified transaction as a HexBytes object.
 
     .. code-block:: python
 
-        >>> tx = web3.eth.send_transaction({
+        >>> tx = web3.bub.send_transaction({
                 'to': '0xd3CdA913deB6f67967B99D67aCDFa1712C293601',
-                'from': web3.eth.coinbase,
+                'from': web3.bub.coinbase,
                 'value': 1000
             })
         HexBytes('0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331')
-        >>> web3.eth.modify_transaction('0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331', value=2000)
+        >>> web3.bub.modify_transaction('0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331', value=2000)
         HexBytes('0xec6434e6701771606e55d6b4ca35a1a6b75ee3d73315145a921026d15299d05')
 
 
-.. py:method:: Eth.sign(account, data=None, hexstr=None, text=None)
+.. py:method:: Bub.sign(account, data=None, hexstr=None, text=None)
 
-    * Delegates to ``eth_sign`` RPC Method
+    * Delegates to ``bub_sign`` RPC Method
 
     Caller must specify exactly one of: ``data``, ``hexstr``, or ``text``.
 
@@ -908,25 +908,25 @@ The following methods are available on the ``web3.eth`` namespace.
 
     .. code-block:: python
 
-        >>> web3.eth.sign(
+        >>> web3.bub.sign(
               '0xd3CdA913deB6f67967B99D67aCDFa1712C293601',
               text='some-text-tö-sign')
         '0x1a8bbe6eab8c72a219385681efefe565afd3accee35f516f8edf5ae82208fbd45a58f9f9116d8d88ba40fcd29076d6eada7027a3b412a9db55a0164547810cc401'
 
-        >>> web3.eth.sign(
+        >>> web3.bub.sign(
               '0xd3CdA913deB6f67967B99D67aCDFa1712C293601',
               data=b'some-text-t\xc3\xb6-sign')
         '0x1a8bbe6eab8c72a219385681efefe565afd3accee35f516f8edf5ae82208fbd45a58f9f9116d8d88ba40fcd29076d6eada7027a3b412a9db55a0164547810cc401'
 
-        >>> web3.eth.sign(
+        >>> web3.bub.sign(
               '0xd3CdA913deB6f67967B99D67aCDFa1712C293601',
               hexstr='0x736f6d652d746578742d74c3b62d7369676e')
         '0x1a8bbe6eab8c72a219385681efefe565afd3accee35f516f8edf5ae82208fbd45a58f9f9116d8d88ba40fcd29076d6eada7027a3b412a9db55a0164547810cc401'
 
 
-.. py:method:: Eth.sign_typed_data(account, jsonMessage)
+.. py:method:: Bub.sign_typed_data(account, jsonMessage)
 
-    * Delegates to ``eth_signTypedData`` RPC Method
+    * Delegates to ``bub_signTypedData`` RPC Method
 
     Please note that the ``jsonMessage`` argument is the loaded JSON Object
     and **NOT** the JSON String itself.
@@ -937,15 +937,15 @@ The following methods are available on the ``web3.eth`` namespace.
     ``account`` may be a checksum address or an ENS name
 
 
-.. py:method:: Eth.call(transaction, block_identifier=web3.eth.default_block, state_override=None, ccip_read_enabled=True)
+.. py:method:: Bub.call(transaction, block_identifier=web3.bub.default_block, state_override=None, ccip_read_enabled=True)
 
-    * Delegates to ``eth_call`` RPC Method
+    * Delegates to ``bub_call`` RPC Method
 
     Executes the given transaction locally without creating a new transaction
     on the blockchain.  Returns the return value of the executed contract.
 
     The ``transaction`` parameter is handled in the same manner as the
-    :meth:`~web3.eth.Eth.send_transaction()` method.
+    :meth:`~web3.bub.Bub.send_transaction()` method.
 
     .. code-block:: python
 
@@ -954,18 +954,18 @@ The following methods are available on the ``web3.eth`` namespace.
         >>> myContract.functions.getVar().call()
         1
         # The above call equivalent to the raw call:
-        >>> web3.eth.call({'value': 0, 'gas': 21736, 'maxFeePerGas': 2000000000, 'maxPriorityFeePerGas': 1000000000, 'to': '0xc305c901078781C232A2a521C2aF7980f8385ee9', 'data': '0x477a5c98'})
+        >>> web3.bub.call({'value': 0, 'gas': 21736, 'maxFeePerGas': 2000000000, 'maxPriorityFeePerGas': 1000000000, 'to': '0xc305c901078781C232A2a521C2aF7980f8385ee9', 'data': '0x477a5c98'})
         HexBytes('0x0000000000000000000000000000000000000000000000000000000000000001')
 
     In most cases it is better to make contract function call through the :py:class:`web3.contract.Contract` interface.
 
-    Overriding state is a debugging feature available in Geth clients.
-    View their `usage documentation <https://geth.ethereum.org/docs/rpc/ns-eth#3-object---state-override-set>`_
+    Overriding state is a debugging feature available in Bub clients.
+    View their `usage documentation <https://bub.ethereum.org/docs/rpc/ns-eth#3-object---state-override-set>`_
     for a list of possible parameters.
 
     `EIP-3668 <https://eips.ethereum.org/EIPS/eip-3668>`_ introduced support for the ``OffchainLookup`` revert / CCIP
     Read support. In order to properly handle a call to a contract function that reverts with an ``OffchainLookup``
-    error for offchain data retrieval, the ``ccip_read_enabled`` flag has been added to the ``eth_call`` method.
+    error for offchain data retrieval, the ``ccip_read_enabled`` flag has been added to the ``bub_call`` method.
     ``ccip_read_enabled`` is optional, yielding the default value for CCIP Read on calls to a global
     ``global_ccip_read_enabled`` flag on the provider which is set to ``True`` by default. This means CCIP Read is
     enabled by default for calls, as is recommended in EIP-3668. Therefore, calls to contract functions that revert with
@@ -982,9 +982,9 @@ The following methods are available on the ``web3.eth`` namespace.
     As of v6.3.0, the raw data is also returned and
     can be accessed via the ``data`` attribute on ``ContractLogicError``.
 
-.. py:method:: Eth.fee_history(block_count, newest_block, reward_percentiles=None)
+.. py:method:: Bub.fee_history(block_count, newest_block, reward_percentiles=None)
 
-    * Delegates to ``eth_feeHistory`` RPC Method
+    * Delegates to ``bub_feeHistory`` RPC Method
 
     Returns transaction fee data for up to 1,024 blocks.
 
@@ -1011,7 +1011,7 @@ The following methods are available on the ``web3.eth`` namespace.
 
     .. code-block:: python
 
-        >>> w3.eth.fee_history(4, 'latest', [10, 90])
+        >>> w3.bub.fee_history(4, 'latest', [10, 90])
         AttributeDict({
             'oldestBlock': 3,
             'reward': [[220, 7145389], [1000000, 6000213], [550, 550], [125, 12345678]],
@@ -1020,24 +1020,24 @@ The following methods are available on the ``web3.eth`` namespace.
         })
 
 
-.. py:method:: Eth.estimate_gas(transaction, block_identifier=None)
+.. py:method:: Bub.estimate_gas(transaction, block_identifier=None)
 
-    * Delegates to ``eth_estimateGas`` RPC Method
+    * Delegates to ``bub_estimateGas`` RPC Method
 
     Executes the given transaction locally without creating a new transaction
     on the blockchain.  Returns amount of gas consumed by execution which can
     be used as a gas estimate.
 
     The ``transaction`` and ``block_identifier`` parameters are handled in the
-    same manner as the :meth:`~web3.eth.Eth.send_transaction()` method.
+    same manner as the :meth:`~web3.bub.Bub.send_transaction()` method.
 
     .. code-block:: python
 
-        >>> web3.eth.estimate_gas({'to': '0xd3CdA913deB6f67967B99D67aCDFa1712C293601', 'from':web3.eth.coinbase, 'value': 12345})
+        >>> web3.bub.estimate_gas({'to': '0xd3CdA913deB6f67967B99D67aCDFa1712C293601', 'from':web3.bub.coinbase, 'value': 12345})
         21000
 
 
-.. py:method:: Eth.generate_gas_price(transaction_params=None)
+.. py:method:: Bub.generate_gas_price(transaction_params=None)
 
     Uses the selected gas price strategy to calculate a gas price. This method
     returns the gas price denominated in wei.
@@ -1047,7 +1047,7 @@ The following methods are available on the ``web3.eth`` namespace.
 
     .. code-block:: python
 
-        >>> web3.eth.generate_gas_price()
+        >>> web3.bub.generate_gas_price()
         20000000000
 
     .. note::
@@ -1055,7 +1055,7 @@ The following methods are available on the ``web3.eth`` namespace.
         :ref:`Gas_Price`.
 
 
-.. py:method:: Eth.set_gas_price_strategy(gas_price_strategy)
+.. py:method:: Bub.set_gas_price_strategy(gas_price_strategy)
 
     Set the selected gas price strategy. It must be a method of the signature
     ``(web3, transaction_params)`` and return a gas price denominated in wei.
@@ -1064,27 +1064,27 @@ The following methods are available on the ``web3.eth`` namespace.
 Filters
 -------
 
-The following methods are available on the ``web3.eth`` object for interacting
+The following methods are available on the ``web3.bub`` object for interacting
 with the filtering API.
 
 
-.. py:method:: Eth.filter(filter_params)
+.. py:method:: Bub.filter(filter_params)
 
-    * Delegates to ``eth_newFilter``, ``eth_newBlockFilter``, and
-      ``eth_newPendingTransactionFilter`` RPC Methods.
+    * Delegates to ``bub_newFilter``, ``bub_newBlockFilter``, and
+      ``bub_newPendingTransactionFilter`` RPC Methods.
 
     This method delegates to one of three RPC methods depending on the value of
     ``filter_params``.
 
     * If ``filter_params`` is the string ``'pending'`` then a new filter is
-      registered using the ``eth_newPendingTransactionFilter`` RPC method.
+      registered using the ``bub_newPendingTransactionFilter`` RPC method.
       This will create a new filter that will be called for each new unmined
       transaction that the node receives.
     * If ``filter_params`` is the string ``'latest'`` then a new filter is
-      registered using the ``eth_newBlockFilter`` RPC method.  This will create
+      registered using the ``bub_newBlockFilter`` RPC method.  This will create
       a new filter that will be called each time the node receives a new block.
     * If ``filter_params`` is a dictionary then a new filter is registered
-      using the ``eth_newFilter`` RPC method.  This will create a new filter
+      using the ``bub_newFilter`` RPC method.  This will create a new filter
       that will be called for all log entries that match the provided
       ``filter_params``.
 
@@ -1112,31 +1112,31 @@ with the filtering API.
     .. note::
 
         Though ``"latest"`` and ``"safe"`` block identifiers are not yet part of the
-        specifications for ``eth_newFilter``, they are supported by web3.py and may or
+        specifications for ``bub_newFilter``, they are supported by web3.py and may or
         may not yield expected results depending on the node being accessed.
 
     See :doc:`./filters` for more information about filtering.
 
     .. code-block:: python
 
-        >>> web3.eth.filter('latest')
+        >>> web3.bub.filter('latest')
         <BlockFilter at 0x10b72dc28>
-        >>> web3.eth.filter('pending')
+        >>> web3.bub.filter('pending')
         <TransactionFilter at 0x10b780340>
-        >>> web3.eth.filter({'fromBlock': 1000000, 'toBlock': 1000100, 'address': '0x6C8f2A135f6ed072DE4503Bd7C4999a1a17F824B'})
+        >>> web3.bub.filter({'fromBlock': 1000000, 'toBlock': 1000100, 'address': '0x6C8f2A135f6ed072DE4503Bd7C4999a1a17F824B'})
         <LogFilter at 0x10b7803d8>
 
-.. py:method:: Eth.get_filter_changes(self, filter_id)
+.. py:method:: Bub.get_filter_changes(self, filter_id)
 
-    * Delegates to ``eth_getFilterChanges`` RPC Method.
+    * Delegates to ``bub_getFilterChanges`` RPC Method.
 
     Returns all new entries which occurred since the last call to this method
     for the given ``filter_id``
 
     .. code-block:: python
 
-        >>> filter = web3.eth.filter()
-        >>> web3.eth.get_filter_changes(filter.filter_id)
+        >>> filter = web3.bub.filter()
+        >>> web3.bub.get_filter_changes(filter.filter_id)
         [
             {
                 'address': '0xDc3A9Db694BCdd55EBaE4A89B22aC6D12b3F0c24',
@@ -1154,16 +1154,16 @@ with the filtering API.
         ]
 
 
-.. py:method:: Eth.get_filter_logs(self, filter_id)
+.. py:method:: Bub.get_filter_logs(self, filter_id)
 
-    * Delegates to ``eth_getFilterLogs`` RPC Method.
+    * Delegates to ``bub_getFilterLogs`` RPC Method.
 
     Returns all entries for the given ``filter_id``
 
     .. code-block:: python
 
-        >>> filter = web3.eth.filter()
-        >>> web3.eth.get_filter_logs(filter.filter_id)
+        >>> filter = web3.bub.filter()
+        >>> web3.bub.get_filter_logs(filter.filter_id)
         [
             {
                 'address': '0xDc3A9Db694BCdd55EBaE4A89B22aC6D12b3F0c24',
@@ -1181,46 +1181,46 @@ with the filtering API.
         ]
 
 
-.. py:method:: Eth.uninstall_filter(self, filter_id)
+.. py:method:: Bub.uninstall_filter(self, filter_id)
 
-    * Delegates to ``eth_uninstallFilter`` RPC Method.
+    * Delegates to ``bub_uninstallFilter`` RPC Method.
 
     Uninstalls the filter specified by the given ``filter_id``.  Returns
     boolean as to whether the filter was successfully uninstalled.
 
     .. code-block:: python
 
-        >>> filter = web3.eth.filter()
-        >>> web3.eth.uninstall_filter(filter.filter_id)
+        >>> filter = web3.bub.filter()
+        >>> web3.bub.uninstall_filter(filter.filter_id)
         True
-        >>> web3.eth.uninstall_filter(filter.filter_id)
+        >>> web3.bub.uninstall_filter(filter.filter_id)
         False  # already uninstalled.
 
 
-.. py:method:: Eth.get_logs(filter_params)
+.. py:method:: Bub.get_logs(filter_params)
 
     This is the equivalent of: creating a new
-    filter, running :meth:`~Eth.get_filter_logs`, and then uninstalling the filter. See
-    :meth:`~Eth.filter` for details on allowed filter parameters.
+    filter, running :meth:`~Bub.get_filter_logs`, and then uninstalling the filter. See
+    :meth:`~Bub.filter` for details on allowed filter parameters.
 
-.. py:method:: Eth.submit_hashrate(hashrate, nodeid)
+.. py:method:: Bub.submit_hashrate(hashrate, nodeid)
 
-    * Delegates to ``eth_submitHashrate`` RPC Method
+    * Delegates to ``bub_submitHashrate`` RPC Method
 
     .. code-block:: python
 
        >>> node_id = '59daa26581d0acd1fce254fb7e85952f4c09d0915afd33d3886cd914bc7d283c'
-       >>> web3.eth.submit_hashrate(5000, node_id)
+       >>> web3.bub.submit_hashrate(5000, node_id)
        True
 
 
-.. py:method:: Eth.submit_work(nonce, pow_hash, mix_digest)
+.. py:method:: Bub.submit_work(nonce, pow_hash, mix_digest)
 
-    * Delegates to ``eth_submitWork`` RPC Method.
+    * Delegates to ``bub_submitWork`` RPC Method.
 
     .. code-block:: python
 
-       >>> web3.eth.submit_work(
+       >>> web3.bub.submit_work(
                1,
                '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
                '0xD1FE5700000000000000000000000000D1FE5700000000000000000000000000',
@@ -1231,7 +1231,7 @@ with the filtering API.
 Contracts
 ---------
 
-.. py:method:: Eth.contract(address=None, contract_name=None, ContractFactoryClass=Contract, **contract_factory_kwargs)
+.. py:method:: Bub.contract(address=None, contract_name=None, ContractFactoryClass=Contract, **contract_factory_kwargs)
 
     If ``address`` is provided, then this method will return an instance of the
     contract defined by ``abi``. The address may be a checksum string,
@@ -1243,10 +1243,10 @@ Contracts
 
         w3 = Web3(...)
 
-        contract = w3.eth.contract(address='0x000000000000000000000000000000000000dEaD', abi=...)
+        contract = w3.bub.contract(address='0x000000000000000000000000000000000000dEaD', abi=...)
 
         # alternatively:
-        contract = w3.eth.contract(address='mycontract.eth', abi=...)
+        contract = w3.bub.contract(address='mycontract.eth', abi=...)
 
     .. note::
 
@@ -1264,7 +1264,7 @@ Contracts
 
         w3 = Web3(...)
 
-        Contract = w3.eth.contract(abi=...)
+        Contract = w3.bub.contract(abi=...)
 
         # later, initialize contracts with the same metadata at different addresses:
         contract1 = Contract(address='0x000000000000000000000000000000000000dEaD')
@@ -1294,7 +1294,7 @@ Contracts
 
     See :doc:`web3.contract` for more information about how to use contracts.
 
-.. py:method:: Eth.set_contract_factory(contractFactoryClass)
+.. py:method:: Bub.set_contract_factory(contractFactoryClass)
 
     Modify the default contract factory from ``Contract`` to ``contractFactoryClass``.
-    Future calls to ``Eth.contract()`` will then default to ``contractFactoryClass``.
+    Future calls to ``Bub.contract()`` will then default to ``contractFactoryClass``.

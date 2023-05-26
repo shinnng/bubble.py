@@ -1,9 +1,9 @@
 import pytest
 
-from web3._utils.empty import (
+from bubble._utils.empty import (
     empty,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     Web3ValidationError,
 )
 
@@ -12,7 +12,7 @@ def test_transacting_with_contract_no_arguments(w3, math_contract, transact, cal
     initial_value = call(contract=math_contract, contract_function="counter")
 
     txn_hash = transact(contract=math_contract, contract_function="incrementCounter")
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = call(contract=math_contract, contract_function="counter")
@@ -31,7 +31,7 @@ def test_transact_not_sending_ether_to_nonpayable_function(
     txn_hash = transact(
         contract=payable_tester_contract, contract_function="doNoValueCall"
     )
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = call(contract=payable_tester_contract, contract_function="wasCalled")
@@ -53,7 +53,7 @@ def test_transact_sending_ether_to_nonpayable_function(
             contract_function="doNoValueCall",
             tx_params={"value": 1},
         )
-        txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+        txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
         assert txn_receipt is not None
 
     final_value = call(contract=payable_tester_contract, contract_function="wasCalled")
@@ -80,7 +80,7 @@ def test_transacting_with_contract_with_arguments(
         func_kwargs=transact_kwargs,
     )
 
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = call(contract=math_contract, contract_function="counter")
@@ -89,24 +89,24 @@ def test_transacting_with_contract_with_arguments(
 
 
 def test_deploy_when_default_account_is_set(w3, string_contract_data):
-    w3.eth.default_account = w3.eth.accounts[1]
-    assert w3.eth.default_account is not empty
+    w3.bub.default_account = w3.bub.accounts[1]
+    assert w3.bub.default_account is not empty
 
-    StringContract = w3.eth.contract(**string_contract_data)
+    StringContract = w3.bub.contract(**string_contract_data)
 
     deploy_txn = StringContract.constructor("Caqalai").transact()
-    w3.eth.wait_for_transaction_receipt(deploy_txn)
-    txn_after = w3.eth.get_transaction(deploy_txn)
-    assert txn_after["from"] == w3.eth.default_account
+    w3.bub.wait_for_transaction_receipt(deploy_txn)
+    txn_after = w3.bub.get_transaction(deploy_txn)
+    assert txn_after["from"] == w3.bub.default_account
 
 
 def test_transact_when_default_account_is_set(w3, math_contract, transact):
-    w3.eth.default_account = w3.eth.accounts[1]
-    assert w3.eth.default_account is not empty
+    w3.bub.default_account = w3.bub.accounts[1]
+    assert w3.bub.default_account is not empty
 
     txn_hash = transact(contract=math_contract, contract_function="incrementCounter")
-    txn_after = w3.eth.get_transaction(txn_hash)
-    assert txn_after["from"] == w3.eth.default_account
+    txn_after = w3.bub.get_transaction(txn_hash)
+    assert txn_after["from"] == w3.bub.default_account
 
 
 def test_transacting_with_contract_with_string_argument(
@@ -117,7 +117,7 @@ def test_transacting_with_contract_with_string_argument(
         contract_function="setValue",
         func_args=["ÄLÄMÖLÖ"],
     )
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = call(contract=string_contract, contract_function="getValue")
@@ -135,7 +135,7 @@ def test_transacting_with_contract_with_encoded_string_argument_non_strict(
         contract_function="setValue",
         func_args=["ÄLÄMÖLÖ".encode("utf8")],
     )
-    txn_receipt = w3_non_strict_abi.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3_non_strict_abi.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = call(
@@ -159,7 +159,7 @@ def test_transacting_with_contract_with_bytes32_array_argument(
         contract_function="setBytes32Value",
         func_args=[new_bytes32_array],
     )
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = call(contract=arrays_contract, contract_function="getBytes32Value")
@@ -175,7 +175,7 @@ def test_transacting_with_contract_with_byte_array_argument_strict(
         contract_function="setByteValue",
         func_args=[new_byte_array],
     )
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = call(contract=arrays_contract, contract_function="getByteValue")
@@ -191,7 +191,7 @@ def test_transacting_with_contract_with_byte_array_argument_non_strict(
         contract_function="setByteValue",
         func_args=[new_byte_array],
     )
-    txn_receipt = w3_non_strict_abi.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3_non_strict_abi.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = call(
@@ -203,10 +203,10 @@ def test_transacting_with_contract_with_byte_array_argument_non_strict(
 def test_transacting_with_contract_respects_explicit_gas(
     w3, string_contract_data, wait_for_block, call, transact
 ):
-    StringContract = w3.eth.contract(**string_contract_data)
+    StringContract = w3.bub.contract(**string_contract_data)
 
     deploy_txn = StringContract.constructor("Caqalai").transact()
-    deploy_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn, 30)
+    deploy_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn, 30)
     assert deploy_receipt is not None
     string_contract = StringContract(address=deploy_receipt["contractAddress"])
 
@@ -216,23 +216,23 @@ def test_transacting_with_contract_respects_explicit_gas(
         func_args=["ÄLÄMÖLÖ"],
         tx_params={"gas": 200000},
     )
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash, 30)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash, 30)
     assert txn_receipt is not None
 
     final_value = call(contract=string_contract, contract_function="getValue")
     assert final_value == "ÄLÄMÖLÖ"
 
-    txn = w3.eth.get_transaction(txn_hash)
+    txn = w3.bub.get_transaction(txn_hash)
     assert txn["gas"] == 200000
 
 
 def test_auto_gas_computation_when_transacting(
     w3, string_contract_data, wait_for_block, call, transact
 ):
-    StringContract = w3.eth.contract(**string_contract_data)
+    StringContract = w3.bub.contract(**string_contract_data)
 
     deploy_txn = StringContract.constructor("Caqalai").transact()
-    deploy_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn, 30)
+    deploy_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn, 30)
     assert deploy_receipt is not None
     string_contract = StringContract(address=deploy_receipt["contractAddress"])
 
@@ -242,13 +242,13 @@ def test_auto_gas_computation_when_transacting(
         contract_function="setValue",
         func_args=["ÄLÄMÖLÖ"],
     )
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash, 30)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash, 30)
     assert txn_receipt is not None
 
     final_value = call(contract=string_contract, contract_function="getValue")
     assert final_value == "ÄLÄMÖLÖ"
 
-    txn = w3.eth.get_transaction(txn_hash)
+    txn = w3.bub.get_transaction(txn_hash)
     assert txn["gas"] == gas_estimate + 100000
 
 
@@ -257,7 +257,7 @@ def test_fallback_transacting_with_contract(w3, fallback_function_contract, call
         contract=fallback_function_contract, contract_function="getData"
     )
     txn_hash = fallback_function_contract.fallback.transact()
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = call(contract=fallback_function_contract, contract_function="getData")
@@ -296,7 +296,7 @@ async def test_async_transacting_with_contract_no_arguments(
     txn_hash = await async_transact(
         contract=async_math_contract, contract_function="incrementCounter"
     )
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = await async_call(
@@ -318,7 +318,7 @@ async def test_async_transact_not_sending_ether_to_nonpayable_function(
     txn_hash = await async_transact(
         contract=async_payable_tester_contract, contract_function="doNoValueCall"
     )
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = await async_call(
@@ -343,7 +343,7 @@ async def test_async_transact_sending_ether_to_nonpayable_function(
             contract_function="doNoValueCall",
             tx_params={"value": 1},
         )
-        txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+        txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash)
         assert txn_receipt is not None
 
     final_value = await async_call(
@@ -380,7 +380,7 @@ async def test_async_transacting_with_contract_with_arguments(
         func_kwargs=transact_kwargs,
     )
 
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = await async_call(
@@ -392,31 +392,31 @@ async def test_async_transacting_with_contract_with_arguments(
 
 @pytest.mark.asyncio
 async def test_async_deploy_when_default_account_is_set(async_w3, string_contract_data):
-    async_w3_accounts = await async_w3.eth.accounts
-    async_w3.eth.default_account = async_w3_accounts[1]
-    assert async_w3.eth.default_account is not empty
+    async_w3_accounts = await async_w3.bub.accounts
+    async_w3.bub.default_account = async_w3_accounts[1]
+    assert async_w3.bub.default_account is not empty
 
-    StringContract = async_w3.eth.contract(**string_contract_data)
+    StringContract = async_w3.bub.contract(**string_contract_data)
 
     deploy_txn = await StringContract.constructor("Caqalai").transact()
-    await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
-    txn_after = await async_w3.eth.get_transaction(deploy_txn)
-    assert txn_after["from"] == async_w3.eth.default_account
+    await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
+    txn_after = await async_w3.bub.get_transaction(deploy_txn)
+    assert txn_after["from"] == async_w3.bub.default_account
 
 
 @pytest.mark.asyncio
 async def test_async_transact_when_default_account_is_set(
     async_w3, async_math_contract, async_transact
 ):
-    async_w3_accounts = await async_w3.eth.accounts
-    async_w3.eth.default_account = async_w3_accounts[1]
-    assert async_w3.eth.default_account is not empty
+    async_w3_accounts = await async_w3.bub.accounts
+    async_w3.bub.default_account = async_w3_accounts[1]
+    assert async_w3.bub.default_account is not empty
 
     txn_hash = await async_transact(
         contract=async_math_contract, contract_function="incrementCounter"
     )
-    txn_after = await async_w3.eth.get_transaction(txn_hash)
-    assert txn_after["from"] == async_w3.eth.default_account
+    txn_after = await async_w3.bub.get_transaction(txn_hash)
+    assert txn_after["from"] == async_w3.bub.default_account
 
 
 @pytest.mark.asyncio
@@ -428,7 +428,7 @@ async def test_async_transacting_with_contract_with_string_argument(
         contract_function="setValue",
         func_args=["ÄLÄMÖLÖ"],
     )
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = await async_call(
@@ -452,7 +452,7 @@ async def test_async_transacting_with_contract_with_bytes32_array_argument(
         contract_function="setBytes32Value",
         func_args=[new_bytes32_array],
     )
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = await async_call(
@@ -474,7 +474,7 @@ async def test_async_transacting_with_contract_with_byte_array_argument(
         contract_function="setByteValue",
         func_args=[new_byte_array],
     )
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = await async_call(
@@ -496,7 +496,7 @@ async def test_async_transacting_with_contract_with_byte_array_argument_non_stri
         contract_function="setByteValue",
         func_args=[new_byte_array],
     )
-    txn_receipt = await async_w3_non_strict_abi.eth.wait_for_transaction_receipt(
+    txn_receipt = await async_w3_non_strict_abi.bub.wait_for_transaction_receipt(
         txn_hash
     )
     assert txn_receipt is not None
@@ -511,10 +511,10 @@ async def test_async_transacting_with_contract_with_byte_array_argument_non_stri
 async def test_async_transacting_with_contract_respects_explicit_gas(
     async_w3, string_contract_data, async_call, async_transact
 ):
-    StringContract = async_w3.eth.contract(**string_contract_data)
+    StringContract = async_w3.bub.contract(**string_contract_data)
 
     deploy_txn = await StringContract.constructor("Caqalai").transact()
-    deploy_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn, 30)
+    deploy_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn, 30)
     assert deploy_receipt is not None
     string_contract = StringContract(address=deploy_receipt["contractAddress"])
 
@@ -524,7 +524,7 @@ async def test_async_transacting_with_contract_respects_explicit_gas(
         func_args=["ÄLÄMÖLÖ"],
         tx_params={"gas": 200000},
     )
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash, 30)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash, 30)
     assert txn_receipt is not None
 
     final_value = await async_call(
@@ -532,7 +532,7 @@ async def test_async_transacting_with_contract_respects_explicit_gas(
     )
     assert final_value == "ÄLÄMÖLÖ"
 
-    txn = await async_w3.eth.get_transaction(txn_hash)
+    txn = await async_w3.bub.get_transaction(txn_hash)
     assert txn["gas"] == 200000
 
 
@@ -540,10 +540,10 @@ async def test_async_transacting_with_contract_respects_explicit_gas(
 async def test_async_auto_gas_computation_when_transacting(
     async_w3, string_contract_data, async_call, async_transact
 ):
-    StringContract = async_w3.eth.contract(**string_contract_data)
+    StringContract = async_w3.bub.contract(**string_contract_data)
 
     deploy_txn = await StringContract.constructor("Caqalai").transact()
-    deploy_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn, 30)
+    deploy_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn, 30)
     assert deploy_receipt is not None
     string_contract = StringContract(address=deploy_receipt["contractAddress"])
 
@@ -556,7 +556,7 @@ async def test_async_auto_gas_computation_when_transacting(
         contract_function="setValue",
         func_args=["ÄLÄMÖLÖ"],
     )
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash, 30)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash, 30)
     assert txn_receipt is not None
 
     final_value = await async_call(
@@ -564,7 +564,7 @@ async def test_async_auto_gas_computation_when_transacting(
     )
     assert final_value == "ÄLÄMÖLÖ"
 
-    txn = await async_w3.eth.get_transaction(txn_hash)
+    txn = await async_w3.bub.get_transaction(txn_hash)
     assert txn["gas"] == gas_estimate + 100000
 
 
@@ -576,7 +576,7 @@ async def test_async_fallback_transacting_with_contract(
         contract=async_fallback_function_contract, contract_function="getData"
     )
     txn_hash = await async_fallback_function_contract.fallback.transact()
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash)
     assert txn_receipt is not None
 
     final_value = await async_call(

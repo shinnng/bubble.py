@@ -198,7 +198,7 @@ shared between modules that exist within the same directory as that particular
 Unit Testing and eth-tester Tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Our unit tests are grouped together with tests against the ``eth-tester`` library,
+Our unit tests are grouped tobuber with tests against the ``eth-tester`` library,
 using the ``py-evm`` library as a backend, via the ``EthereumTesterProvider``.
 
 These tests live under appropriately named child directories within the
@@ -219,7 +219,7 @@ interact with the client when we run our tests.
 
 The parent ``/integration`` directory houses some common configuration shared across
 all client tests, whereas the ``/go_ethereum`` directory houses common code to be
-shared across geth-specific provider tests. Though the setup and run configurations
+shared across bub-specific provider tests. Though the setup and run configurations
 exist across the different files within ``/tests/integration``, our integration module
 tests are written across different files within ``/web3/_utils/module_testing``.
 
@@ -343,7 +343,7 @@ commit that introduces the feature or bugfix.
 Generating New Fixtures
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Our integration tests make use of Geth private networks.
+Our integration tests make use of Bub private networks.
 When new versions of the client software are introduced, new fixtures should be
 generated.
 
@@ -360,62 +360,62 @@ Before generating new fixtures, make sure you have the test dependencies install
     testing web3.py functionality against.
 
 
-Geth Fixtures
+Bub Fixtures
 ^^^^^^^^^^^^^
 
-1. Install the desired Geth version on your machine locally. We recommend `py-geth`_ for
-   this purpose, because it enables you to easily manage multiple versions of Geth.
+1. Install the desired Bub version on your machine locally. We recommend `py-bub`_ for
+   this purpose, because it enables you to easily manage multiple versions of Bub.
 
-   Note that ``py-geth`` will need updating to support each new Geth version as well.
-   Adding newer Geth versions to py-geth is straightforward; see past commits for a template.
+   Note that ``py-bub`` will need updating to support each new Bub version as well.
+   Adding newer Bub versions to py-bub is straightforward; see past commits for a template.
 
-   If py-geth has the Geth version you need, install that version locally. For example:
-
-   .. code:: sh
-
-       $ python -m geth.install v1.11.5
-
-2. Specify the Geth binary and run the fixture creation script (from within the web3.py directory):
+   If py-bub has the Bub version you need, install that version locally. For example:
 
    .. code:: sh
 
-       $ GETH_BINARY=~/.py-geth/geth-v1.11.5/bin/geth python ./tests/integration/generate_fixtures/go_ethereum.py ./tests/integration/geth-1.11.5-fixture
+       $ python -m bub.install v1.11.5
+
+2. Specify the Bub binary and run the fixture creation script (from within the web3.py directory):
+
+   .. code:: sh
+
+       $ BUB_BINARY=~/.py-bub/bub-v1.11.5/bin/bub python ./tests/integration/generate_fixtures/go_ethereum.py ./tests/integration/bub-1.11.5-fixture
 
 3. The output of this script is your fixture, a zip file, which is now stored in ``/tests/integration/``.
    Update the ``/tests/integration/go_ethereum/conftest.py`` and
    ``/web3/tools/benchmark/node.py`` files to point to this new fixture. Delete the old
    fixture.
 
-4. Run the tests. To ensure that the tests run with the correct Geth version locally,
-   you may again include the ``GETH_BINARY`` environment variable.
+4. Run the tests. To ensure that the tests run with the correct Bub version locally,
+   you may again include the ``BUB_BINARY`` environment variable.
 
-5. Update the ``geth_version`` and ``pygeth_version`` parameter defaults in
+5. Update the ``bub_version`` and ``pybub_version`` parameter defaults in
    ``/.circleci/config.yml`` to match the ``go-ethereum`` version used to generate the
-   test fixture and the ``py-geth`` version that supports installing it.
+   test fixture and the ``py-bub`` version that supports installing it.
 
 
-CI Testing With a Nightly Geth Build
+CI Testing With a Nightly Bub Build
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Occasionally you'll want to have CI run the test suite against an unreleased version of Geth,
+Occasionally you'll want to have CI run the test suite against an unreleased version of Bub,
 for example, to test upcoming hard fork changes. The workflow described below is for testing only,
 i.e., open a PR, let CI run the tests, but the changes should only be merged into main once the
-Geth release is published or you have some workaround that doesn't require test fixtures built from
+Bub release is published or you have some workaround that doesn't require test fixtures built from
 an unstable client.
 
 1. Configure ``tests/integration/generate_fixtures/go_ethereum/common.py`` as needed.
 
-2. Geth automagically compiles new builds for every commit that gets merged into the codebase.
-   Download the desired build from the `develop builds <https://geth.ethereum.org/downloads/>`_.
+2. Bub automagically compiles new builds for every commit that gets merged into the codebase.
+   Download the desired build from the `develop builds <https://bub.ethereum.org/downloads/>`_.
 
-3. Build your test fixture, passing in the binary you just downloaded via ``GETH_BINARY``. Don't forget
+3. Build your test fixture, passing in the binary you just downloaded via ``BUB_BINARY``. Don't forget
    to update the ``/tests/integration/go_ethereum/conftest.py`` file to point to your new fixture.
 
 4. Our CI runs on Ubuntu, so download the corresponding 64-bit Linux
-   `develop build <https://geth.ethereum.org/downloads/>`_, then
-   add it to the root of your web3.py directory. Rename the binary ``custom_geth``.
+   `develop build <https://bub.ethereum.org/downloads/>`_, then
+   add it to the root of your web3.py directory. Rename the binary ``custom_bub``.
 
-5. In ``.circleci/config.yml``, update jobs relying on ``geth_steps``, to instead use ``custom_geth_steps``.
+5. In ``.circleci/config.yml``, update jobs relying on ``bub_steps``, to instead use ``custom_bub_steps``.
 
 6. Create a PR and let CI do its thing.
 
@@ -433,6 +433,36 @@ virtualenv for smoke testing:
 .. code:: sh
 
     $ git checkout main && git pull
+
+        $ make package
+
+        # in another shell, navigate to the virtualenv mentioned in output of ^
+
+        # load the virtualenv with the packaged web3.py release
+        $ source package-smoke-test/bin/activate
+
+        # smoke test the release
+        $ pip install ipython
+        $ ipython
+        >>> from bubble import Web3, IPCProvider
+        >>> w3 = Web3(IPCProvider(provider_url))
+        >>> w3.is_connected()
+        >>> ...
+
+        $ make package
+
+        # in another shell, navigate to the virtualenv mentioned in output of ^
+
+        # load the virtualenv with the packaged web3.py release
+        $ source package-smoke-test/bin/activate
+
+        # smoke test the release
+        $ pip install ipython
+        $ ipython
+        >>> from bubble import Web3, IPCProvider
+        >>> w3 = Web3(IPCProvider(provider_url))
+        >>> w3.is_connected()
+        >>> ...
 
     $ make package
 
@@ -516,6 +546,6 @@ version explicitly, like ``make release bump="--new-version 4.0.0-alpha.1 devnum
 .. _type hints: https://www.python.org/dev/peps/pep-0484/
 .. _how to create documentation: https://github.com/ethereum/snake-charmers-tactical-manual/blob/master/documentation.md
 .. _working on pull requests: https://help.github.com/articles/about-pull-requests/
-.. _py-geth: https://github.com/ethereum/py-geth
+.. _py-bub: https://github.com/ethereum/py-bub
 .. _pytest documentation: https://docs.pytest.org/en/latest
 .. _pytest documentation on fixtures: https://docs.pytest.org/en/latest/how-to/fixtures.html

@@ -1,7 +1,7 @@
 import pytest
 import re
 
-from web3.datastructures import (
+from bubble.datastructures import (
     AttributeDict,
     tupleize_lists_nested,
 )

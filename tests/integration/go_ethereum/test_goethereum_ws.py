@@ -9,7 +9,7 @@ from tests.utils import (
     get_open_port,
     wait_for_ws,
 )
-from web3 import (
+from bubble import (
     Web3,
 )
 
@@ -32,9 +32,9 @@ def endpoint_uri(ws_port):
     return f"ws://localhost:{ws_port}"
 
 
-def _geth_command_arguments(ws_port, base_geth_command_arguments, geth_version):
-    yield from base_geth_command_arguments
-    if geth_version.major == 1:
+def _bub_command_arguments(ws_port, base_bub_command_arguments, bub_version):
+    yield from base_bub_command_arguments
+    if bub_version.major == 1:
         yield from (
             "--miner.etherbase",
             COINBASE[2:],
@@ -42,29 +42,29 @@ def _geth_command_arguments(ws_port, base_geth_command_arguments, geth_version):
             "--ws.port",
             ws_port,
             "--ws.api",
-            "admin,eth,net,web3,personal,miner",
+            "admin,bub,net,bubble,personal,miner",
             "--ws.origins",
             "*",
             "--ipcdisable",
             "--allow-insecure-unlock",
         )
-        if geth_version.minor not in [10, 11]:
-            raise AssertionError("Unsupported Geth version")
+        if bub_version.minor not in [10, 11]:
+            raise AssertionError("Unsupported Bub version")
     else:
-        raise AssertionError("Unsupported Geth version")
+        raise AssertionError("Unsupported Bub version")
 
 
 @pytest.fixture(scope="module")
-def geth_command_arguments(
-    geth_binary, get_geth_version, datadir, ws_port, base_geth_command_arguments
+def bub_command_arguments(
+    bub_binary, get_bub_version, datadir, ws_port, base_bub_command_arguments
 ):
-    return _geth_command_arguments(
-        ws_port, base_geth_command_arguments, get_geth_version
+    return _bub_command_arguments(
+        ws_port, base_bub_command_arguments, get_bub_version
     )
 
 
 @pytest.fixture(scope="module")
-def w3(geth_process, endpoint_uri):
+def w3(bub_process, endpoint_uri):
     event_loop = asyncio.new_event_loop()
     event_loop.run_until_complete(wait_for_ws(endpoint_uri))
     _w3 = Web3(Web3.WebsocketProvider(endpoint_uri, websocket_timeout=30))
@@ -77,7 +77,7 @@ class TestGoEthereumTest(GoEthereumTest):
 
 class TestGoEthereumAdminModuleTest(GoEthereumAdminModuleTest):
     @pytest.mark.xfail(
-        reason="running geth with the --nodiscover flag doesn't allow peer addition"
+        reason="running bub with the --nodiscover flag doesn't allow peer addition"
     )
     def test_admin_peers(self, w3: "Web3") -> None:
         super().test_admin_peers(w3)

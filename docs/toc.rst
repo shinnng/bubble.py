@@ -18,7 +18,7 @@ Table of Contents
     transactions
     examples
     troubleshooting
-    web3.eth.account
+    web3.bub.account
     filters
     web3.contract
     abi_types
@@ -35,12 +35,12 @@ Table of Contents
     :caption: API
 
     web3.main
-    web3.eth
+    web3.bub
     web3.beacon
     web3.pm
     web3.net
     web3.miner
-    web3.geth
+    web3.bub
     web3.tracing
     web3.utils
     gas_price

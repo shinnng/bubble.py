@@ -27,11 +27,11 @@ from ethpm.constants import (
 )
 
 if TYPE_CHECKING:
-    from web3 import Web3  # noqa: F401
+    from bubble import Web3  # noqa: F401
 
 
 def get_genesis_block_hash(w3: "Web3") -> HexBytes:
-    return w3.eth.get_block(BlockNumber(0))["hash"]
+    return w3.bub.get_block(BlockNumber(0))["hash"]
 
 
 BLOCK = "block"

@@ -8,7 +8,7 @@ from eth_utils.toolz import (
     identity,
 )
 
-from web3._utils.contract_sources.contract_data.emitter_contract import (
+from bubble._utils.contract_sources.contract_data.emitter_contract import (
     EMITTER_CONTRACT_DATA,
 )
 

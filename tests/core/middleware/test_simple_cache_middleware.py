@@ -3,35 +3,35 @@ import pytest
 import threading
 import uuid
 
-from web3 import (
+from bubble import (
     AsyncWeb3,
     Web3,
 )
-from web3._utils.caching import (
+from bubble._utils.caching import (
     generate_cache_key,
 )
-from web3.middleware import (
+from bubble.middleware import (
     construct_error_generator_middleware,
     construct_result_generator_middleware,
     construct_simple_cache_middleware,
 )
-from web3.middleware.async_cache import (
+from bubble.middleware.async_cache import (
     async_construct_simple_cache_middleware,
 )
-from web3.middleware.fixture import (
+from bubble.middleware.fixture import (
     async_construct_error_generator_middleware,
     async_construct_result_generator_middleware,
 )
-from web3.providers.base import (
+from bubble.providers.base import (
     BaseProvider,
 )
-from web3.providers.eth_tester import (
-    AsyncEthereumTesterProvider,
+from bubble.providers.bub_tester import (
+    AsyncBubereumTesterProvider,
 )
-from web3.types import (
+from bubble.types import (
     RPCEndpoint,
 )
-from web3.utils.caching import (
+from bubble.utils.caching import (
     SimpleCache,
 )
 
@@ -168,7 +168,7 @@ async def _async_simple_cache_middleware_for_testing(make_request, async_w3):
 @pytest.fixture
 def async_w3():
     return AsyncWeb3(
-        provider=AsyncEthereumTesterProvider(),
+        provider=AsyncBubereumTesterProvider(),
         middlewares=[
             (_async_simple_cache_middleware_for_testing, "simple_cache"),
         ],

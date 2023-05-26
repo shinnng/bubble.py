@@ -20,7 +20,7 @@ from ethpm.tools.builder import (
     build,
 )
 
-# todo: validate no duplicate blockchain uris in deployments, if web3 is available
+# todo: validate no duplicate blockchain uris in deployments, if bubble is available
 
 WARNINGS = {
     "manifest_missing": "Manifest missing a required 'manifest' field.",

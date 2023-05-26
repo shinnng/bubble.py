@@ -1,7 +1,7 @@
 import pytest
 import time
 
-from web3._utils.threads import (
+from bubble._utils.threads import (
     ThreadWithReturn,
     Timeout,
     spawn,

@@ -37,17 +37,17 @@ from ens.contract_data import (
     simple_resolver_bytecode,
     simple_resolver_bytecode_runtime,
 )
-from web3 import (
+from bubble import (
     AsyncWeb3,
     Web3,
 )
-from web3.contract import (
+from bubble.contract import (
     AsyncContract,
     Contract,
 )
-from web3.providers.eth_tester import (
-    AsyncEthereumTesterProvider,
-    EthereumTesterProvider,
+from bubble.providers.bub_tester import (
+    AsyncBubereumTesterProvider,
+    BubbleTesterProvider,
 )
 
 
@@ -66,13 +66,13 @@ def deploy(w3, Factory, from_address, args=None):
     args = args or []
     factory = Factory(w3)
     deploy_txn = factory.constructor(*args).transact({"from": from_address})
-    deploy_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    deploy_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert deploy_receipt is not None
     return factory(address=deploy_receipt["contractAddress"])
 
 
 def DefaultReverseResolver(w3):
-    return w3.eth.contract(
+    return w3.bub.contract(
         bytecode=reverse_resolver_bytecode,
         bytecode_runtime=reverse_resolver_bytecode_runtime,
         abi=reverse_resolver_abi,
@@ -81,7 +81,7 @@ def DefaultReverseResolver(w3):
 
 
 def ReverseRegistrar(w3):
-    return w3.eth.contract(
+    return w3.bub.contract(
         bytecode=reverse_registrar_bytecode,
         bytecode_runtime=reverse_registrar_bytecode_runtime,
         abi=reverse_registrar_abi,
@@ -90,7 +90,7 @@ def ReverseRegistrar(w3):
 
 
 def PublicResolverFactory(w3):
-    return w3.eth.contract(
+    return w3.bub.contract(
         bytecode=resolver_bytecode,
         bytecode_runtime=resolver_bytecode_runtime,
         abi=resolver_abi,
@@ -99,7 +99,7 @@ def PublicResolverFactory(w3):
 
 
 def SimpleResolver(w3):
-    return w3.eth.contract(
+    return w3.bub.contract(
         bytecode=simple_resolver_bytecode,
         bytecode_runtime=simple_resolver_bytecode_runtime,
         abi=simple_resolver_abi,
@@ -108,7 +108,7 @@ def SimpleResolver(w3):
 
 
 def ExtendedResolver(w3):
-    return w3.eth.contract(
+    return w3.bub.contract(
         bytecode=extended_resolver_bytecode,
         bytecode_runtime=extended_resolver_bytecode_runtime,
         abi=extended_resolver_abi,
@@ -117,7 +117,7 @@ def ExtendedResolver(w3):
 
 
 def OffchainResolver(w3):
-    return w3.eth.contract(
+    return w3.bub.contract(
         bytecode=offchain_resolver_bytecode,
         bytecode_runtime=offchain_resolver_bytecode_runtime,
         abi=offchain_resolver_abi,
@@ -126,7 +126,7 @@ def OffchainResolver(w3):
 
 
 def ENSFactory(w3):
-    return w3.eth.contract(
+    return w3.bub.contract(
         bytecode="6060604052341561000f57600080fd5b60008080526020527fad3228b676f7d3cd4284a5443f17f1962b36e491b30a40b2405849e597ba5fb58054600160a060020a033316600160a060020a0319909116179055610501806100626000396000f300606060405236156100805763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630178b8bf811461008557806302571be3146100b757806306ab5923146100cd57806314ab9038146100f457806316a25cbd146101175780631896f70a1461014a5780635b0fc9c31461016c575b600080fd5b341561009057600080fd5b61009b60043561018e565b604051600160a060020a03909116815260200160405180910390f35b34156100c257600080fd5b61009b6004356101ac565b34156100d857600080fd5b6100f2600435602435600160a060020a03604435166101c7565b005b34156100ff57600080fd5b6100f260043567ffffffffffffffff60243516610289565b341561012257600080fd5b61012d600435610355565b60405167ffffffffffffffff909116815260200160405180910390f35b341561015557600080fd5b6100f2600435600160a060020a036024351661038c565b341561017757600080fd5b6100f2600435600160a060020a0360243516610432565b600090815260208190526040902060010154600160a060020a031690565b600090815260208190526040902054600160a060020a031690565b600083815260208190526040812054849033600160a060020a039081169116146101f057600080fd5b8484604051918252602082015260409081019051908190039020915083857fce0457fe73731f824cc272376169235128c118b49d344817417c6d108d155e8285604051600160a060020a03909116815260200160405180910390a3506000908152602081905260409020805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555050565b600082815260208190526040902054829033600160a060020a039081169116146102b257600080fd5b827f1d4f9bbfc9cab89d66e1a1562f2233ccbf1308cb4f63de2ead5787adddb8fa688360405167ffffffffffffffff909116815260200160405180910390a250600091825260208290526040909120600101805467ffffffffffffffff90921674010000000000000000000000000000000000000000027fffffffff0000000000000000ffffffffffffffffffffffffffffffffffffffff909216919091179055565b60009081526020819052604090206001015474010000000000000000000000000000000000000000900467ffffffffffffffff1690565b600082815260208190526040902054829033600160a060020a039081169116146103b557600080fd5b827f335721b01866dc23fbee8b6b2c7b1e14d6f05c28cd35a2c934239f94095602a083604051600160a060020a03909116815260200160405180910390a250600091825260208290526040909120600101805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03909216919091179055565b600082815260208190526040902054829033600160a060020a0390811691161461045b57600080fd5b827fd4735d920b0f87494915f556dd9b54c8f309026070caea5c737245152564d26683604051600160a060020a03909116815260200160405180910390a250600091825260208290526040909120805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039092169190911790555600a165627a7a7230582050975b6c54a16d216b563f4c4960d6ebc5881eb1ec73c2ef1f87920a251159530029",  # noqa: E501
         bytecode_runtime="606060405236156100805763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630178b8bf811461008557806302571be3146100b757806306ab5923146100cd57806314ab9038146100f457806316a25cbd146101175780631896f70a1461014a5780635b0fc9c31461016c575b600080fd5b341561009057600080fd5b61009b60043561018e565b604051600160a060020a03909116815260200160405180910390f35b34156100c257600080fd5b61009b6004356101ac565b34156100d857600080fd5b6100f2600435602435600160a060020a03604435166101c7565b005b34156100ff57600080fd5b6100f260043567ffffffffffffffff60243516610289565b341561012257600080fd5b61012d600435610355565b60405167ffffffffffffffff909116815260200160405180910390f35b341561015557600080fd5b6100f2600435600160a060020a036024351661038c565b341561017757600080fd5b6100f2600435600160a060020a0360243516610432565b600090815260208190526040902060010154600160a060020a031690565b600090815260208190526040902054600160a060020a031690565b600083815260208190526040812054849033600160a060020a039081169116146101f057600080fd5b8484604051918252602082015260409081019051908190039020915083857fce0457fe73731f824cc272376169235128c118b49d344817417c6d108d155e8285604051600160a060020a03909116815260200160405180910390a3506000908152602081905260409020805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555050565b600082815260208190526040902054829033600160a060020a039081169116146102b257600080fd5b827f1d4f9bbfc9cab89d66e1a1562f2233ccbf1308cb4f63de2ead5787adddb8fa688360405167ffffffffffffffff909116815260200160405180910390a250600091825260208290526040909120600101805467ffffffffffffffff90921674010000000000000000000000000000000000000000027fffffffff0000000000000000ffffffffffffffffffffffffffffffffffffffff909216919091179055565b60009081526020819052604090206001015474010000000000000000000000000000000000000000900467ffffffffffffffff1690565b600082815260208190526040902054829033600160a060020a039081169116146103b557600080fd5b827f335721b01866dc23fbee8b6b2c7b1e14d6f05c28cd35a2c934239f94095602a083604051600160a060020a03909116815260200160405180910390a250600091825260208290526040909120600101805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03909216919091179055565b600082815260208190526040902054829033600160a060020a0390811691161461045b57600080fd5b827fd4735d920b0f87494915f556dd9b54c8f309026070caea5c737245152564d26683604051600160a060020a03909116815260200160405180910390a250600091825260208290526040909120805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039092169190911790555600a165627a7a7230582050975b6c54a16d216b563f4c4960d6ebc5881eb1ec73c2ef1f87920a251159530029",  # noqa: E501
         abi=json.loads(
@@ -137,7 +137,7 @@ def ENSFactory(w3):
 
 
 def ENSRegistryFactory(w3):
-    return w3.eth.contract(
+    return w3.bub.contract(
         bytecode=registrar_bytecode,
         bytecode_runtime=registrar_bytecode_runtime,
         abi=registrar_abi,
@@ -147,25 +147,25 @@ def ENSRegistryFactory(w3):
 
 @pytest.fixture
 def ens(ens_setup, mocker):
-    mocker.patch("web3.middleware.stalecheck._is_fresh", return_value=True)
-    ens_setup.w3.eth.default_account = ens_setup.w3.eth.coinbase
+    mocker.patch("bubble.middleware.stalecheck._is_fresh", return_value=True)
+    ens_setup.w3.bub.default_account = ens_setup.w3.bub.coinbase
     return ens_setup
 
 
 # session scope for performance
 @pytest.fixture(scope="session")
 def ens_setup():
-    w3 = Web3(EthereumTesterProvider(EthereumTester()))
+    w3 = Web3(BubbleTesterProvider(EthereumTester()))
 
     # ** Set up ENS contracts **
 
     # remove account that creates ENS, so test transactions don't have write access
-    accounts = w3.eth.accounts
+    accounts = w3.bub.accounts
     ens_key = accounts.pop()
 
     # create ENS contract
-    eth_labelhash = w3.keccak(text="eth")
-    eth_namehash = bytes32(
+    bub_labelhash = w3.keccak(text="bub")
+    bub_namehash = bytes32(
         0x93CDEB708B7545DC668EB9280176169D1C33CFD8ED6F04690A0BCC88A93FC4AE
     )
     resolver_namehash = bytes32(
@@ -184,13 +184,13 @@ def ens_setup():
         w3, PublicResolverFactory, ens_key, args=[ens_contract.address]
     )
 
-    # set 'resolver.eth' to resolve to public resolver
-    ens_contract.functions.setSubnodeOwner(b"\0" * 32, eth_labelhash, ens_key).transact(
+    # set 'resolver.bub' to resolve to public resolver
+    ens_contract.functions.setSubnodeOwner(b"\0" * 32, bub_labelhash, ens_key).transact(
         {"from": ens_key}
     )
 
     ens_contract.functions.setSubnodeOwner(
-        eth_namehash, w3.keccak(text="resolver"), ens_key
+        bub_namehash, w3.keccak(text="resolver"), ens_key
     ).transact({"from": ens_key})
 
     ens_contract.functions.setResolver(
@@ -201,20 +201,20 @@ def ens_setup():
         resolver_namehash, public_resolver.address
     ).transact({"from": ens_key})
 
-    # create .eth registrar
-    eth_registrar = deploy(
+    # create .bub registrar
+    bub_registrar = deploy(
         w3,
         ENSRegistryFactory,
         ens_key,
-        args=[ens_contract.address, eth_namehash],
+        args=[ens_contract.address, bub_namehash],
     )
 
-    # set '.eth' to resolve to the registrar
-    ens_contract.functions.setResolver(eth_namehash, public_resolver.address).transact(
+    # set '.bub' to resolve to the registrar
+    ens_contract.functions.setResolver(bub_namehash, public_resolver.address).transact(
         {"from": ens_key}
     )
 
-    public_resolver.functions.setAddr(eth_namehash, eth_registrar.address).transact(
+    public_resolver.functions.setAddr(bub_namehash, bub_registrar.address).transact(
         {"from": ens_key}
     )
 
@@ -248,11 +248,11 @@ def ens_setup():
         reverser_namehash, reverse_registrar.address
     ).transact({"from": ens_key})
 
-    # set owner of tester.eth to an account controlled by tests
-    second_account = w3.eth.accounts[2]
+    # set owner of tester.bub to an account controlled by tests
+    second_account = w3.bub.accounts[2]
 
     ens_contract.functions.setSubnodeOwner(
-        eth_namehash,
+        bub_namehash,
         w3.keccak(text="tester"),
         # note that this does not have to be the default, only in the list
         second_account,
@@ -263,12 +263,12 @@ def ens_setup():
     # create simple resolver
     simple_resolver = deploy(w3, SimpleResolver, ens_key, args=[ens_contract.address])
 
-    # set owner of simple-resolver.eth to an account controlled by tests
+    # set owner of simple-resolver.bub to an account controlled by tests
     ens_contract.functions.setSubnodeOwner(
-        eth_namehash, w3.keccak(text="simple-resolver"), second_account
+        bub_namehash, w3.keccak(text="simple-resolver"), second_account
     ).transact({"from": ens_key})
 
-    # ns.namehash('simple-resolver.eth')
+    # ns.namehash('simple-resolver.bub')
     simple_resolver_namehash = bytes32(
         0x65DB4C1C4F4AB9E6917FA7896CE546B1FE03E9341E98187E3917AFB60AA9835A
     )
@@ -284,12 +284,12 @@ def ens_setup():
         w3, ExtendedResolver, ens_key, args=[ens_contract.address]
     )
 
-    # set owner of extended-resolver.eth to an account controlled by tests
+    # set owner of extended-resolver.bub to an account controlled by tests
     ens_contract.functions.setSubnodeOwner(
-        eth_namehash, w3.keccak(text="extended-resolver"), second_account
+        bub_namehash, w3.keccak(text="extended-resolver"), second_account
     ).transact({"from": ens_key})
 
-    # ns.namehash('extended-resolver.eth')
+    # ns.namehash('extended-resolver.bub')
     extended_resolver_namehash = bytes32(
         0xF0A378CC2AFE91730D0105E67D6BB037CC5B8B6BFEC5B5962D9B637FF6497E55
     )
@@ -317,12 +317,12 @@ def ens_setup():
         ],
     )
 
-    # set owner of offchainexample.eth to an account controlled by tests
+    # set owner of offchainexample.bub to an account controlled by tests
     ens_contract.functions.setSubnodeOwner(
-        eth_namehash, w3.keccak(text="offchainexample"), second_account
+        bub_namehash, w3.keccak(text="offchainexample"), second_account
     ).transact({"from": ens_key})
 
-    # ns.namehash('offchainexample.eth')
+    # ns.namehash('offchainexample.bub')
     offchain_example_namehash = bytes32(
         0x42041B0018EDD29D7C17154B0C671ACC0502EA0B3693CAFBEADF58E6BEAAA16C
     )
@@ -333,9 +333,9 @@ def ens_setup():
 
     # --- finish setup --- #
 
-    # make the registrar the owner of the 'eth' name
+    # make the registrar the owner of the 'bub' name
     ens_contract.functions.setSubnodeOwner(
-        b"\0" * 32, eth_labelhash, eth_registrar.address
+        b"\0" * 32, bub_labelhash, bub_registrar.address
     ).transact({"from": ens_key})
 
     # make the reverse registrar the owner of the 'addr.reverse' name
@@ -356,7 +356,7 @@ def TEST_ADDRESS(address_conversion_func):
 
 @pytest_asyncio.fixture(scope="session")
 def async_w3():
-    provider = AsyncEthereumTesterProvider()
+    provider = AsyncBubereumTesterProvider()
     _async_w3 = AsyncWeb3(provider, middlewares=provider.middlewares)
     return _async_w3
 
@@ -365,13 +365,13 @@ async def async_deploy(async_w3, Factory, from_address, args=None):
     args = args or []
     factory = Factory(async_w3)
     deploy_txn = await factory.constructor(*args).transact({"from": from_address})
-    deploy_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
+    deploy_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert deploy_receipt is not None
     return factory(address=deploy_receipt["contractAddress"])
 
 
 def async_default_reverse_resolver(async_w3):
-    return async_w3.eth.contract(
+    return async_w3.bub.contract(
         bytecode=reverse_resolver_bytecode,
         bytecode_runtime=reverse_resolver_bytecode_runtime,
         abi=reverse_resolver_abi,
@@ -380,7 +380,7 @@ def async_default_reverse_resolver(async_w3):
 
 
 def async_reverse_registrar(async_w3):
-    return async_w3.eth.contract(
+    return async_w3.bub.contract(
         bytecode=reverse_registrar_bytecode,
         bytecode_runtime=reverse_registrar_bytecode_runtime,
         abi=reverse_registrar_abi,
@@ -389,7 +389,7 @@ def async_reverse_registrar(async_w3):
 
 
 def async_public_resolver_factory(async_w3):
-    return async_w3.eth.contract(
+    return async_w3.bub.contract(
         bytecode=resolver_bytecode,
         bytecode_runtime=resolver_bytecode_runtime,
         abi=resolver_abi,
@@ -398,7 +398,7 @@ def async_public_resolver_factory(async_w3):
 
 
 def async_simple_resolver(async_w3):
-    return async_w3.eth.contract(
+    return async_w3.bub.contract(
         bytecode=simple_resolver_bytecode,
         bytecode_runtime=simple_resolver_bytecode_runtime,
         abi=simple_resolver_abi,
@@ -407,7 +407,7 @@ def async_simple_resolver(async_w3):
 
 
 def async_extended_resolver(async_w3):
-    return async_w3.eth.contract(
+    return async_w3.bub.contract(
         bytecode=extended_resolver_bytecode,
         bytecode_runtime=extended_resolver_bytecode_runtime,
         abi=extended_resolver_abi,
@@ -416,7 +416,7 @@ def async_extended_resolver(async_w3):
 
 
 def async_offchain_resolver(async_w3):
-    return async_w3.eth.contract(
+    return async_w3.bub.contract(
         bytecode=offchain_resolver_bytecode,
         bytecode_runtime=offchain_resolver_bytecode_runtime,
         abi=offchain_resolver_abi,
@@ -425,7 +425,7 @@ def async_offchain_resolver(async_w3):
 
 
 def async_ENS_factory(async_w3):
-    return async_w3.eth.contract(
+    return async_w3.bub.contract(
         bytecode="6060604052341561000f57600080fd5b60008080526020527fad3228b676f7d3cd4284a5443f17f1962b36e491b30a40b2405849e597ba5fb58054600160a060020a033316600160a060020a0319909116179055610501806100626000396000f300606060405236156100805763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630178b8bf811461008557806302571be3146100b757806306ab5923146100cd57806314ab9038146100f457806316a25cbd146101175780631896f70a1461014a5780635b0fc9c31461016c575b600080fd5b341561009057600080fd5b61009b60043561018e565b604051600160a060020a03909116815260200160405180910390f35b34156100c257600080fd5b61009b6004356101ac565b34156100d857600080fd5b6100f2600435602435600160a060020a03604435166101c7565b005b34156100ff57600080fd5b6100f260043567ffffffffffffffff60243516610289565b341561012257600080fd5b61012d600435610355565b60405167ffffffffffffffff909116815260200160405180910390f35b341561015557600080fd5b6100f2600435600160a060020a036024351661038c565b341561017757600080fd5b6100f2600435600160a060020a0360243516610432565b600090815260208190526040902060010154600160a060020a031690565b600090815260208190526040902054600160a060020a031690565b600083815260208190526040812054849033600160a060020a039081169116146101f057600080fd5b8484604051918252602082015260409081019051908190039020915083857fce0457fe73731f824cc272376169235128c118b49d344817417c6d108d155e8285604051600160a060020a03909116815260200160405180910390a3506000908152602081905260409020805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555050565b600082815260208190526040902054829033600160a060020a039081169116146102b257600080fd5b827f1d4f9bbfc9cab89d66e1a1562f2233ccbf1308cb4f63de2ead5787adddb8fa688360405167ffffffffffffffff909116815260200160405180910390a250600091825260208290526040909120600101805467ffffffffffffffff90921674010000000000000000000000000000000000000000027fffffffff0000000000000000ffffffffffffffffffffffffffffffffffffffff909216919091179055565b60009081526020819052604090206001015474010000000000000000000000000000000000000000900467ffffffffffffffff1690565b600082815260208190526040902054829033600160a060020a039081169116146103b557600080fd5b827f335721b01866dc23fbee8b6b2c7b1e14d6f05c28cd35a2c934239f94095602a083604051600160a060020a03909116815260200160405180910390a250600091825260208290526040909120600101805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03909216919091179055565b600082815260208190526040902054829033600160a060020a0390811691161461045b57600080fd5b827fd4735d920b0f87494915f556dd9b54c8f309026070caea5c737245152564d26683604051600160a060020a03909116815260200160405180910390a250600091825260208290526040909120805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039092169190911790555600a165627a7a7230582050975b6c54a16d216b563f4c4960d6ebc5881eb1ec73c2ef1f87920a251159530029",  # noqa: E501
         bytecode_runtime="606060405236156100805763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630178b8bf811461008557806302571be3146100b757806306ab5923146100cd57806314ab9038146100f457806316a25cbd146101175780631896f70a1461014a5780635b0fc9c31461016c575b600080fd5b341561009057600080fd5b61009b60043561018e565b604051600160a060020a03909116815260200160405180910390f35b34156100c257600080fd5b61009b6004356101ac565b34156100d857600080fd5b6100f2600435602435600160a060020a03604435166101c7565b005b34156100ff57600080fd5b6100f260043567ffffffffffffffff60243516610289565b341561012257600080fd5b61012d600435610355565b60405167ffffffffffffffff909116815260200160405180910390f35b341561015557600080fd5b6100f2600435600160a060020a036024351661038c565b341561017757600080fd5b6100f2600435600160a060020a0360243516610432565b600090815260208190526040902060010154600160a060020a031690565b600090815260208190526040902054600160a060020a031690565b600083815260208190526040812054849033600160a060020a039081169116146101f057600080fd5b8484604051918252602082015260409081019051908190039020915083857fce0457fe73731f824cc272376169235128c118b49d344817417c6d108d155e8285604051600160a060020a03909116815260200160405180910390a3506000908152602081905260409020805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555050565b600082815260208190526040902054829033600160a060020a039081169116146102b257600080fd5b827f1d4f9bbfc9cab89d66e1a1562f2233ccbf1308cb4f63de2ead5787adddb8fa688360405167ffffffffffffffff909116815260200160405180910390a250600091825260208290526040909120600101805467ffffffffffffffff90921674010000000000000000000000000000000000000000027fffffffff0000000000000000ffffffffffffffffffffffffffffffffffffffff909216919091179055565b60009081526020819052604090206001015474010000000000000000000000000000000000000000900467ffffffffffffffff1690565b600082815260208190526040902054829033600160a060020a039081169116146103b557600080fd5b827f335721b01866dc23fbee8b6b2c7b1e14d6f05c28cd35a2c934239f94095602a083604051600160a060020a03909116815260200160405180910390a250600091825260208290526040909120600101805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03909216919091179055565b600082815260208190526040902054829033600160a060020a0390811691161461045b57600080fd5b827fd4735d920b0f87494915f556dd9b54c8f309026070caea5c737245152564d26683604051600160a060020a03909116815260200160405180910390a250600091825260208290526040909120805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039092169190911790555600a165627a7a7230582050975b6c54a16d216b563f4c4960d6ebc5881eb1ec73c2ef1f87920a251159530029",  # noqa: E501
         abi=json.loads(
@@ -436,7 +436,7 @@ def async_ENS_factory(async_w3):
 
 
 def async_ENS_registry_factory(async_w3):
-    return async_w3.eth.contract(
+    return async_w3.bub.contract(
         bytecode=registrar_bytecode,
         bytecode_runtime=registrar_bytecode_runtime,
         abi=registrar_abi,
@@ -452,17 +452,17 @@ def event_loop():
 # add session scope with above session-scoped `event_loop` for better performance
 @pytest_asyncio.fixture(scope="session")
 async def async_ens_setup(async_w3):
-    async_w3.eth.default_account = await async_w3.eth.coinbase
+    async_w3.bub.default_account = await async_w3.bub.coinbase
 
     # ** Set up ENS contracts **
 
     # remove account that creates ENS, so test transactions don't have write access
-    accounts = await async_w3.eth.accounts
+    accounts = await async_w3.bub.accounts
     ens_key = accounts.pop()
 
     # create ENS contract
-    eth_labelhash = async_w3.keccak(text="eth")
-    eth_namehash = bytes32(
+    bub_labelhash = async_w3.keccak(text="bub")
+    bub_namehash = bytes32(
         0x93CDEB708B7545DC668EB9280176169D1C33CFD8ED6F04690A0BCC88A93FC4AE
     )
     resolver_namehash = bytes32(
@@ -481,13 +481,13 @@ async def async_ens_setup(async_w3):
         async_w3, async_public_resolver_factory, ens_key, args=[ens_contract.address]
     )
 
-    # set 'resolver.eth' to resolve to public resolver
+    # set 'resolver.bub' to resolve to public resolver
     await ens_contract.functions.setSubnodeOwner(
-        b"\0" * 32, eth_labelhash, ens_key
+        b"\0" * 32, bub_labelhash, ens_key
     ).transact({"from": ens_key})
 
     await ens_contract.functions.setSubnodeOwner(
-        eth_namehash, async_w3.keccak(text="resolver"), ens_key
+        bub_namehash, async_w3.keccak(text="resolver"), ens_key
     ).transact({"from": ens_key})
 
     await ens_contract.functions.setResolver(
@@ -498,21 +498,21 @@ async def async_ens_setup(async_w3):
         resolver_namehash, public_resolver.address
     ).transact({"from": ens_key})
 
-    # create .eth registrar
-    eth_registrar = await async_deploy(
+    # create .bub registrar
+    bub_registrar = await async_deploy(
         async_w3,
         async_ENS_registry_factory,
         ens_key,
-        args=[ens_contract.address, eth_namehash],
+        args=[ens_contract.address, bub_namehash],
     )
 
-    # set '.eth' to resolve to the registrar
+    # set '.bub' to resolve to the registrar
     await ens_contract.functions.setResolver(
-        eth_namehash, public_resolver.address
+        bub_namehash, public_resolver.address
     ).transact({"from": ens_key})
 
     await public_resolver.functions.setAddr(
-        eth_namehash, eth_registrar.address
+        bub_namehash, bub_registrar.address
     ).transact({"from": ens_key})
 
     # create reverse resolver
@@ -545,12 +545,12 @@ async def async_ens_setup(async_w3):
         reverser_namehash, reverse_registrar.address
     ).transact({"from": ens_key})
 
-    # set owner of tester.eth to an account controlled by tests
-    second_accounts = await async_w3.eth.accounts
+    # set owner of tester.bub to an account controlled by tests
+    second_accounts = await async_w3.bub.accounts
     second_account = second_accounts[2]
 
     await ens_contract.functions.setSubnodeOwner(
-        eth_namehash,
+        bub_namehash,
         async_w3.keccak(text="tester"),
         # note that this does not have to be the default, only in the list
         second_account,
@@ -563,12 +563,12 @@ async def async_ens_setup(async_w3):
         async_w3, async_simple_resolver, ens_key, args=[ens_contract.address]
     )
 
-    # set owner of simple-resolver.eth to an account controlled by tests
+    # set owner of simple-resolver.bub to an account controlled by tests
     await ens_contract.functions.setSubnodeOwner(
-        eth_namehash, async_w3.keccak(text="simple-resolver"), second_account
+        bub_namehash, async_w3.keccak(text="simple-resolver"), second_account
     ).transact({"from": ens_key})
 
-    # ns.namehash('simple-resolver.eth')
+    # ns.namehash('simple-resolver.bub')
     simple_resolver_namehash = bytes32(
         0x65DB4C1C4F4AB9E6917FA7896CE546B1FE03E9341E98187E3917AFB60AA9835A
     )
@@ -584,12 +584,12 @@ async def async_ens_setup(async_w3):
         async_w3, async_extended_resolver, ens_key, args=[ens_contract.address]
     )
 
-    # set owner of extended-resolver.eth to an account controlled by tests
+    # set owner of extended-resolver.bub to an account controlled by tests
     await ens_contract.functions.setSubnodeOwner(
-        eth_namehash, async_w3.keccak(text="extended-resolver"), second_account
+        bub_namehash, async_w3.keccak(text="extended-resolver"), second_account
     ).transact({"from": ens_key})
 
-    # ns.namehash('extended-resolver.eth')
+    # ns.namehash('extended-resolver.bub')
     extended_resolver_namehash = bytes32(
         0xF0A378CC2AFE91730D0105E67D6BB037CC5B8B6BFEC5B5962D9B637FF6497E55
     )
@@ -617,12 +617,12 @@ async def async_ens_setup(async_w3):
         ],
     )
 
-    # set owner of offchainexample.eth to an account controlled by tests
+    # set owner of offchainexample.bub to an account controlled by tests
     await ens_contract.functions.setSubnodeOwner(
-        eth_namehash, async_w3.keccak(text="offchainexample"), second_account
+        bub_namehash, async_w3.keccak(text="offchainexample"), second_account
     ).transact({"from": ens_key})
 
-    # ns.namehash('offchainexample.eth')
+    # ns.namehash('offchainexample.bub')
     offchain_example_namehash = bytes32(
         0x42041B0018EDD29D7C17154B0C671ACC0502EA0B3693CAFBEADF58E6BEAAA16C
     )
@@ -633,9 +633,9 @@ async def async_ens_setup(async_w3):
 
     # --- finish setup --- #
 
-    # make the registrar the owner of the 'eth' name
+    # make the registrar the owner of the 'bub' name
     await ens_contract.functions.setSubnodeOwner(
-        b"\0" * 32, eth_labelhash, eth_registrar.address
+        b"\0" * 32, bub_labelhash, bub_registrar.address
     ).transact({"from": ens_key})
 
     # make the reverse registrar the owner of the 'addr.reverse' name
@@ -648,6 +648,6 @@ async def async_ens_setup(async_w3):
 
 @pytest_asyncio.fixture
 async def async_ens(async_ens_setup, mocker):
-    mocker.patch("web3.middleware.stalecheck._is_fresh", return_value=True)
-    async_ens_setup.w3.eth.default_account = await async_ens_setup.w3.eth.coinbase
+    mocker.patch("bubble.middleware.stalecheck._is_fresh", return_value=True)
+    async_ens_setup.w3.bub.default_account = await async_ens_setup.w3.bub.coinbase
     return async_ens_setup

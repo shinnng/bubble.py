@@ -75,7 +75,91 @@ The first time it's used, web3.py will create the  ``ens`` instance using
 
     .. doctest::
 
-        >>> from web3 import Web3, EthereumTesterProvider
+        >>> from bubble import Web3, EthereumTesterProvider
+                        >>> from ens import ENS
+                        >>> w3 = Web3(BubbleTesterProvider())
+
+                        >>> assert w3.strict_bytes_type_checking  # assert strict by default
+                        >>> w3.is_encodable('bytes2', b'1')
+                        False
+
+                        >>> w3.strict_bytes_type_checking = False
+                        >>> w3.is_encodable('bytes2', b'1')  # zero-padded, so encoded to: b'1\x00'
+                        True
+
+                        >>> ns = ENS.from_web3(w3)
+                        >>> # assert inherited from w3 at time of instantiation via ENS.from_web3()
+                        >>> assert ns.strict_bytes_type_checking is False
+                        >>> ns.w3.is_encodable('bytes2', b'1')
+                        True
+
+                        >>> # assert these are now separate instances
+                        >>> ns.strict_bytes_type_checking = True
+                        >>> ns.w3.is_encodable('bytes2', b'1')
+                        False
+
+                        >>> # assert w3 flag value remains
+                        >>> assert w3.strict_bytes_type_checking is False
+                        >>> w3.is_encodable('bytes2', b'1')
+                        True
+
+                    However, if accessing the
+                >>> from ens import ENS
+                >>> w3 = Web3(EthereumTesterProvider())
+
+                >>> assert w3.strict_bytes_type_checking  # assert strict by default
+                >>> w3.is_encodable('bytes2', b'1')
+                False
+
+                >>> w3.strict_bytes_type_checking = False
+                >>> w3.is_encodable('bytes2', b'1')  # zero-padded, so encoded to: b'1\x00'
+                True
+
+                >>> ns = ENS.from_web3(w3)
+                >>> # assert inherited from w3 at time of instantiation via ENS.from_web3()
+                >>> assert ns.strict_bytes_type_checking is False
+                >>> ns.w3.is_encodable('bytes2', b'1')
+                True
+
+                >>> # assert these are now separate instances
+                >>> ns.strict_bytes_type_checking = True
+                >>> ns.w3.is_encodable('bytes2', b'1')
+                False
+
+                >>> # assert w3 flag value remains
+                >>> assert w3.strict_bytes_type_checking is False
+                >>> w3.is_encodable('bytes2', b'1')
+                True
+
+            However, if accessing the
+                >>> from ens import ENS
+                >>> w3 = Web3(BubbleTesterProvider())
+
+                >>> assert w3.strict_bytes_type_checking  # assert strict by default
+                >>> w3.is_encodable('bytes2', b'1')
+                False
+
+                >>> w3.strict_bytes_type_checking = False
+                >>> w3.is_encodable('bytes2', b'1')  # zero-padded, so encoded to: b'1\x00'
+                True
+
+                >>> ns = ENS.from_web3(w3)
+                >>> # assert inherited from w3 at time of instantiation via ENS.from_web3()
+                >>> assert ns.strict_bytes_type_checking is False
+                >>> ns.w3.is_encodable('bytes2', b'1')
+                True
+
+                >>> # assert these are now separate instances
+                >>> ns.strict_bytes_type_checking = True
+                >>> ns.w3.is_encodable('bytes2', b'1')
+                False
+
+                >>> # assert w3 flag value remains
+                >>> assert w3.strict_bytes_type_checking is False
+                >>> w3.is_encodable('bytes2', b'1')
+                True
+
+            However, if accessing the
         >>> from ens import ENS
         >>> w3 = Web3(EthereumTesterProvider())
 
@@ -111,7 +195,64 @@ The first time it's used, web3.py will create the  ``ens`` instance using
 
     .. doctest::
 
-        >>> from web3 import Web3, EthereumTesterProvider
+        >>> from bubble import Web3, EthereumTesterProvider
+                        >>> w3 = Web3(BubbleTesterProvider())
+
+                        >>> assert w3.strict_bytes_type_checking  # assert strict by default
+                        >>> w3.is_encodable('bytes2', b'1')
+                        False
+
+                        >>> w3.strict_bytes_type_checking = False
+                        >>> w3.is_encodable('bytes2', b'1')  # zero-padded, so encoded to: b'1\x00'
+                        True
+
+                        >>> assert w3 == w3.ens.w3  # assert same object
+                        >>> assert not w3.ens.w3.strict_bytes_type_checking
+                        >>> w3.ens.w3.is_encodable('bytes2', b'1')
+                        True
+
+                        >>> # sanity check on bub module as well
+                        >>> assert not w3.bub.w3.strict_bytes_type_checking
+                        >>> w3.bub.w3.is_encodable('bytes2', b'1')
+                        True
+                >>> w3 = Web3(EthereumTesterProvider())
+
+                >>> assert w3.strict_bytes_type_checking  # assert strict by default
+                >>> w3.is_encodable('bytes2', b'1')
+                False
+
+                >>> w3.strict_bytes_type_checking = False
+                >>> w3.is_encodable('bytes2', b'1')  # zero-padded, so encoded to: b'1\x00'
+                True
+
+                >>> assert w3 == w3.ens.w3  # assert same object
+                >>> assert not w3.ens.w3.strict_bytes_type_checking
+                >>> w3.ens.w3.is_encodable('bytes2', b'1')
+                True
+
+                >>> # sanity check on bub module as well
+                >>> assert not w3.bub.w3.strict_bytes_type_checking
+                >>> w3.bub.w3.is_encodable('bytes2', b'1')
+                True
+                >>> w3 = Web3(BubbleTesterProvider())
+
+                >>> assert w3.strict_bytes_type_checking  # assert strict by default
+                >>> w3.is_encodable('bytes2', b'1')
+                False
+
+                >>> w3.strict_bytes_type_checking = False
+                >>> w3.is_encodable('bytes2', b'1')  # zero-padded, so encoded to: b'1\x00'
+                True
+
+                >>> assert w3 == w3.ens.w3  # assert same object
+                >>> assert not w3.ens.w3.strict_bytes_type_checking
+                >>> w3.ens.w3.is_encodable('bytes2', b'1')
+                True
+
+                >>> # sanity check on bub module as well
+                >>> assert not w3.bub.w3.strict_bytes_type_checking
+                >>> w3.bub.w3.is_encodable('bytes2', b'1')
+                True
         >>> w3 = Web3(EthereumTesterProvider())
 
         >>> assert w3.strict_bytes_type_checking  # assert strict by default
@@ -127,9 +268,9 @@ The first time it's used, web3.py will create the  ``ens`` instance using
         >>> w3.ens.w3.is_encodable('bytes2', b'1')
         True
 
-        >>> # sanity check on eth module as well
-        >>> assert not w3.eth.w3.strict_bytes_type_checking
-        >>> w3.eth.w3.is_encodable('bytes2', b'1')
+        >>> # sanity check on bub module as well
+        >>> assert not w3.bub.w3.strict_bytes_type_checking
+        >>> w3.bub.w3.is_encodable('bytes2', b'1')
         True
 
 
@@ -147,8 +288,8 @@ Get the Address for an ENS Name
 .. code-block:: python
 
     from ens.auto import ns
-    eth_address = ns.address('jasoncarver.eth')
-    assert eth_address == '0x5B2063246F2191f18F2675ceDB8b28102e957458'
+    bub_address = ns.address('jasoncarver.bub')
+    assert bub_address == '0x5B2063246F2191f18F2675ceDB8b28102e957458'
 
 The ``ENS`` module has no opinion as to which TLD you can use,
 but will not infer a TLD if it is not provided with the name.
@@ -177,7 +318,7 @@ Get the Owner of a Name
 
 .. code-block:: python
 
-    eth_address = ns.owner('exchange.eth')
+    bub_address = ns.owner('exchange.eth')
 
 ....
 

@@ -1,13 +1,13 @@
 import pytest
 
-from web3._utils.threads import (
+from bubble._utils.threads import (
     Timeout,
 )
 
 
 def test_sync_filter_against_latest_blocks(w3, sleep_interval, wait_for_block):
-    txn_filter = w3.eth.filter("latest")
-    current_block = w3.eth.block_number
+    txn_filter = w3.bub.filter("latest")
+    current_block = w3.bub.block_number
     wait_for_block(w3, current_block + 3)
 
     found_block_hashes = []
@@ -19,7 +19,7 @@ def test_sync_filter_against_latest_blocks(w3, sleep_interval, wait_for_block):
     assert len(found_block_hashes) == 3
 
     expected_block_hashes = [
-        w3.eth.get_block(n + 1).hash for n in range(current_block, current_block + 3)
+        w3.bub.get_block(n + 1).hash for n in range(current_block, current_block + 3)
     ]
     assert found_block_hashes == expected_block_hashes
 
@@ -31,8 +31,8 @@ def test_sync_filter_against_latest_blocks(w3, sleep_interval, wait_for_block):
 async def test_async_filter_against_latest_blocks(
     async_w3, sleep_interval, async_wait_for_block
 ):
-    txn_filter = await async_w3.eth.filter("latest")
-    current_block = await async_w3.eth.block_number
+    txn_filter = await async_w3.bub.filter("latest")
+    current_block = await async_w3.bub.block_number
     await async_wait_for_block(async_w3, current_block + 3)
 
     found_block_hashes = []
@@ -46,7 +46,7 @@ async def test_async_filter_against_latest_blocks(
 
     expected_block_hashes = []
     for n in range(current_block, current_block + 3):
-        block = await async_w3.eth.get_block(n + 1)
+        block = await async_w3.bub.get_block(n + 1)
         expected_block_hashes.append(block.hash)
 
     assert found_block_hashes == expected_block_hashes

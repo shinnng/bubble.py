@@ -56,22 +56,22 @@ def test_ens_from_web3_inherits_w3_codec_and_strict_byte_type_checking(w3):
 def test_modules_use_codec_and_strict_byte_type_check_from_web3_instance_reference(
     w3, module1, module2, module3
 ):
-    assert w3.codec == w3.eth.codec
+    assert w3.codec == w3.bub.codec
     assert w3.codec == w3.net.codec
-    assert w3.codec == w3.geth.codec
+    assert w3.codec == w3.bub.codec
 
     assert w3.strict_bytes_type_checking
     assert not w3.is_encodable("bytes2", b"\x01")
-    assert not w3.eth.codec.is_encodable("bytes2", b"\x01")
+    assert not w3.bub.codec.is_encodable("bytes2", b"\x01")
     assert not w3.net.codec.is_encodable("bytes2", b"\x01")
-    assert not w3.geth.codec.is_encodable("bytes2", b"\x01")
+    assert not w3.bub.codec.is_encodable("bytes2", b"\x01")
 
     w3.strict_bytes_type_checking = False
     assert not w3.strict_bytes_type_checking
     assert w3.is_encodable("bytes2", b"\x01")
-    assert w3.eth.codec.is_encodable("bytes2", b"\x01")
+    assert w3.bub.codec.is_encodable("bytes2", b"\x01")
     assert w3.net.codec.is_encodable("bytes2", b"\x01")
-    assert w3.geth.codec.is_encodable("bytes2", b"\x01")
+    assert w3.bub.codec.is_encodable("bytes2", b"\x01")
 
     # add modules after byte check swap
 
@@ -98,9 +98,9 @@ def test_modules_use_codec_and_strict_byte_type_check_from_web3_instance_referen
     w3.strict_bytes_type_checking = True
     assert w3.strict_bytes_type_checking
     assert not w3.is_encodable("bytes2", b"\x01")
-    assert not w3.eth.codec.is_encodable("bytes2", b"\x01")
+    assert not w3.bub.codec.is_encodable("bytes2", b"\x01")
     assert not w3.net.codec.is_encodable("bytes2", b"\x01")
-    assert not w3.geth.codec.is_encodable("bytes2", b"\x01")
+    assert not w3.bub.codec.is_encodable("bytes2", b"\x01")
     assert not w3.module1.codec.is_encodable("bytes2", b"\x01")
     assert not w3.module2.codec.is_encodable("bytes2", b"\x01")
     assert not w3.module2.submodule1.codec.is_encodable("bytes2", b"\x01")

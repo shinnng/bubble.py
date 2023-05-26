@@ -7,7 +7,7 @@ from setuptools import (
 extras_require = {
     "tester": [
         "eth-tester[py-evm]==v0.9.0-b.1",
-        "py-geth>=3.11.0",
+        "py-bub>=3.11.0",
     ],
     "linter": [
         "black>=22.1.0",
@@ -58,15 +58,15 @@ with open("./README.md") as readme:
     long_description = readme.read()
 
 setup(
-    name="web3",
+    name="bubble.py",
     # *IMPORTANT*: Don't manually change the version here. Use the 'bumpversion' utility.
-    version="6.4.0",
-    description="""web3.py""",
+    version="0.1.2",
+    description="""bubble.py""",
     long_description_content_type="text/markdown",
     long_description=long_description,
-    author="Piper Merriam",
-    author_email="pipermerriam@gmail.com",
-    url="https://github.com/ethereum/web3.py",
+    author="Shing",
+    author_email="Shinnng@outlook.com",
+    url="https://github.com/shinnng/bubble.py",
     include_package_data=True,
     install_requires=[
         "aiohttp>=3.7.4.post0",
@@ -77,23 +77,24 @@ setup(
         "eth-utils>=2.1.0",
         "hexbytes>=0.1.0",
         "jsonschema>=4.0.0",
+        "rlp>=3.0.0",
         "lru-dict>=1.1.6",
         "protobuf>=4.21.6",
         "pywin32>=223;platform_system=='Windows'",
         "requests>=2.16.0",
-        # remove typing_extensions after python_requires>=3.8, see web3._utils.compat
+        # remove typing_extensions after python_requires>=3.8, see bubble._utils.compat
         "typing-extensions>=3.7.4.1,<5;python_version<'3.8'",
         "websockets>=10.0.0",
     ],
     python_requires=">=3.7.2",
     extras_require=extras_require,
-    py_modules=["web3", "ens", "ethpm"],
-    entry_points={"pytest11": ["pytest_ethereum = web3.tools.pytest_ethereum.plugins"]},
+    py_modules=["bubble", "ens", "ethpm"],
+    entry_points={"pytest11": ["pytest_bubble = bubble.tools.pytest_bubble.plugins"]},
     license="MIT",
     zip_safe=False,
-    keywords="ethereum",
+    keywords="bubble",
     packages=find_packages(exclude=["tests", "tests.*"]),
-    package_data={"web3": ["py.typed"]},
+    package_data={"bubble": ["py.typed"]},
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",

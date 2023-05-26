@@ -36,11 +36,11 @@ def test_contract_get_logs_range(
     contract = emitter
     event_id = emitter_contract_event_ids.LogNoArguments
 
-    assert w3.eth.block_number == 2
+    assert w3.bub.block_number == 2
     txn_hash = contract.functions.logNoArgs(event_id).transact()
     # Mined as block 3
     wait_for_transaction(w3, txn_hash)
-    assert w3.eth.block_number == 3
+    assert w3.bub.block_number == 3
 
     log_entries = list(contract.events.LogNoArguments.get_logs())
     assert len(log_entries) == 1
@@ -128,13 +128,13 @@ async def test_async_contract_get_logs_range(
     contract = async_emitter
     event_id = emitter_contract_event_ids.LogNoArguments
 
-    eth_block_number = await async_w3.eth.block_number
-    assert eth_block_number == 2
+    bub_block_number = await async_w3.bub.block_number
+    assert bub_block_number == 2
     txn_hash = await contract.functions.logNoArgs(event_id).transact()
     # Mined as block 3
     await async_wait_for_transaction(async_w3, txn_hash)
-    eth_block_number = await async_w3.eth.block_number
-    assert eth_block_number == 3
+    bub_block_number = await async_w3.bub.block_number
+    assert bub_block_number == 3
 
     contract_logs = await contract.events.LogNoArguments.get_logs()
     log_entries = list(contract_logs)

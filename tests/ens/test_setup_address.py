@@ -17,7 +17,7 @@ from ens import (
 from ens.constants import (
     EMPTY_ADDR_HEX,
 )
-from web3 import (
+from bubble import (
     Web3,
 )
 
@@ -27,35 +27,35 @@ API at: https://github.com/carver/ens.py/issues/2
 
 SETUP_ADDRESS_TEST_CASES = (
     (
-        "tester.eth",
+        "tester.bub",
         "0x2a7ac1c833d35677c2ff34a908951de142cc1653de6080ad4e38f4c9cc00aafe",
     ),
     (
-        "TESTER.eth",
+        "TESTER.bub",
         "0x2a7ac1c833d35677c2ff34a908951de142cc1653de6080ad4e38f4c9cc00aafe",
     ),
     # handles alternative dot separators
     (
-        "tester．eth",
+        "tester．bub",
         "0x2a7ac1c833d35677c2ff34a908951de142cc1653de6080ad4e38f4c9cc00aafe",
     ),
     (
-        "tester。eth",
+        "tester。bub",
         "0x2a7ac1c833d35677c2ff34a908951de142cc1653de6080ad4e38f4c9cc00aafe",
     ),
     (
-        "tester｡eth",
+        "tester｡bub",
         "0x2a7ac1c833d35677c2ff34a908951de142cc1653de6080ad4e38f4c9cc00aafe",
     ),
     # confirm that set-owner works
     (
-        "lots.of.subdomains.tester.eth",
+        "lots.of.subdomains.tester.bub",
         "0x0d62a759aa1f1c9680de8603a12a5eb175cd1bfa79426229868eba99f4dce692",
     ),
 )
 SETUP_ADDRESS_EQUIVALENCE_TEST_CASES = (
-    ("TESTER.eth", "tester.eth"),
-    ("unicÖde.tester.eth", "unicöde.tester.eth"),
+    ("TESTER.bub", "tester.bub"),
+    ("unicÖde.tester.bub", "unicöde.tester.bub"),
 )
 SETUP_ADDRESS_NOOP_TEST_CASES = (
     # since the test uses get_transaction_count,
@@ -72,7 +72,7 @@ SETUP_ADDRESS_NOOP_TEST_CASES = (
 @pytest.mark.parametrize("name, namehash_hex", SETUP_ADDRESS_TEST_CASES)
 def test_setup_address(ens, name, namehash_hex, TEST_ADDRESS):
     assert ens.address(name) is None
-    owner = ens.owner("tester.eth")
+    owner = ens.owner("tester.bub")
 
     ens.setup_address(name, TEST_ADDRESS)
     assert is_same_address(ens.address(name), TEST_ADDRESS)
@@ -111,27 +111,27 @@ def test_setup_address_equivalence(ens, name, equivalent, TEST_ADDRESS):
     SETUP_ADDRESS_NOOP_TEST_CASES,
 )
 def test_setup_address_noop(ens, setup_address):
-    eth = ens.w3.eth
-    owner = ens.owner("tester.eth")
-    ens.setup_address("noop.tester.eth", setup_address)
+    eth = ens.w3.bub
+    owner = ens.owner("tester.bub")
+    ens.setup_address("noop.tester.bub", setup_address)
     starting_transactions = eth.get_transaction_count(owner)
 
     # do not issue transaction if address is already set
-    ens.setup_address("noop.tester.eth", setup_address)
+    ens.setup_address("noop.tester.bub", setup_address)
     assert eth.get_transaction_count(owner) == starting_transactions
 
 
 def test_setup_address_unauthorized(ens, TEST_ADDRESS):
     with pytest.raises(UnauthorizedError):
-        ens.setup_address("eth", TEST_ADDRESS)
+        ens.setup_address("bub", TEST_ADDRESS)
 
 
 def test_setup_address_default_address_to_owner(ens):
-    assert ens.address("default.tester.eth") is None
-    owner = ens.owner("tester.eth")
+    assert ens.address("default.tester.bub") is None
+    owner = ens.owner("tester.bub")
 
-    ens.setup_address("default.tester.eth")
-    assert ens.address("default.tester.eth") == owner
+    ens.setup_address("default.tester.bub")
+    assert ens.address("default.tester.bub") == owner
 
 
 def test_first_owner_upchain_identify(ens):
@@ -139,27 +139,27 @@ def test_first_owner_upchain_identify(ens):
     addr = "0x5B2063246F2191f18F2675ceDB8b28102e957458"
 
     def getowner(name):
-        if name == "cdefghi.eth":
+        if name == "cdefghi.bub":
             return addr
         else:
             return None
 
     with patch.object(ens, "owner", side_effect=getowner):
-        assert ens._first_owner("abcdefg.bcdefgh.cdefghi.eth") == (
+        assert ens._first_owner("abcdefg.bcdefgh.cdefghi.bub") == (
             addr,
             ["abcdefg", "bcdefgh"],
-            "cdefghi.eth",
+            "cdefghi.bub",
         )
 
 
 def test_setup_resolver_leave_default(ens, TEST_ADDRESS):
-    owner = ens.owner("tester.eth")
-    ens.setup_address("leave-default-resolver.tester.eth", TEST_ADDRESS)
-    eth = ens.w3.eth
+    owner = ens.owner("tester.bub")
+    ens.setup_address("leave-default-resolver.tester.bub", TEST_ADDRESS)
+    eth = ens.w3.bub
     num_transactions = eth.get_transaction_count(owner)
 
     ens.setup_address(
-        "leave-default-resolver.tester.eth",
+        "leave-default-resolver.tester.bub",
         "0x5B2063246F2191f18F2675ceDB8b28102e957458",
     )
 
@@ -175,7 +175,7 @@ def test_setup_resolver_leave_default(ens, TEST_ADDRESS):
 @pytest.mark.parametrize("name, namehash_hex", SETUP_ADDRESS_TEST_CASES)
 async def test_async_setup_address(async_ens, name, namehash_hex, TEST_ADDRESS):
     assert await async_ens.address(name) is None
-    owner = await async_ens.owner("tester.eth")
+    owner = await async_ens.owner("tester.bub")
 
     await async_ens.setup_address(name, TEST_ADDRESS)
     assert is_same_address(await async_ens.address(name), TEST_ADDRESS)
@@ -217,29 +217,29 @@ async def test_async_setup_address_equivalence(
 @pytest.mark.asyncio
 @pytest.mark.parametrize("setup_address", SETUP_ADDRESS_NOOP_TEST_CASES)
 async def test_async_setup_address_noop(async_ens, setup_address):
-    eth = async_ens.w3.eth
-    owner = await async_ens.owner("tester.eth")
-    await async_ens.setup_address("noop.tester.eth", setup_address)
+    eth = async_ens.w3.bub
+    owner = await async_ens.owner("tester.bub")
+    await async_ens.setup_address("noop.tester.bub", setup_address)
     starting_transactions = await eth.get_transaction_count(owner)
 
     # do not issue transaction if address is already set
-    await async_ens.setup_address("noop.tester.eth", setup_address)
+    await async_ens.setup_address("noop.tester.bub", setup_address)
     assert await eth.get_transaction_count(owner) == starting_transactions
 
 
 @pytest.mark.asyncio
 async def test_async_setup_address_unauthorized(async_ens, TEST_ADDRESS):
     with pytest.raises(UnauthorizedError):
-        await async_ens.setup_address("eth", TEST_ADDRESS)
+        await async_ens.setup_address("bub", TEST_ADDRESS)
 
 
 @pytest.mark.asyncio
 async def test_async_setup_address_default_address_to_owner(async_ens):
-    assert await async_ens.address("default.tester.eth") is None
-    owner = await async_ens.owner("tester.eth")
+    assert await async_ens.address("default.tester.bub") is None
+    owner = await async_ens.owner("tester.bub")
 
-    await async_ens.setup_address("default.tester.eth")
-    assert await async_ens.address("default.tester.eth") == owner
+    await async_ens.setup_address("default.tester.bub")
+    assert await async_ens.address("default.tester.bub") == owner
 
 
 @pytest.mark.asyncio
@@ -249,25 +249,25 @@ async def test_async_first_owner_upchain_identify(async_ens):
     addr = "0x5B2063246F2191f18F2675ceDB8b28102e957458"
 
     async def mock_async_get_owner(name):
-        return addr if name == "cdefghi.eth" else None
+        return addr if name == "cdefghi.bub" else None
 
     with patch.object(async_ens, "owner", side_effect=mock_async_get_owner):
-        assert await async_ens._first_owner("abcdefg.bcdefgh.cdefghi.eth") == (
+        assert await async_ens._first_owner("abcdefg.bcdefgh.cdefghi.bub") == (
             addr,
             ["abcdefg", "bcdefgh"],
-            "cdefghi.eth",
+            "cdefghi.bub",
         )
 
 
 @pytest.mark.asyncio
 async def test_async_setup_resolver_leave_default(async_ens, TEST_ADDRESS):
-    owner = await async_ens.owner("tester.eth")
-    await async_ens.setup_address("leave-default-resolver.tester.eth", TEST_ADDRESS)
-    eth = async_ens.w3.eth
+    owner = await async_ens.owner("tester.bub")
+    await async_ens.setup_address("leave-default-resolver.tester.bub", TEST_ADDRESS)
+    eth = async_ens.w3.bub
     num_transactions = await eth.get_transaction_count(owner)
 
     await async_ens.setup_address(
-        "leave-default-resolver.tester.eth",
+        "leave-default-resolver.tester.bub",
         "0x5B2063246F2191f18F2675ceDB8b28102e957458",
     )
 

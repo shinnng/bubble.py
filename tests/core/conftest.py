@@ -2,20 +2,20 @@ import pytest
 
 import pytest_asyncio
 
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3.eth import (
-    AsyncEth,
+from bubble.bub import (
+    AsyncBub,
 )
-from web3.module import (
+from bubble.module import (
     Module,
 )
-from web3.providers.eth_tester.main import (
-    AsyncEthereumTesterProvider,
+from bubble.providers.bub_tester.main import (
+    AsyncBubereumTesterProvider,
 )
 
-# --- inherit from `web3.module.Module` class --- #
+# --- inherit from `bubble.module.Module` class --- #
 
 
 @pytest.fixture(scope="module")
@@ -58,7 +58,7 @@ def module4():
     return Module4
 
 
-# --- do not inherit from `web3.module.Module` class --- #
+# --- do not inherit from `bubble.module.Module` class --- #
 
 
 @pytest.fixture(scope="module")
@@ -75,8 +75,8 @@ def module1_unique():
             return self._b
 
         @property
-        def return_eth_chain_id(self):
-            return self.w3.eth.chain_id
+        def return_bub_chain_id(self):
+            return self.w3.bub.chain_id
 
     return Module1
 
@@ -121,16 +121,16 @@ def module_many_init_args():
 
 @pytest_asyncio.fixture()
 async def async_w3():
-    provider = AsyncEthereumTesterProvider()
-    w3 = Web3(provider, modules={"eth": [AsyncEth]}, middlewares=provider.middlewares)
-    w3.eth.default_account = await w3.eth.coinbase
+    provider = AsyncBubereumTesterProvider()
+    w3 = Web3(provider, modules={"bub": [AsyncBub]}, middlewares=provider.middlewares)
+    w3.bub.default_account = await w3.bub.coinbase
     return w3
 
 
 @pytest_asyncio.fixture()
 async def async_w3_non_strict_abi():
-    provider = AsyncEthereumTesterProvider()
-    w3 = Web3(provider, modules={"eth": [AsyncEth]}, middlewares=provider.middlewares)
+    provider = AsyncBubereumTesterProvider()
+    w3 = Web3(provider, modules={"bub": [AsyncBub]}, middlewares=provider.middlewares)
     w3.strict_bytes_type_checking = False
-    w3.eth.default_account = await w3.eth.coinbase
+    w3.bub.default_account = await w3.bub.coinbase
     return w3

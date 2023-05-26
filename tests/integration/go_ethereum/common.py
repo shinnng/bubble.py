@@ -7,8 +7,8 @@ from eth_typing import (
     ChecksumAddress,
 )
 
-from web3._utils.module_testing import (  # noqa: F401
-    AsyncEthModuleTest,
+from bubble._utils.module_testing import (  # noqa: F401
+    AsyncBubModuleTest,
     AsyncNetModuleTest,
     EthModuleTest,
     GoEthereumAdminModuleTest,
@@ -18,64 +18,64 @@ from web3._utils.module_testing import (  # noqa: F401
     NetModuleTest,
     Web3ModuleTest,
 )
-from web3.types import (
+from bubble.types import (
     BlockData,
 )
 
 if TYPE_CHECKING:
-    from web3 import (  # noqa: F401
+    from bubble import (  # noqa: F401
         Web3,
     )
 
 
 class GoEthereumTest(Web3ModuleTest):
     def _check_web3_client_version(self, client_version):
-        assert client_version.startswith("Geth/")
+        assert client_version.startswith("Bub/")
 
 
 class GoEthereumEthModuleTest(EthModuleTest):
-    @pytest.mark.xfail(reason="eth_signTypedData has not been released in geth")
-    def test_eth_sign_typed_data(self, w3, unlocked_account_dual_type):
-        super().test_eth_sign_typed_data(w3, unlocked_account_dual_type)
+    @pytest.mark.xfail(reason="bub_signTypedData has not been released in bub")
+    def test_bub_sign_typed_data(self, w3, unlocked_account_dual_type):
+        super().test_bub_sign_typed_data(w3, unlocked_account_dual_type)
 
-    @pytest.mark.xfail(reason="eth_signTypedData has not been released in geth")
-    def test_invalid_eth_sign_typed_data(self, w3, unlocked_account_dual_type):
-        super().test_invalid_eth_sign_typed_data(w3, unlocked_account_dual_type)
-
-    @pytest.mark.xfail(reason="Inconsistently creating timeout issues.", strict=False)
-    def test_eth_estimate_gas(
-        self, w3: "Web3", unlocked_account_dual_type: ChecksumAddress
-    ) -> None:
-        super().test_eth_estimate_gas(w3, unlocked_account_dual_type)
+    @pytest.mark.xfail(reason="bub_signTypedData has not been released in bub")
+    def test_invalid_bub_sign_typed_data(self, w3, unlocked_account_dual_type):
+        super().test_invalid_bub_sign_typed_data(w3, unlocked_account_dual_type)
 
     @pytest.mark.xfail(reason="Inconsistently creating timeout issues.", strict=False)
-    def test_eth_estimate_gas_with_block(
+    def test_bub_estimate_gas(
         self, w3: "Web3", unlocked_account_dual_type: ChecksumAddress
     ) -> None:
-        super().test_eth_estimate_gas_with_block(w3, unlocked_account_dual_type)
+        super().test_bub_estimate_gas(w3, unlocked_account_dual_type)
 
     @pytest.mark.xfail(reason="Inconsistently creating timeout issues.", strict=False)
-    def test_eth_get_transaction_receipt_unmined(
+    def test_bub_estimate_gas_with_block(
         self, w3: "Web3", unlocked_account_dual_type: ChecksumAddress
     ) -> None:
-        super().test_eth_get_transaction_receipt_unmined(w3, unlocked_account_dual_type)
+        super().test_bub_estimate_gas_with_block(w3, unlocked_account_dual_type)
 
     @pytest.mark.xfail(reason="Inconsistently creating timeout issues.", strict=False)
-    def test_eth_wait_for_transaction_receipt_unmined(
+    def test_bub_get_transaction_receipt_unmined(
         self, w3: "Web3", unlocked_account_dual_type: ChecksumAddress
     ) -> None:
-        super().test_eth_wait_for_transaction_receipt_unmined(
+        super().test_bub_get_transaction_receipt_unmined(w3, unlocked_account_dual_type)
+
+    @pytest.mark.xfail(reason="Inconsistently creating timeout issues.", strict=False)
+    def test_bub_wait_for_transaction_receipt_unmined(
+        self, w3: "Web3", unlocked_account_dual_type: ChecksumAddress
+    ) -> None:
+        super().test_bub_wait_for_transaction_receipt_unmined(
             w3, unlocked_account_dual_type
         )
 
     @pytest.mark.xfail(reason="Inconsistently creating timeout issues.", strict=False)
-    def test_eth_get_raw_transaction_by_block(
+    def test_bub_get_raw_transaction_by_block(
         self,
         w3: "Web3",
         unlocked_account_dual_type: ChecksumAddress,
         block_with_txn: BlockData,
     ) -> None:
-        super().test_eth_get_raw_transaction_by_block(
+        super().test_bub_get_raw_transaction_by_block(
             w3, unlocked_account_dual_type, block_with_txn
         )
 
@@ -96,5 +96,5 @@ class GoEthereumPersonalModuleTest(GoEthereumPersonalModuleTest):
     pass
 
 
-class GoEthereumAsyncEthModuleTest(AsyncEthModuleTest):
+class GoEthereumAsyncBubModuleTest(AsyncBubModuleTest):
     pass

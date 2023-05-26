@@ -38,12 +38,12 @@ from ethpm.backends.registry import (
 from ethpm.exceptions import (
     CannotHandleURI,
 )
-from web3.types import (
+from bubble.types import (
     BlockNumber,
 )
 
 if TYPE_CHECKING:
-    from web3 import Web3  # noqa F401
+    from bubble import Web3  # noqa F401
 
 
 def resolve_uri_contents(uri: URI, fingerprint: bool = None) -> bytes:
@@ -109,7 +109,7 @@ def create_latest_block_uri(w3: "Web3", from_blocks_ago: int = 3) -> URI:
     If using a testnet with less than 3 mined blocks, adjust :from_blocks_ago:.
     """
     chain_id = to_hex(get_genesis_block_hash(w3))
-    latest_block_tx_receipt = w3.eth.get_block("latest")
+    latest_block_tx_receipt = w3.bub.get_block("latest")
     target_block_number = BlockNumber(
         latest_block_tx_receipt["number"] - from_blocks_ago
     )
@@ -118,20 +118,20 @@ def create_latest_block_uri(w3: "Web3", from_blocks_ago: int = 3) -> URI:
             f"Only {latest_block_tx_receipt['number']} blocks avaible on provided w3, "
             f"cannot create latest block uri for {from_blocks_ago} blocks ago."
         )
-    recent_block = to_hex(w3.eth.get_block(target_block_number)["hash"])
+    recent_block = to_hex(w3.bub.get_block(target_block_number)["hash"])
     return create_block_uri(chain_id, recent_block)
 
 
 @curry
 def check_if_chain_matches_chain_uri(w3: "Web3", blockchain_uri: URI) -> bool:
     chain_id, resource_type, resource_hash = parse_BIP122_uri(blockchain_uri)
-    genesis_block = w3.eth.get_block("earliest")
+    genesis_block = w3.bub.get_block("earliest")
 
     if encode_hex(genesis_block["hash"]) != chain_id:
         return False
 
     if resource_type == BLOCK:
-        resource = w3.eth.get_block(resource_hash)
+        resource = w3.bub.get_block(resource_hash)
     else:
         raise ValueError(f"Unsupported resource type: {resource_type}")
 

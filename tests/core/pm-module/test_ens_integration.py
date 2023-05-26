@@ -10,10 +10,10 @@ from ens import (
 from ethpm import (
     ASSETS_DIR,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     InvalidAddress,
 )
-from web3.pm import (
+from bubble.pm import (
     SimpleRegistry,
 )
 
@@ -36,14 +36,14 @@ def ens_setup(deployer):
     # ** Set up ENS contracts **
 
     # remove account that creates ENS, so test transactions don't have write access
-    accounts = w3.eth.accounts
+    accounts = w3.bub.accounts
     ens_key = accounts.pop()
 
     # create ENS contract
     # values borrowed from:
     # https://github.com/ethereum/web3.py/blob/main/tests/ens/conftest.py#L109
-    eth_labelhash = w3.keccak(text="eth")
-    eth_namehash = bytes32(
+    bub_labelhash = w3.keccak(text="bub")
+    bub_namehash = bytes32(
         0x93CDEB708B7545DC668EB9280176169D1C33CFD8ED6F04690A0BCC88A93FC4AE
     )
     resolver_namehash = bytes32(
@@ -58,13 +58,13 @@ def ens_setup(deployer):
     )
     public_resolver = public_resolver_package.deployments.get_instance("PublicResolver")
 
-    # set 'resolver.eth' to resolve to public resolver
-    ens_contract.functions.setSubnodeOwner(b"\0" * 32, eth_labelhash, ens_key).transact(
+    # set 'resolver.bub' to resolve to public resolver
+    ens_contract.functions.setSubnodeOwner(b"\0" * 32, bub_labelhash, ens_key).transact(
         {"from": ens_key}
     )
 
     ens_contract.functions.setSubnodeOwner(
-        eth_namehash, w3.keccak(text="resolver"), ens_key
+        bub_namehash, w3.keccak(text="resolver"), ens_key
     ).transact({"from": ens_key})
 
     ens_contract.functions.setResolver(
@@ -75,44 +75,44 @@ def ens_setup(deployer):
         resolver_namehash, public_resolver.address
     ).transact({"from": ens_key})
 
-    # create .eth auction registrar
-    eth_registrar_package = ens_deployer.deploy(
+    # create .bub auction registrar
+    bub_registrar_package = ens_deployer.deploy(
         "FIFSRegistrar",
         ens_contract.address,
-        eth_namehash,
+        bub_namehash,
         transaction={"from": ens_key},
     )
-    eth_registrar = eth_registrar_package.deployments.get_instance("FIFSRegistrar")
+    bub_registrar = bub_registrar_package.deployments.get_instance("FIFSRegistrar")
 
-    # set '.eth' to resolve to the registrar
-    ens_contract.functions.setResolver(eth_namehash, public_resolver.address).transact(
+    # set '.bub' to resolve to the registrar
+    ens_contract.functions.setResolver(bub_namehash, public_resolver.address).transact(
         {"from": ens_key}
     )
 
-    public_resolver.functions.setAddr(eth_namehash, eth_registrar.address).transact(
+    public_resolver.functions.setAddr(bub_namehash, bub_registrar.address).transact(
         {"from": ens_key}
     )
 
-    # set owner of tester.eth to an account controlled by tests
+    # set owner of tester.bub to an account controlled by tests
     ens_contract.functions.setSubnodeOwner(
-        eth_namehash,
+        bub_namehash,
         w3.keccak(text="tester"),
-        w3.eth.accounts[
+        w3.bub.accounts[
             2
         ],  # note that this does not have to be the default, only in the list
     ).transact({"from": ens_key})
 
-    # make the registrar the owner of the 'eth' name
+    # make the registrar the owner of the 'bub' name
     ens_contract.functions.setSubnodeOwner(
-        b"\0" * 32, eth_labelhash, eth_registrar.address
+        b"\0" * 32, bub_labelhash, bub_registrar.address
     ).transact({"from": ens_key})
     return ENS.from_web3(w3, ens_contract.address)
 
 
 @pytest.fixture
 def ens(ens_setup, mocker):
-    mocker.patch("web3.middleware.stalecheck._is_fresh", return_value=True)
-    ens_setup.w3.eth.default_account = ens_setup.w3.eth.coinbase
+    mocker.patch("bubble.middleware.stalecheck._is_fresh", return_value=True)
+    ens_setup.w3.bub.default_account = ens_setup.w3.bub.coinbase
     ens_setup.w3.enable_unstable_package_management_api()
     return ens_setup
 
@@ -120,7 +120,7 @@ def ens(ens_setup, mocker):
 def test_ens_must_be_set_before_ens_methods_can_be_used(ens):
     w3 = ens.w3
     with pytest.raises(InvalidAddress):
-        w3.pm.set_registry("tester.eth")
+        w3.pm.set_registry("tester.bub")
 
 
 @pytest.mark.xfail(reason="Need to properly add authorization as of 8/10/2022")
@@ -129,9 +129,9 @@ def test_web3_ens(ens):
     ns = ENS.from_web3(w3, ens.ens.address)
     w3.ens = ns
     registry = SimpleRegistry.deploy_new_instance(w3)
-    w3.ens.setup_address("tester.eth", registry.address)
-    actual_addr = ens.address("tester.eth")
-    w3.pm.set_registry("tester.eth")
+    w3.ens.setup_address("tester.bub", registry.address)
+    actual_addr = ens.address("tester.bub")
+    w3.pm.set_registry("tester.bub")
     assert w3.pm.registry.address == actual_addr
     w3.pm.release_package(
         "owned", "1.0.0", "ipfs://QmcxvhkJJVpbxEAa6cgW3B6XwPJb79w9GpNUv2P2THUzZR"

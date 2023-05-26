@@ -7,13 +7,13 @@ from eth_abi.registry import (
     registry as default_registry,
 )
 
-from web3._utils.abi import (
+from bubble._utils.abi import (
     abi_decoded_namedtuple_factory,
     check_if_arguments_can_be_encoded,
     named_tree,
     recursive_dict_to_namedtuple,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     MismatchedABI,
 )
 

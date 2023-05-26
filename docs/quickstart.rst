@@ -61,7 +61,7 @@ Local Providers
 The hardware requirements are `steep <https://ethereum.org/en/developers/docs/nodes-and-clients/run-a-node/#top>`_,
 but the safest way to interact with Ethereum is to run an Ethereum client on your own hardware.
 For locally run nodes, an IPC connection is the most secure option, but HTTP and
-websocket configurations are also available. By default, the popular `Geth client <https://geth.ethereum.org/>`_
+websocket configurations are also available. By default, the popular `Bub client <https://bub.ethereum.org/>`_
 exposes port ``8545`` to serve HTTP requests and ``8546`` for websocket requests. Connecting
 to this local node can be done as follows:
 
@@ -70,7 +70,7 @@ to this local node can be done as follows:
    >>> from web3 import Web3, AsyncWeb3
 
    # IPCProvider:
-   >>> w3 = Web3(Web3.IPCProvider('./path/to/geth.ipc'))
+   >>> w3 = Web3(Web3.IPCProvider('./path/to/bub.ipc'))
 
    # HTTPProvider:
    >>> w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
@@ -117,7 +117,7 @@ to interact with the Ethereum blockchain. Try getting all the information about 
 
 .. code-block:: python
 
-    >>> w3.eth.get_block('latest')
+    >>> w3.bub.get_block('latest')
     {'difficulty': 1,
      'gasLimit': 6283185,
      'gasUsed': 0,
@@ -145,7 +145,7 @@ and a number of other features.
 A few suggestions from here:
 
 - The :doc:`overview` page provides a summary of web3.py's features.
-- The :class:`w3.eth <web3.eth.Eth>` API contains the most frequently used methods.
+- The :class:`w3.bub <web3.bub.Bub>` API contains the most frequently used methods.
 - A guide to :ref:`contracts` includes deployment and usage examples.
 - The nuances of :doc:`transactions` are explained in another guide.
 - For other inspiration, see the :doc:`examples`.

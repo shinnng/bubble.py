@@ -1,22 +1,22 @@
 import pytest
 
-from web3 import (
-    EthereumTesterProvider,
+from bubble import (
+    BubbleTesterProvider,
     Web3,
 )
-from web3.datastructures import (
+from bubble.datastructures import (
     AttributeDict,
 )
-from web3.middleware import (
+from bubble.middleware import (
     async_attrdict_middleware,
     async_construct_result_generator_middleware,
     attrdict_middleware,
     construct_result_generator_middleware,
 )
-from web3.providers.eth_tester import (
-    AsyncEthereumTesterProvider,
+from bubble.providers.bub_tester import (
+    AsyncBubereumTesterProvider,
 )
-from web3.types import (
+from bubble.types import (
     RPCEndpoint,
 )
 
@@ -37,7 +37,7 @@ def _assert_dict_and_not_attrdict(value):
 
 
 def test_attrdict_middleware_default_for_ethereum_tester_provider():
-    w3 = Web3(EthereumTesterProvider())
+    w3 = Web3(BubbleTesterProvider())
     assert w3.middleware_onion.get("attrdict") == attrdict_middleware
 
 
@@ -69,7 +69,7 @@ def test_attrdict_middleware_is_recursive(w3):
 
 
 def test_no_attrdict_middleware_does_not_convert_dicts_to_attrdict():
-    w3 = Web3(EthereumTesterProvider())
+    w3 = Web3(BubbleTesterProvider())
 
     w3.middleware_onion.inject(
         construct_result_generator_middleware(
@@ -98,7 +98,7 @@ def test_no_attrdict_middleware_does_not_convert_dicts_to_attrdict():
 
 @pytest.mark.asyncio
 async def test_async_attrdict_middleware_default_for_async_ethereum_tester_provider():
-    async_w3 = Web3(AsyncEthereumTesterProvider())
+    async_w3 = Web3(AsyncBubereumTesterProvider())
     assert async_w3.middleware_onion.get("attrdict") == async_attrdict_middleware
 
 
@@ -132,7 +132,7 @@ async def test_async_attrdict_middleware_is_recursive(async_w3):
 
 @pytest.mark.asyncio
 async def test_no_async_attrdict_middleware_does_not_convert_dicts_to_attrdict():
-    async_w3 = Web3(AsyncEthereumTesterProvider())
+    async_w3 = Web3(AsyncBubereumTesterProvider())
 
     async_w3.middleware_onion.inject(
         await async_construct_result_generator_middleware(

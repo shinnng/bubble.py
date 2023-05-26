@@ -83,14 +83,14 @@ Valid formats for this environment variable are:
 Auto-initialization Provider Shortcuts
 --------------------------------------
 
-Geth dev Proof of Authority
+Bub dev Proof of Authority
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To connect to a ``geth --dev`` Proof of Authority instance with defaults:
+To connect to a ``bub --dev`` Proof of Authority instance with defaults:
 
 .. code-block:: python
 
-    >>> from web3.auto.gethdev import w3
+    >>> from web3.auto.bubdev import w3
 
     # confirm that the connection succeeded
     >>> w3.is_connected()
@@ -166,24 +166,24 @@ IPCProvider
     .. code-block:: python
 
         >>> from web3 import Web3
-        >>> w3 = Web3(Web3.IPCProvider("~/Library/Ethereum/geth.ipc"))
+        >>> w3 = Web3(Web3.IPCProvider("~/Library/Ethereum/bub.ipc"))
 
     If no ``ipc_path`` is specified, it will use the first IPC file
     it can find from this list:
 
     - On Linux and FreeBSD:
 
-      - ``~/.ethereum/geth.ipc``
+      - ``~/.ethereum/bub.ipc``
       - ``~/.local/share/io.parity.ethereum/jsonrpc.ipc``
       - ``~/.local/share/trinity/mainnet/ipcs-eth1/jsonrpc.ipc``
     - On Mac OS:
 
-      - ``~/Library/Ethereum/geth.ipc``
+      - ``~/Library/Ethereum/bub.ipc``
       - ``~/Library/Application Support/io.parity.ethereum/jsonrpc.ipc``
       - ``~/.local/share/trinity/mainnet/ipcs-eth1/jsonrpc.ipc``
     - On Windows:
 
-      - ``\\\.\pipe\geth.ipc``
+      - ``\\\.\pipe\bub.ipc``
       - ``\\\.\pipe\jsonrpc.ipc``
 
 
@@ -262,41 +262,41 @@ AsyncHTTPProvider
 Supported Methods
 ^^^^^^^^^^^^^^^^^
 
-Eth
+Bub
 ***
-- :class:`web3.eth.account <eth_account.account.Account>`
-- :meth:`web3.eth.accounts <web3.eth.Eth.accounts>`
-- :meth:`web3.eth.block_number <web3.eth.Eth.block_number>`
-- :meth:`web3.eth.chain_id <web3.eth.Eth.chain_id>`
-- :meth:`web3.eth.coinbase <web3.eth.Eth.coinbase>`
-- :meth:`web3.eth.default_account <web3.eth.Eth.default_account>`
-- :meth:`web3.eth.default_block <web3.eth.Eth.default_block>`
-- :meth:`web3.eth.gas_price <web3.eth.Eth.gas_price>`
-- :meth:`web3.eth.hashrate <web3.eth.Eth.hashrate>`
-- :meth:`web3.eth.max_priority_fee <web3.eth.Eth.max_priority_fee>`
-- :meth:`web3.eth.mining <web3.eth.Eth.mining>`
-- :meth:`web3.eth.syncing <web3.eth.Eth.syncing>`
-- :meth:`web3.eth.call() <web3.eth.Eth.call>`
-- :meth:`web3.eth.estimate_gas() <web3.eth.Eth.estimate_gas>`
-- :meth:`web3.eth.generate_gas_price() <web3.eth.Eth.generate_gas_price>`
-- :meth:`web3.eth.get_balance() <web3.eth.Eth.get_balance>`
-- :meth:`web3.eth.get_block() <web3.eth.Eth.get_block>`
-- :meth:`web3.eth.get_code() <web3.eth.Eth.get_code>`
-- :meth:`web3.eth.get_logs() <web3.eth.Eth.get_logs>`
-- :meth:`web3.eth.get_raw_transaction() <web3.eth.Eth.get_raw_transaction>`
-- :meth:`web3.eth.get_raw_transaction_by_block() <web3.eth.Eth.get_raw_transaction_by_block>`
-- :meth:`web3.eth.get_transaction() <web3.eth.Eth.get_transaction>`
-- :meth:`web3.eth.get_transaction_count() <web3.eth.Eth.get_transaction_count>`
-- :meth:`web3.eth.get_transaction_receipt() <web3.eth.Eth.get_transaction_receipt>`
-- :meth:`web3.eth.get_storage_at() <web3.eth.Eth.get_storage_at>`
-- :meth:`web3.eth.send_transaction() <web3.eth.Eth.send_transaction>`
-- :meth:`web3.eth.send_raw_transaction() <web3.eth.Eth.send_raw_transaction>`
-- :meth:`web3.eth.wait_for_transaction_receipt() <web3.eth.Eth.wait_for_transaction_receipt>`
-- :meth:`web3.eth.sign() <web3.eth.Eth.sign>`
-- :meth:`web3.eth.sign_transaction() <web3.eth.Eth.sign_transaction>`
-- :meth:`web3.eth.modify_transaction() <web3.eth.Eth.modify_transaction>`
-- :meth:`web3.eth.replace_transaction() <web3.eth.Eth.replace_transaction>`
-- :meth:`web3.eth.get_uncle_count() <web3.eth.Eth.get_uncle_count>`
+- :class:`web3.bub.account <eth_account.account.Account>`
+- :meth:`web3.bub.accounts <web3.bub.Bub.accounts>`
+- :meth:`web3.bub.block_number <web3.bub.Bub.block_number>`
+- :meth:`web3.bub.chain_id <web3.bub.Bub.chain_id>`
+- :meth:`web3.bub.coinbase <web3.bub.Bub.coinbase>`
+- :meth:`web3.bub.default_account <web3.bub.Bub.default_account>`
+- :meth:`web3.bub.default_block <web3.bub.Bub.default_block>`
+- :meth:`web3.bub.gas_price <web3.bub.Bub.gas_price>`
+- :meth:`web3.bub.hashrate <web3.bub.Bub.hashrate>`
+- :meth:`web3.bub.max_priority_fee <web3.bub.Bub.max_priority_fee>`
+- :meth:`web3.bub.mining <web3.bub.Bub.mining>`
+- :meth:`web3.bub.syncing <web3.bub.Bub.syncing>`
+- :meth:`web3.bub.call() <web3.bub.Bub.call>`
+- :meth:`web3.bub.estimate_gas() <web3.bub.Bub.estimate_gas>`
+- :meth:`web3.bub.generate_gas_price() <web3.bub.Bub.generate_gas_price>`
+- :meth:`web3.bub.get_balance() <web3.bub.Bub.get_balance>`
+- :meth:`web3.bub.get_block() <web3.bub.Bub.get_block>`
+- :meth:`web3.bub.get_code() <web3.bub.Bub.get_code>`
+- :meth:`web3.bub.get_logs() <web3.bub.Bub.get_logs>`
+- :meth:`web3.bub.get_raw_transaction() <web3.bub.Bub.get_raw_transaction>`
+- :meth:`web3.bub.get_raw_transaction_by_block() <web3.bub.Bub.get_raw_transaction_by_block>`
+- :meth:`web3.bub.get_transaction() <web3.bub.Bub.get_transaction>`
+- :meth:`web3.bub.get_transaction_count() <web3.bub.Bub.get_transaction_count>`
+- :meth:`web3.bub.get_transaction_receipt() <web3.bub.Bub.get_transaction_receipt>`
+- :meth:`web3.bub.get_storage_at() <web3.bub.Bub.get_storage_at>`
+- :meth:`web3.bub.send_transaction() <web3.bub.Bub.send_transaction>`
+- :meth:`web3.bub.send_raw_transaction() <web3.bub.Bub.send_raw_transaction>`
+- :meth:`web3.bub.wait_for_transaction_receipt() <web3.bub.Bub.wait_for_transaction_receipt>`
+- :meth:`web3.bub.sign() <web3.bub.Bub.sign>`
+- :meth:`web3.bub.sign_transaction() <web3.bub.Bub.sign_transaction>`
+- :meth:`web3.bub.modify_transaction() <web3.bub.Bub.modify_transaction>`
+- :meth:`web3.bub.replace_transaction() <web3.bub.Bub.replace_transaction>`
+- :meth:`web3.bub.get_uncle_count() <web3.bub.Bub.get_uncle_count>`
 
 Net
 ***
@@ -304,28 +304,28 @@ Net
 - :meth:`web3.net.peer_count() <web3.net.peer_count>`
 - :meth:`web3.net.version() <web3.net.version>`
 
-Geth
+Bub
 ****
-- :meth:`web3.geth.admin.add_peer() <web3.geth.admin.add_peer>`
-- :meth:`web3.geth.admin.datadir() <web3.geth.admin.datadir>`
-- :meth:`web3.geth.admin.node_info() <web3.geth.admin.node_info>`
-- :meth:`web3.geth.admin.peers() <web3.geth.admin.peers>`
-- :meth:`web3.geth.admin.start_http() <web3.geth.admin.start_http>`
-- :meth:`web3.geth.admin.start_ws() <web3.geth.admin.start_ws>`
-- :meth:`web3.geth.admin.stop_http() <web3.geth.admin.stop_http>`
-- :meth:`web3.geth.admin.stop_ws() <web3.geth.admin.stop_ws>`
-- :meth:`web3.geth.personal.ec_recover()`
-- :meth:`web3.geth.personal.import_raw_key() <web3.geth.personal.import_raw_key>`
-- :meth:`web3.geth.personal.list_accounts() <web3.geth.personal.list_accounts>`
-- :meth:`web3.geth.personal.list_wallets() <web3.geth.personal.list_wallets()>`
-- :meth:`web3.geth.personal.lock_account() <web3.geth.personal.lock_account>`
-- :meth:`web3.geth.personal.new_account() <web3.geth.personal.new_account>`
-- :meth:`web3.geth.personal.send_transaction() <web3.geth.personal.send_transaction>`
-- :meth:`web3.geth.personal.sign()`
-- :meth:`web3.geth.personal.unlock_account() <web3.geth.personal.unlock_account>`
-- :meth:`web3.geth.txpool.inspect() <web3.geth.txpool.TxPool.inspect()>`
-- :meth:`web3.geth.txpool.content() <web3.geth.txpool.TxPool.content()>`
-- :meth:`web3.geth.txpool.status() <web3.geth.txpool.TxPool.status()>`
+- :meth:`web3.node.admin.add_peer() <web3.node.admin.add_peer>`
+- :meth:`web3.node.admin.datadir() <web3.node.admin.datadir>`
+- :meth:`web3.node.admin.node_info() <web3.node.admin.node_info>`
+- :meth:`web3.node.admin.peers() <web3.node.admin.peers>`
+- :meth:`web3.node.admin.start_http() <web3.node.admin.start_http>`
+- :meth:`web3.node.admin.start_ws() <web3.node.admin.start_ws>`
+- :meth:`web3.node.admin.stop_http() <web3.node.admin.stop_http>`
+- :meth:`web3.node.admin.stop_ws() <web3.node.admin.stop_ws>`
+- :meth:`web3.node.personal.ec_recover()`
+- :meth:`web3.node.personal.import_raw_key() <web3.node.personal.import_raw_key>`
+- :meth:`web3.node.personal.list_accounts() <web3.node.personal.list_accounts>`
+- :meth:`web3.node.personal.list_wallets() <web3.node.personal.list_wallets()>`
+- :meth:`web3.node.personal.lock_account() <web3.node.personal.lock_account>`
+- :meth:`web3.node.personal.new_account() <web3.node.personal.new_account>`
+- :meth:`web3.node.personal.send_transaction() <web3.node.personal.send_transaction>`
+- :meth:`web3.node.personal.sign()`
+- :meth:`web3.node.personal.unlock_account() <web3.node.personal.unlock_account>`
+- :meth:`web3.node.txpool.inspect() <web3.node.txpool.TxPool.inspect()>`
+- :meth:`web3.node.txpool.content() <web3.node.txpool.TxPool.content()>`
+- :meth:`web3.node.txpool.status() <web3.node.txpool.TxPool.status()>`
 
 Contract
 ^^^^^^^^
@@ -344,7 +344,7 @@ Supported Middleware
 - :meth:`Stalecheck Middleware <web3.middleware.make_stalecheck_middleware>`
 - :meth:`Attribute Dict Middleware <web3.middleware.attrdict_middleware>`
 - :meth:`Validation Middleware <web3.middleware.validation>`
-- :ref:`Geth POA Middleware <geth-poa>`
+- :ref:`Bub POA Middleware <bub-poa>`
 - :meth:`Simple Cache Middleware <web3.middleware.simple_cache_middleware>`
 
 

@@ -4,7 +4,7 @@ import pytest
 def test_sync_filter_against_log_events(
     w3, emitter, wait_for_transaction, emitter_contract_event_ids
 ):
-    txn_filter = w3.eth.filter({})
+    txn_filter = w3.bub.filter({})
     txn_hashes = set()
     txn_hashes.add(
         emitter.functions.logNoArgs(
@@ -24,7 +24,7 @@ def test_sync_filter_against_log_events(
 async def test_async_filter_against_log_events(
     async_w3, async_emitter, async_wait_for_transaction, emitter_contract_event_ids
 ):
-    txn_filter = await async_w3.eth.filter({})
+    txn_filter = await async_w3.bub.filter({})
     txn_hashes = set()
     txn_hashes.add(
         await async_emitter.functions.logNoArgs(

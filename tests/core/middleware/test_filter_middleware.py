@@ -5,16 +5,16 @@ from hexbytes import (
 )
 import pytest_asyncio
 
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3.datastructures import (
+from bubble.datastructures import (
     AttributeDict,
 )
-from web3.eth import (
-    AsyncEth,
+from bubble.bub import (
+    AsyncBub,
 )
-from web3.middleware import (
+from bubble.middleware import (
     async_attrdict_middleware,
     async_construct_result_generator_middleware,
     async_local_filter_middleware,
@@ -22,15 +22,15 @@ from web3.middleware import (
     construct_result_generator_middleware,
     local_filter_middleware,
 )
-from web3.middleware.filter import (
+from bubble.middleware.filter import (
     async_iter_latest_block_ranges,
     block_ranges,
     iter_latest_block_ranges,
 )
-from web3.providers.async_base import (
+from bubble.providers.async_base import (
     AsyncBaseProvider,
 )
-from web3.providers.base import (
+from bubble.providers.base import (
     BaseProvider,
 )
 
@@ -91,10 +91,10 @@ def iter_block_number(start=0):
 def result_generator_middleware(iter_block_number):
     return construct_result_generator_middleware(
         {
-            "eth_getLogs": lambda *_: FILTER_LOG,
-            "eth_getBlockByNumber": lambda *_: {"hash": BLOCK_HASH},
+            "bub_getLogs": lambda *_: FILTER_LOG,
+            "bub_getBlockByNumber": lambda *_: {"hash": BLOCK_HASH},
             "net_version": lambda *_: 1,
-            "eth_blockNumber": lambda *_: next(iter_block_number),
+            "bub_blockNumber": lambda *_: next(iter_block_number),
         }
     )
 
@@ -223,25 +223,25 @@ def test_iter_latest_block_ranges(
 
 def test_pending_block_filter_middleware(w3):
     with pytest.raises(NotImplementedError):
-        w3.eth.filter("pending")
+        w3.bub.filter("pending")
 
 
 def test_local_filter_middleware(w3, iter_block_number):
-    block_filter = w3.eth.filter("latest")
+    block_filter = w3.bub.filter("latest")
     block_filter.get_new_entries()
     iter_block_number.send(1)
-    assert w3.eth.get_filter_changes(block_filter.filter_id) == [HexBytes(BLOCK_HASH)]
+    assert w3.bub.get_filter_changes(block_filter.filter_id) == [HexBytes(BLOCK_HASH)]
 
-    log_filter = w3.eth.filter(filter_params={"fromBlock": "latest"})
+    log_filter = w3.bub.filter(filter_params={"fromBlock": "latest"})
     iter_block_number.send(2)
-    log_changes = w3.eth.get_filter_changes(log_filter.filter_id)
+    log_changes = w3.bub.get_filter_changes(log_filter.filter_id)
     assert log_changes == FILTER_LOG
-    assert w3.eth.get_filter_logs(log_filter.filter_id) == FILTER_LOG
+    assert w3.bub.get_filter_logs(log_filter.filter_id) == FILTER_LOG
 
-    log_filter_from_hex_string = w3.eth.filter(
+    log_filter_from_hex_string = w3.bub.filter(
         filter_params={"fromBlock": "0x0", "toBlock": "0x2"}
     )
-    log_filter_from_int = w3.eth.filter(filter_params={"fromBlock": 1, "toBlock": 3})
+    log_filter_from_int = w3.bub.filter(filter_params={"fromBlock": 1, "toBlock": 3})
 
     filter_ids = (
         block_filter.filter_id,
@@ -269,10 +269,10 @@ class AsyncDummyProvider(AsyncBaseProvider):
 async def async_result_generator_middleware(iter_block_number):
     return await async_construct_result_generator_middleware(
         {
-            "eth_getLogs": lambda *_: FILTER_LOG,
-            "eth_getBlockByNumber": lambda *_: {"hash": BLOCK_HASH},
+            "bub_getLogs": lambda *_: FILTER_LOG,
+            "bub_getBlockByNumber": lambda *_: {"hash": BLOCK_HASH},
             "net_version": lambda *_: 1,
-            "eth_blockNumber": lambda *_: next(iter_block_number),
+            "bub_blockNumber": lambda *_: next(iter_block_number),
         }
     )
 
@@ -280,7 +280,7 @@ async def async_result_generator_middleware(iter_block_number):
 @pytest.fixture(scope="function")
 def async_w3_base():
     return Web3(
-        provider=AsyncDummyProvider(), modules={"eth": (AsyncEth)}, middlewares=[]
+        provider=AsyncDummyProvider(), modules={"bub": (AsyncBub)}, middlewares=[]
     )
 
 
@@ -370,23 +370,23 @@ async def test_async_iter_latest_block_ranges(
 
 @pytest.mark.asyncio
 async def test_async_local_filter_middleware(async_w3, iter_block_number):
-    block_filter = await async_w3.eth.filter("latest")
+    block_filter = await async_w3.bub.filter("latest")
     await block_filter.get_new_entries()
     iter_block_number.send(1)
-    block_changes = await async_w3.eth.get_filter_changes(block_filter.filter_id)
+    block_changes = await async_w3.bub.get_filter_changes(block_filter.filter_id)
     assert block_changes == [HexBytes(BLOCK_HASH)]
 
-    log_filter = await async_w3.eth.filter(filter_params={"fromBlock": "latest"})
+    log_filter = await async_w3.bub.filter(filter_params={"fromBlock": "latest"})
     iter_block_number.send(2)
-    log_changes = await async_w3.eth.get_filter_changes(log_filter.filter_id)
+    log_changes = await async_w3.bub.get_filter_changes(log_filter.filter_id)
     assert log_changes == FILTER_LOG
-    logs = await async_w3.eth.get_filter_logs(log_filter.filter_id)
+    logs = await async_w3.bub.get_filter_logs(log_filter.filter_id)
     assert logs == FILTER_LOG
 
-    log_filter_from_hex_string = await async_w3.eth.filter(
+    log_filter_from_hex_string = await async_w3.bub.filter(
         filter_params={"fromBlock": "0x0", "toBlock": "0x2"}
     )
-    log_filter_from_int = await async_w3.eth.filter(
+    log_filter_from_int = await async_w3.bub.filter(
         filter_params={"fromBlock": 1, "toBlock": 3}
     )
 

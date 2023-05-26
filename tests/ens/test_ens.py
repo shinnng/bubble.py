@@ -4,15 +4,15 @@ from ens import (
     ENS,
     AsyncENS,
 )
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3.middleware import (
+from bubble.middleware import (
     async_validation_middleware,
     pythonic_middleware,
 )
-from web3.providers.eth_tester import (
-    AsyncEthereumTesterProvider,
+from bubble.providers.bub_tester import (
+    AsyncBubereumTesterProvider,
 )
 
 
@@ -93,7 +93,7 @@ def test_ens_strict_bytes_type_checking_is_distinct_from_w3_instance(w3):
 
 @pytest.fixture
 def async_w3():
-    return Web3(AsyncEthereumTesterProvider())
+    return Web3(AsyncBubereumTesterProvider())
 
 
 def test_async_from_web3_inherits_web3_middlewares(async_w3):

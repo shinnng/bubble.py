@@ -28,7 +28,7 @@ def w3(request):
 
 @pytest.fixture
 def emitter_contract_factory(w3, emitter_contract_data):
-    return w3.eth.contract(**emitter_contract_data)
+    return w3.bub.contract(**emitter_contract_data)
 
 
 @pytest.fixture
@@ -75,7 +75,7 @@ def async_w3(request):
 
 @pytest.fixture
 def async_emitter_contract_factory(async_w3, emitter_contract_data):
-    return async_w3.eth.contract(**emitter_contract_data)
+    return async_w3.bub.contract(**emitter_contract_data)
 
 
 @pytest_asyncio.fixture

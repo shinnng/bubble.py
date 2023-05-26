@@ -57,7 +57,7 @@ Ethereum network. An example configuration, if you're connecting to a locally ru
     # now `w3` is available to use:
     >>> w3.is_connected()
     True
-    >>> w3.eth.send_transaction(...)
+    >>> w3.bub.send_transaction(...)
 
 Refer to the :ref:`providers` documentation for further help with configuration.
 
@@ -84,7 +84,7 @@ diagnose the problem, ``is_connected`` has an optional ``show_traceback`` argume
     # <long stack trace ouput>
     ProviderConnectionError: Problem connecting to provider with error: <class 'FileNotFoundError'>: cannot connect to IPC socket at path: None
 
-If you're running a local node, such as Geth, double-check that you've indeed started 
+If you're running a local node, such as Bub, double-check that you've indeed started
 the binary and that you've started it from the intended directory - particularly if
 you've specified a relative path to its ipc file.
 
@@ -134,15 +134,15 @@ you may be trying to create an account while connected to a remote node provider
 As a matter of security, remote nodes cannot create accounts.
 
 If you are in fact running a local node, make sure that it's properly configured to accept ``personal``
-methods. For Geth, that looks something like: ``--http.api personal,eth,<etc>`` or ``--ws.api personal,eth,<etc>``
+methods. For Bub, that looks something like: ``--http.api personal,eth,<etc>`` or ``--ws.api personal,eth,<etc>``
 depending on your configuration. Note that the IPC configuration is most secure and includes the ``personal``
 API by default.
 
 In general, your options for accounts are:
 
-- Run a node (e.g., Geth) locally, connect to it via the local port, then use the ``personal`` API.
-- Import a keystore file for an account and :ref:`extract the private key<extract_geth_pk>`.
-- Create an account via the :ref:`eth-account <eth-account>` API, e.g., ``new_acct = w3.eth.account.create()``.
+- Run a node (e.g., Bub) locally, connect to it via the local port, then use the ``personal`` API.
+- Import a keystore file for an account and :ref:`extract the private key<extract_bub_pk>`.
+- Create an account via the :ref:`eth-account <eth-account>` API, e.g., ``new_acct = w3.bub.account.create()``.
 - Use an external service (e.g., MyCrypto) to generate a new account, then securely import its private key.
 
 .. Warning:: Don't store real value in an account until you are familiar with security best practices.
@@ -153,7 +153,7 @@ Making Ethereum JSON-RPC API access faster
 
 Your Ethereum node JSON-RPC API might be slow when fetching multiple and large requests, especially when running batch jobs. Here are some tips for how to speed up your web3.py application.
 
-- Run your client locally, e.g., `Go Ethereum <https://github.com/ethereum/go-ethereum>`_ or `TurboGeth <https://github.com/ledgerwatch/turbo-geth>`_. The network latency and speed are the major limiting factors for fast API access.
+- Run your client locally, e.g., `Go Ethereum <https://github.com/ethereum/go-ethereum>`_ or `TurboBub <https://github.com/ledgerwatch/turbo-bub>`_. The network latency and speed are the major limiting factors for fast API access.
 
 - Use IPC communication instead of HTTP/WebSockets. See :ref:`choosing_provider`.
 

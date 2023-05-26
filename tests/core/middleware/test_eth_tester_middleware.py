@@ -3,11 +3,11 @@ from unittest.mock import (
     Mock,
 )
 
-from web3.providers.eth_tester.middleware import (
+from bubble.providers.bub_tester.middleware import (
     async_default_transaction_fields_middleware,
     default_transaction_fields_middleware,
 )
-from web3.types import (
+from bubble.types import (
     BlockData,
 )
 
@@ -21,7 +21,7 @@ SAMPLE_ADDRESS = "0x0000000000000000000000000000000000000004"
 
 @pytest.mark.parametrize("block_number", {0, "0x0", "earliest"})
 def test_get_transaction_count_formatters(w3, block_number):
-    tx_counts = w3.eth.get_transaction_count(w3.eth.accounts[-1], block_number)
+    tx_counts = w3.bub.get_transaction_count(w3.bub.accounts[-1], block_number)
     assert tx_counts == 0
 
 
@@ -31,7 +31,7 @@ def test_get_block_formatters(w3):
         [k for k in all_block_keys if k != "proofOfAuthorityData"]
     )
 
-    latest_block = w3.eth.get_block("latest")
+    latest_block = w3.bub.get_block("latest")
     latest_block_keys = set(latest_block.keys())
     assert all_non_poa_block_keys == latest_block_keys
 
@@ -39,47 +39,47 @@ def test_get_block_formatters(w3):
 @pytest.mark.parametrize(
     "w3_accounts, w3_coinbase, method, from_field_added, from_field_value",
     (
-        (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "eth_call", True, SAMPLE_ADDRESS),
+        (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "bub_call", True, SAMPLE_ADDRESS),
         (
             SAMPLE_ADDRESS_LIST,
             SAMPLE_ADDRESS,
-            "eth_estimateGas",
+            "bub_estimateGas",
             True,
             SAMPLE_ADDRESS,
         ),
         (
             SAMPLE_ADDRESS_LIST,
             SAMPLE_ADDRESS,
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             True,
             SAMPLE_ADDRESS,
         ),
-        (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "eth_gasPrice", False, None),
-        (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "eth_blockNumber", False, None),
+        (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "bub_gasPrice", False, None),
+        (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "bub_blockNumber", False, None),
         (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "meow", False, None),
-        (SAMPLE_ADDRESS_LIST, None, "eth_call", True, SAMPLE_ADDRESS_LIST[0]),
-        (SAMPLE_ADDRESS_LIST, None, "eth_estimateGas", True, SAMPLE_ADDRESS_LIST[0]),
+        (SAMPLE_ADDRESS_LIST, None, "bub_call", True, SAMPLE_ADDRESS_LIST[0]),
+        (SAMPLE_ADDRESS_LIST, None, "bub_estimateGas", True, SAMPLE_ADDRESS_LIST[0]),
         (
             SAMPLE_ADDRESS_LIST,
             None,
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             True,
             SAMPLE_ADDRESS_LIST[0],
         ),
-        (SAMPLE_ADDRESS_LIST, None, "eth_gasPrice", False, None),
-        (SAMPLE_ADDRESS_LIST, None, "eth_blockNumber", False, None),
+        (SAMPLE_ADDRESS_LIST, None, "bub_gasPrice", False, None),
+        (SAMPLE_ADDRESS_LIST, None, "bub_blockNumber", False, None),
         (SAMPLE_ADDRESS_LIST, None, "meow", False, None),
-        (None, SAMPLE_ADDRESS, "eth_call", True, SAMPLE_ADDRESS),
-        (None, SAMPLE_ADDRESS, "eth_estimateGas", True, SAMPLE_ADDRESS),
-        (None, SAMPLE_ADDRESS, "eth_sendTransaction", True, SAMPLE_ADDRESS),
-        (None, SAMPLE_ADDRESS, "eth_gasPrice", False, SAMPLE_ADDRESS),
-        (None, SAMPLE_ADDRESS, "eth_blockNumber", False, SAMPLE_ADDRESS),
+        (None, SAMPLE_ADDRESS, "bub_call", True, SAMPLE_ADDRESS),
+        (None, SAMPLE_ADDRESS, "bub_estimateGas", True, SAMPLE_ADDRESS),
+        (None, SAMPLE_ADDRESS, "bub_sendTransaction", True, SAMPLE_ADDRESS),
+        (None, SAMPLE_ADDRESS, "bub_gasPrice", False, SAMPLE_ADDRESS),
+        (None, SAMPLE_ADDRESS, "bub_blockNumber", False, SAMPLE_ADDRESS),
         (None, SAMPLE_ADDRESS, "meow", False, SAMPLE_ADDRESS),
-        (None, None, "eth_call", True, None),
-        (None, None, "eth_estimateGas", True, None),
-        (None, None, "eth_sendTransaction", True, None),
-        (None, None, "eth_gasPrice", False, None),
-        (None, None, "eth_blockNumber", False, None),
+        (None, None, "bub_call", True, None),
+        (None, None, "bub_estimateGas", True, None),
+        (None, None, "bub_sendTransaction", True, None),
+        (None, None, "bub_gasPrice", False, None),
+        (None, None, "bub_blockNumber", False, None),
         (None, None, "meow", False, None),
     ),
 )
@@ -90,8 +90,8 @@ def test_default_transaction_fields_middleware(
         return params
 
     mock_w3 = Mock()
-    mock_w3.eth.accounts = w3_accounts
-    mock_w3.eth.coinbase = w3_coinbase
+    mock_w3.bub.accounts = w3_accounts
+    mock_w3.bub.coinbase = w3_coinbase
 
     middleware = default_transaction_fields_middleware(mock_request, mock_w3)
     base_params = {"chainId": 5}
@@ -113,47 +113,47 @@ def test_default_transaction_fields_middleware(
 @pytest.mark.parametrize(
     "w3_accounts, w3_coinbase, method, from_field_added, from_field_value",
     (
-        (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "eth_call", True, SAMPLE_ADDRESS),
+        (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "bub_call", True, SAMPLE_ADDRESS),
         (
             SAMPLE_ADDRESS_LIST,
             SAMPLE_ADDRESS,
-            "eth_estimateGas",
+            "bub_estimateGas",
             True,
             SAMPLE_ADDRESS,
         ),
         (
             SAMPLE_ADDRESS_LIST,
             SAMPLE_ADDRESS,
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             True,
             SAMPLE_ADDRESS,
         ),
-        (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "eth_gasPrice", False, None),
-        (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "eth_blockNumber", False, None),
+        (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "bub_gasPrice", False, None),
+        (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "bub_blockNumber", False, None),
         (SAMPLE_ADDRESS_LIST, SAMPLE_ADDRESS, "meow", False, None),
-        (SAMPLE_ADDRESS_LIST, None, "eth_call", True, SAMPLE_ADDRESS_LIST[0]),
-        (SAMPLE_ADDRESS_LIST, None, "eth_estimateGas", True, SAMPLE_ADDRESS_LIST[0]),
+        (SAMPLE_ADDRESS_LIST, None, "bub_call", True, SAMPLE_ADDRESS_LIST[0]),
+        (SAMPLE_ADDRESS_LIST, None, "bub_estimateGas", True, SAMPLE_ADDRESS_LIST[0]),
         (
             SAMPLE_ADDRESS_LIST,
             None,
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             True,
             SAMPLE_ADDRESS_LIST[0],
         ),
-        (SAMPLE_ADDRESS_LIST, None, "eth_gasPrice", False, None),
-        (SAMPLE_ADDRESS_LIST, None, "eth_blockNumber", False, None),
+        (SAMPLE_ADDRESS_LIST, None, "bub_gasPrice", False, None),
+        (SAMPLE_ADDRESS_LIST, None, "bub_blockNumber", False, None),
         (SAMPLE_ADDRESS_LIST, None, "meow", False, None),
-        (None, SAMPLE_ADDRESS, "eth_call", True, SAMPLE_ADDRESS),
-        (None, SAMPLE_ADDRESS, "eth_estimateGas", True, SAMPLE_ADDRESS),
-        (None, SAMPLE_ADDRESS, "eth_sendTransaction", True, SAMPLE_ADDRESS),
-        (None, SAMPLE_ADDRESS, "eth_gasPrice", False, SAMPLE_ADDRESS),
-        (None, SAMPLE_ADDRESS, "eth_blockNumber", False, SAMPLE_ADDRESS),
+        (None, SAMPLE_ADDRESS, "bub_call", True, SAMPLE_ADDRESS),
+        (None, SAMPLE_ADDRESS, "bub_estimateGas", True, SAMPLE_ADDRESS),
+        (None, SAMPLE_ADDRESS, "bub_sendTransaction", True, SAMPLE_ADDRESS),
+        (None, SAMPLE_ADDRESS, "bub_gasPrice", False, SAMPLE_ADDRESS),
+        (None, SAMPLE_ADDRESS, "bub_blockNumber", False, SAMPLE_ADDRESS),
         (None, SAMPLE_ADDRESS, "meow", False, SAMPLE_ADDRESS),
-        (None, None, "eth_call", True, None),
-        (None, None, "eth_estimateGas", True, None),
-        (None, None, "eth_sendTransaction", True, None),
-        (None, None, "eth_gasPrice", False, None),
-        (None, None, "eth_blockNumber", False, None),
+        (None, None, "bub_call", True, None),
+        (None, None, "bub_estimateGas", True, None),
+        (None, None, "bub_sendTransaction", True, None),
+        (None, None, "bub_gasPrice", False, None),
+        (None, None, "bub_blockNumber", False, None),
         (None, None, "meow", False, None),
     ),
 )
@@ -175,8 +175,8 @@ async def test_async_default_transaction_fields_middleware(
         return w3_coinbase
 
     mock_w3 = Mock()
-    mock_w3.eth.accounts = mock_async_accounts()
-    mock_w3.eth.coinbase = mock_async_coinbase()
+    mock_w3.bub.accounts = mock_async_accounts()
+    mock_w3.bub.coinbase = mock_async_coinbase()
 
     middleware = await async_default_transaction_fields_middleware(
         mock_request, mock_w3
@@ -193,5 +193,5 @@ async def test_async_default_transaction_fields_middleware(
     assert filled_transaction[0] == base_params
 
     # clean up
-    mock_w3.eth.accounts.close()
-    mock_w3.eth.coinbase.close()
+    mock_w3.bub.accounts.close()
+    mock_w3.bub.coinbase.close()

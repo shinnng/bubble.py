@@ -1,16 +1,16 @@
 import pytest
 
-from web3._utils.method_formatters import (
+from bubble._utils.method_formatters import (
     get_error_formatters,
     raise_contract_logic_error_on_revert,
 )
-from web3._utils.rpc_abi import (
+from bubble._utils.rpc_abi import (
     RPC,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     ContractLogicError,
 )
-from web3.types import (
+from bubble.types import (
     RPCResponse,
 )
 
@@ -56,7 +56,7 @@ OTHER_ERROR = RPCResponse(
     }
 )
 
-GETH_RESPONSE = RPCResponse(
+BUB_RESPONSE = RPCResponse(
     {
         "jsonrpc": "2.0",
         "id": 2,
@@ -107,7 +107,7 @@ SPACENETH_RESPONSE = RPCResponse(
     (
         (REVERT_WITH_MSG, "execution reverted: not allowed to monitor"),
         (REVERT_WITHOUT_MSG, "execution reverted"),
-        (GETH_RESPONSE, "execution reverted: Function has been reverted."),
+        (BUB_RESPONSE, "execution reverted: Function has been reverted."),
         (
             GANACHE_RESPONSE,
             "execution reverted: VM Exception while processing transaction: revert Custom revert message",  # noqa: E501
@@ -120,7 +120,7 @@ SPACENETH_RESPONSE = RPCResponse(
     ids=[
         "test-get-revert-reason-with-msg",
         "test-get-revert-reason-without-msg",
-        "test-get-geth-revert-reason",
+        "test-get-bub-revert-reason",
         "test_get-ganache-revert-reason",
         "test_get-spaceneth-revert-reason",
     ],
@@ -135,7 +135,7 @@ def test_get_revert_reason_other_error() -> None:
 
 
 def test_get_error_formatters() -> None:
-    formatters = get_error_formatters(RPC.eth_call)
+    formatters = get_error_formatters(RPC.bub_call)
     with pytest.raises(ContractLogicError, match="not allowed to monitor"):
         formatters(REVERT_WITH_MSG)
     with pytest.raises(ContractLogicError):

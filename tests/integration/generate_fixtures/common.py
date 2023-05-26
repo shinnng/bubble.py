@@ -12,14 +12,14 @@ from eth_utils import (
     to_text,
 )
 
-from web3 import (
+from bubble import (
     constants,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     TransactionNotFound,
 )
 
-# use same coinbase value as in `web3.py/tests/integration/common.py`
+# use same coinbase value as in `bubble.py/tests/integration/common.py`
 COINBASE = "0xdc544d1aa88ff8bbd2f2aec754b1f1e99e1812fd"
 COINBASE_PK = "0x58d23b55bc9cdce1f18c2500f40ff4ab7245df9a89505e9b1fa4851f623d241d"
 
@@ -91,23 +91,23 @@ def tempdir():
         shutil.rmtree(dir_path)
 
 
-def get_geth_binary():
-    from geth.install import (
+def get_bub_binary():
+    from bubble.install import (
         get_executable_path,
-        install_geth,
+        install_bub,
     )
 
-    if "GETH_BINARY" in os.environ:
-        return os.environ["GETH_BINARY"]
-    elif "GETH_VERSION" in os.environ:
-        geth_version = os.environ["GETH_VERSION"]
-        _geth_binary = get_executable_path(geth_version)
-        if not os.path.exists(_geth_binary):
-            install_geth(geth_version)
-        assert os.path.exists(_geth_binary)
-        return _geth_binary
+    if "BUB_BINARY" in os.environ:
+        return os.environ["BUB_BINARY"]
+    elif "BUB_VERSION" in os.environ:
+        bub_version = os.environ["BUB_VERSION"]
+        _bub_binary = get_executable_path(bub_version)
+        if not os.path.exists(_bub_binary):
+            install_bub(bub_version)
+        assert os.path.exists(_bub_binary)
+        return _bub_binary
     else:
-        return "geth"
+        return "bub"
 
 
 def wait_for_popen(proc, timeout):
@@ -147,12 +147,12 @@ def wait_for_socket(ipc_path, timeout=30):
 
 
 @contextlib.contextmanager
-def get_geth_process(
-    geth_binary, datadir, genesis_file_path, ipc_path, port, networkid, skip_init=False
+def get_bub_process(
+    bub_binary, datadir, genesis_file_path, ipc_path, port, networkid, skip_init=False
 ):
     if not skip_init:
         init_datadir_command = (
-            geth_binary,
+            bub_binary,
             "--datadir",
             datadir,
             "init",
@@ -165,8 +165,8 @@ def get_geth_process(
             stderr=subprocess.PIPE,
         )
 
-    run_geth_command = (
-        geth_binary,
+    run_bub_command = (
+        bub_binary,
         "--datadir",
         datadir,
         "--ipcpath",
@@ -179,15 +179,15 @@ def get_geth_process(
         "--etherbase",
         COINBASE[2:],
     )
-    print(" ".join(run_geth_command))
+    print(" ".join(run_bub_command))
     try:
-        proc = get_process(run_geth_command)
+        proc = get_process(run_bub_command)
         yield proc
     finally:
         kill_proc_gracefully(proc)
         output, errors = proc.communicate()
         print(
-            "Geth Process Exited:\n"
+            "Bub Process Exited:\n"
             f"stdout:{to_text(output)}\n\n"
             f"stderr:{to_text(errors)}\n\n"
         )
@@ -204,14 +204,14 @@ def get_process(run_command):
 
 
 def mine_block(w3):
-    origin_block_number = w3.eth.block_number
+    origin_block_number = w3.bub.block_number
 
     start_time = time.time()
-    w3.geth.miner.start(1)
+    w3.bub.miner.start(1)
     while time.time() < start_time + 120:
-        block_number = w3.eth.block_number
+        block_number = w3.bub.block_number
         if block_number > origin_block_number:
-            w3.geth.miner.stop()
+            w3.bub.miner.stop()
             return block_number
         else:
             time.sleep(0.1)
@@ -221,14 +221,14 @@ def mine_block(w3):
 
 def mine_transaction_hash(w3, txn_hash):
     start_time = time.time()
-    w3.geth.miner.start(1)
+    w3.bub.miner.start(1)
     while time.time() < start_time + 120:
         try:
-            receipt = w3.eth.get_transaction_receipt(txn_hash)
+            receipt = w3.bub.get_transaction_receipt(txn_hash)
         except TransactionNotFound:
             continue
         if receipt is not None:
-            w3.geth.miner.stop()
+            w3.bub.miner.stop()
             return receipt
         else:
             time.sleep(0.1)
@@ -240,8 +240,8 @@ def mine_transaction_hash(w3, txn_hash):
 
 def deploy_contract(w3, name, factory):
     name = name.upper()
-    w3.geth.personal.unlock_account(w3.eth.coinbase, KEYFILE_PW)
-    deploy_txn_hash = factory.constructor().transact({"from": w3.eth.coinbase})
+    w3.node.personal.unlock_account(w3.bub.coinbase, KEYFILE_PW)
+    deploy_txn_hash = factory.constructor().transact({"from": w3.bub.coinbase})
     print(f"{name}_CONTRACT_DEPLOY_HASH: {deploy_txn_hash}")
     deploy_receipt = mine_transaction_hash(w3, deploy_txn_hash)
     print(f"{name}_CONTRACT_DEPLOY_TRANSACTION_MINED")

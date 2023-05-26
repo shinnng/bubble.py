@@ -1,7 +1,7 @@
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3.providers import (
+from bubble.providers import (
     AutoProvider,
     BaseProvider,
 )

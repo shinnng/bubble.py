@@ -51,7 +51,7 @@ from ethpm.tools.builder import (
     version,
     write_to_disk,
 )
-from web3.tools.pytest_ethereum.linker import (
+from bubble.tools.pytest_bubble.linker import (
     deploy,
     link,
     linker,
@@ -726,7 +726,7 @@ def escrow_package(w3, deployer, ethpm_spec_dir):
     escrow_strategy = linker(
         deploy("SafeSendLib"),
         link("Escrow", "SafeSendLib"),
-        deploy("Escrow", w3.eth.accounts[0]),
+        deploy("Escrow", w3.bub.accounts[0]),
     )
     escrow_deployer.register_strategy("Escrow", escrow_strategy)
     escrow_package = escrow_deployer.deploy("Escrow")

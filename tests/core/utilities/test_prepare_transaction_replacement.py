@@ -1,6 +1,6 @@
 import pytest
 
-from web3._utils.transactions import (
+from bubble._utils.transactions import (
     prepare_replacement_transaction,
 )
 
@@ -97,7 +97,7 @@ def test_prepare_transaction_replacement_gas_price_defaulting_when_strategy_hige
     def higher_gas_price_strategy(w3, txn):
         return 20
 
-    w3.eth.set_gas_price_strategy(higher_gas_price_strategy)
+    w3.bub.set_gas_price_strategy(higher_gas_price_strategy)
 
     current_transaction = SIMPLE_CURRENT_TRANSACTION
     new_transaction = {
@@ -115,7 +115,7 @@ def test_prepare_transaction_replacement_gas_price_defaulting_when_strategy_lowe
     def lower_gas_price_strategy(w3, txn):
         return 5
 
-    w3.eth.set_gas_price_strategy(lower_gas_price_strategy)
+    w3.bub.set_gas_price_strategy(lower_gas_price_strategy)
 
     current_transaction = SIMPLE_CURRENT_TRANSACTION
     new_transaction = {

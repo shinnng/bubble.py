@@ -8,7 +8,7 @@ from tests.integration.common import (
 from tests.utils import (
     get_open_port,
 )
-from web3 import (
+from bubble import (
     Web3,
 )
 
@@ -24,14 +24,14 @@ from .utils import (
 )
 
 
-def _geth_command_arguments(geth_ipc_path, base_geth_command_arguments):
-    geth_port = get_open_port()
-    yield from base_geth_command_arguments
+def _bub_command_arguments(bub_ipc_path, base_bub_command_arguments):
+    bub_port = get_open_port()
+    yield from base_bub_command_arguments
     yield from (
         "--port",
-        geth_port,
+        bub_port,
         "--ipcpath",
-        geth_ipc_path,
+        bub_ipc_path,
         "--miner.etherbase",
         COINBASE[2:],
         "--rpc.enabledeprecatedpersonal",
@@ -39,24 +39,24 @@ def _geth_command_arguments(geth_ipc_path, base_geth_command_arguments):
 
 
 @pytest.fixture(scope="module")
-def geth_command_arguments(geth_ipc_path, base_geth_command_arguments):
-    return _geth_command_arguments(geth_ipc_path, base_geth_command_arguments)
+def bub_command_arguments(bub_ipc_path, base_bub_command_arguments):
+    return _bub_command_arguments(bub_ipc_path, base_bub_command_arguments)
 
 
 @pytest.fixture(scope="module")
-def geth_ipc_path(datadir):
-    geth_ipc_dir_path = tempfile.mkdtemp()
-    _geth_ipc_path = os.path.join(geth_ipc_dir_path, "geth.ipc")
-    yield _geth_ipc_path
+def bub_ipc_path(datadir):
+    bub_ipc_dir_path = tempfile.mkdtemp()
+    _bub_ipc_path = os.path.join(bub_ipc_dir_path, "bub.ipc")
+    yield _bub_ipc_path
 
-    if os.path.exists(_geth_ipc_path):
-        os.remove(_geth_ipc_path)
+    if os.path.exists(_bub_ipc_path):
+        os.remove(_bub_ipc_path)
 
 
 @pytest.fixture(scope="module")
-def w3(geth_process, geth_ipc_path):
-    wait_for_socket(geth_ipc_path)
-    _w3 = Web3(Web3.IPCProvider(geth_ipc_path, timeout=30))
+def w3(bub_process, bub_ipc_path):
+    wait_for_socket(bub_ipc_path)
+    _w3 = Web3(Web3.IPCProvider(bub_ipc_path, timeout=30))
     return _w3
 
 
@@ -66,7 +66,7 @@ class TestGoEthereumTest(GoEthereumTest):
 
 class TestGoEthereumAdminModuleTest(GoEthereumAdminModuleTest):
     @pytest.mark.xfail(
-        reason="running geth with the --nodiscover flag doesn't allow peer addition"
+        reason="running bub with the --nodiscover flag doesn't allow peer addition"
     )
     def test_admin_peers(w3):
         super().test_admin_peers(w3)

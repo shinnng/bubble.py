@@ -1,6 +1,6 @@
 import pytest
 
-from web3.exceptions import (
+from bubble.exceptions import (
     MismatchedABI,
     NoABIFound,
     NoABIFunctionsFound,
@@ -9,7 +9,7 @@ from web3.exceptions import (
 
 @pytest.fixture()
 def address(w3):
-    return w3.eth.accounts[1]
+    return w3.bub.accounts[1]
 
 
 @pytest.fixture()
@@ -73,7 +73,7 @@ decode_tuples_args = (
                     ),
                 ],
             ),
-            "<class 'web3._utils.abi.abi_decoded_namedtuple_factory.<locals>.ABIDecodedNamedTuple'>",  # noqa: E501
+            "<class 'bubble._utils.abi.abi_decoded_namedtuple_factory.<locals>.ABIDecodedNamedTuple'>",  # noqa: E501
             "ABIDecodedNamedTuple(a=123, b=[1, 2], c=[ABIDecodedNamedTuple(x=234, y=[True, False], z=['0x4AD7E79d88650B01EEA2B1f069f01EE9db343d5c', '0xfdF1946A9b40245224488F1a36f4A9ed4844a523', '0xfdF1946A9b40245224488F1a36f4A9ed4844a523']), ABIDecodedNamedTuple(x=345, y=[False, False], z=['0xefd1FF70c185A1C0b125939815225199079096Ee', '0xf35C0784794F3Cd935F5754d3a0EbcE95bEf851e'])])",  # noqa: E501
         ),
     ),
@@ -91,25 +91,25 @@ def test_caller_with_parens(math_contract):
 
 
 def test_caller_with_no_abi(w3):
-    contract = w3.eth.contract()
+    contract = w3.bub.contract()
     with pytest.raises(NoABIFound):
         contract.caller.thisFunctionDoesNotExist()
 
 
 def test_caller_with_no_abi_and_parens(w3):
-    contract = w3.eth.contract()
+    contract = w3.bub.contract()
     with pytest.raises(NoABIFound):
         contract.caller().thisFunctionDoesNotExist()
 
 
 def test_caller_with_empty_abi_and_parens(w3):
-    contract = w3.eth.contract(abi=[])
+    contract = w3.bub.contract(abi=[])
     with pytest.raises(NoABIFunctionsFound):
         contract.caller().thisFunctionDoesNotExist()
 
 
 def test_caller_with_empty_abi(w3):
-    contract = w3.eth.contract(abi=[])
+    contract = w3.bub.contract(abi=[])
     with pytest.raises(NoABIFunctionsFound):
         contract.caller.thisFunctionDoesNotExist()
 
@@ -131,7 +131,7 @@ def test_caller_with_a_nonexistent_function(math_contract):
 
 
 def test_caller_with_block_identifier(w3, math_contract):
-    start_num = w3.eth.get_block("latest").number
+    start_num = w3.bub.get_block("latest").number
     assert math_contract.caller.counter() == 0
 
     w3.provider.make_request(method="evm_mine", params=[5])
@@ -148,7 +148,7 @@ def test_caller_with_block_identifier(w3, math_contract):
 def test_caller_with_block_identifier_and_transaction_dict(
     w3, contract_caller_tester_contract, transaction_dict, address
 ):
-    start_num = w3.eth.get_block("latest").number
+    start_num = w3.bub.get_block("latest").number
     assert contract_caller_tester_contract.caller.counter() == 0
 
     w3.provider.make_request(method="evm_mine", params=[5])
@@ -253,28 +253,28 @@ async def test_async_caller_with_parens(async_math_contract):
 
 @pytest.mark.asyncio
 async def test_async_caller_with_no_abi(async_w3):
-    contract = async_w3.eth.contract()
+    contract = async_w3.bub.contract()
     with pytest.raises(NoABIFound):
         await contract.caller.thisFunctionDoesNotExist()
 
 
 @pytest.mark.asyncio
 async def test_async_caller_with_no_abi_and_parens(async_w3):
-    contract = async_w3.eth.contract()
+    contract = async_w3.bub.contract()
     with pytest.raises(NoABIFound):
         await contract.caller().thisFunctionDoesNotExist()
 
 
 @pytest.mark.asyncio
 async def test_async_caller_with_empty_abi_and_parens(async_w3):
-    contract = async_w3.eth.contract(abi=[])
+    contract = async_w3.bub.contract(abi=[])
     with pytest.raises(NoABIFunctionsFound):
         await contract.caller().thisFunctionDoesNotExist()
 
 
 @pytest.mark.asyncio
 async def test_async_caller_with_empty_abi(async_w3):
-    contract = async_w3.eth.contract(abi=[])
+    contract = async_w3.bub.contract(abi=[])
     with pytest.raises(NoABIFunctionsFound):
         await contract.caller.thisFunctionDoesNotExist()
 
@@ -300,7 +300,7 @@ async def test_async_caller_with_a_nonexistent_function(async_math_contract):
 
 @pytest.mark.asyncio
 async def test_async_caller_with_block_identifier(async_w3, async_math_contract):
-    start = await async_w3.eth.get_block("latest")
+    start = await async_w3.bub.get_block("latest")
     start_num = start.number
     assert await async_math_contract.caller.counter() == 0
 
@@ -319,7 +319,7 @@ async def test_async_caller_with_block_identifier(async_w3, async_math_contract)
 async def test_async_caller_with_block_identifier_and_transaction_dict(
     async_w3, async_contract_caller_tester_contract, transaction_dict, address
 ):
-    start = await async_w3.eth.get_block("latest")
+    start = await async_w3.bub.get_block("latest")
     start_num = start.number
     assert await async_contract_caller_tester_contract.caller.counter() == 0
 

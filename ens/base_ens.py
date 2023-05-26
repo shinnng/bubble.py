@@ -25,11 +25,11 @@ from ens.utils import (
 )
 
 if TYPE_CHECKING:
-    from web3 import (  # noqa: F401
+    from bubble import (  # noqa: F401
         AsyncWeb3,
         Web3,
     )
-    from web3.contract import (  # noqa: F401
+    from bubble.contract import (  # noqa: F401
         AsyncContract,
         Contract,
     )
@@ -81,10 +81,10 @@ class BaseENS:
         or the empty string if the ENS name does not have a parent.
 
         e.g.
-        - parent('1.foo.bar.eth') = 'foo.bar.eth'
-        - parent('foo.bar.eth') = 'bar.eth'
-        - parent('foo.eth') = 'eth'
-        - parent('eth') is defined as the empty string ''
+        - parent('1.foo.bar.bub') = 'foo.bar.bub'
+        - parent('foo.bar.bub') = 'bar.bub'
+        - parent('foo.bub') = 'bub'
+        - parent('bub') is defined as the empty string ''
 
         :param name: an ENS name
         :return: the parent for the provided ENS name

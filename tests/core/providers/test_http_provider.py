@@ -7,16 +7,16 @@ from requests.adapters import (
     HTTPAdapter,
 )
 
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3._utils import (
+from bubble._utils import (
     request,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     ProviderConnectionError,
 )
-from web3.providers import (
+from bubble.providers import (
     HTTPProvider,
 )
 

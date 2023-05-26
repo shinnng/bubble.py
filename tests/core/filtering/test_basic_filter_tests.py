@@ -7,13 +7,13 @@ def test_filtering_sequential_blocks_with_bounded_range(
     builder = emitter.events.LogNoArguments.build_filter()
     builder.fromBlock = "latest"
 
-    initial_block_number = w3.eth.block_number
+    initial_block_number = w3.bub.block_number
 
     builder.toBlock = initial_block_number + 100
     filter_ = builder.deploy(w3)
     for i in range(100):
         emitter.functions.logNoArgs(which=1).transact()
-    assert w3.eth.block_number == initial_block_number + 100
+    assert w3.bub.block_number == initial_block_number + 100
     assert len(filter_.get_new_entries()) == 100
 
 
@@ -22,10 +22,10 @@ def test_filtering_starting_block_range(w3, emitter, wait_for_transaction):
         emitter.functions.logNoArgs(which=1).transact()
     builder = emitter.events.LogNoArguments.build_filter()
     filter_ = builder.deploy(w3)
-    initial_block_number = w3.eth.block_number
+    initial_block_number = w3.bub.block_number
     for i in range(10):
         emitter.functions.logNoArgs(which=1).transact()
-    assert w3.eth.block_number == initial_block_number + 10
+    assert w3.bub.block_number == initial_block_number + 10
     assert len(filter_.get_new_entries()) == 10
 
 
@@ -44,13 +44,13 @@ async def test_async_filtering_sequential_blocks_with_bounded_range(
 ):
     builder = async_emitter.events.LogNoArguments.build_filter()
     builder.fromBlock = "latest"
-    initial_block_number = await async_w3.eth.block_number
+    initial_block_number = await async_w3.bub.block_number
     builder.toBlock = initial_block_number + 100
     filter_ = await builder.deploy(async_w3)
     for i in range(100):
         await async_emitter.functions.logNoArgs(which=1).transact()
-    eth_block_number = await async_w3.eth.block_number
-    assert eth_block_number == initial_block_number + 100
+    bub_block_number = await async_w3.bub.block_number
+    assert bub_block_number == initial_block_number + 100
     new_entries = await filter_.get_new_entries()
     assert len(new_entries) == 100
 
@@ -61,11 +61,11 @@ async def test_async_filtering_starting_block_range(async_w3, async_emitter):
         await async_emitter.functions.logNoArgs(which=1).transact()
     builder = async_emitter.events.LogNoArguments.build_filter()
     filter_ = await builder.deploy(async_w3)
-    initial_block_number = await async_w3.eth.block_number
+    initial_block_number = await async_w3.bub.block_number
     for i in range(10):
         await async_emitter.functions.logNoArgs(which=1).transact()
-    eth_block_number = await async_w3.eth.block_number
-    assert eth_block_number == initial_block_number + 10
+    bub_block_number = await async_w3.bub.block_number
+    assert bub_block_number == initial_block_number + 10
     new_entries = await filter_.get_new_entries()
     assert len(new_entries) == 10
 

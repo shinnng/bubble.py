@@ -1,6 +1,6 @@
 import pytest
 
-from web3.exceptions import (
+from bubble.exceptions import (
     Web3ValidationError,
 )
 
@@ -12,7 +12,7 @@ def test_contract_estimate_gas(w3, math_contract, estimate_gas, transact):
 
     txn_hash = transact(contract=math_contract, contract_function="incrementCounter")
 
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -23,7 +23,7 @@ def test_contract_fallback_estimate_gas(w3, fallback_function_contract):
 
     txn_hash = fallback_function_contract.fallback.transact()
 
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -39,7 +39,7 @@ def test_contract_estimate_gas_with_arguments(
     txn_hash = transact(
         contract=math_contract, contract_function="add", func_args=[5, 6]
     )
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -56,7 +56,7 @@ def test_estimate_gas_not_sending_ether_to_nonpayable_function(
         contract=payable_tester_contract, contract_function="doNoValueCall"
     )
 
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -80,7 +80,7 @@ def test_estimate_gas_accepts_latest_block(w3, math_contract, transact):
 
     txn_hash = transact(contract=math_contract, contract_function="incrementCounter")
 
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -88,7 +88,7 @@ def test_estimate_gas_accepts_latest_block(w3, math_contract, transact):
 
 def test_estimate_gas_block_identifier_unique_estimates(w3, math_contract, transact):
     txn_hash = transact(contract=math_contract, contract_function="incrementCounter")
-    w3.eth.wait_for_transaction_receipt(txn_hash)
+    w3.bub.wait_for_transaction_receipt(txn_hash)
 
     latest_gas_estimate = math_contract.functions.counter().estimate_gas(
         block_identifier="latest"
@@ -112,7 +112,7 @@ async def test_async_contract_estimate_gas(
         contract=async_math_contract, contract_function="incrementCounter"
     )
 
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -126,7 +126,7 @@ async def test_async_contract_fallback_estimate_gas(
 
     txn_hash = await async_fallback_function_contract.fallback.transact()
 
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -143,7 +143,7 @@ async def test_async_contract_estimate_gas_with_arguments(
     txn_hash = await async_transact(
         contract=async_math_contract, contract_function="add", func_args=[5, 6]
     )
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -161,7 +161,7 @@ async def test_async_estimate_gas_not_sending_ether_to_nonpayable_function(
         contract=async_payable_tester_contract, contract_function="doNoValueCall"
     )
 
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -191,7 +191,7 @@ async def test_async_estimate_gas_accepts_latest_block(
         contract=async_math_contract, contract_function="incrementCounter"
     )
 
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(txn_hash)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -204,7 +204,7 @@ async def test_async_estimate_gas_block_identifier_unique_estimates(
     txn_hash = await async_transact(
         contract=async_math_contract, contract_function="incrementCounter"
     )
-    await async_w3.eth.wait_for_transaction_receipt(txn_hash)
+    await async_w3.bub.wait_for_transaction_receipt(txn_hash)
 
     latest_gas_estimate = await async_math_contract.functions.counter().estimate_gas(
         block_identifier="latest"

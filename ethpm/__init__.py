@@ -4,7 +4,7 @@ from pathlib import Path
 
 warnings.warn(
     "The ``ethPM`` module is no longer being maintained and will be "
-    "deprecated with ``web3.py`` version 7",
+    "deprecated with ``bubble.py`` version 7",
     UserWarning,
 )
 

@@ -4,11 +4,11 @@ from websockets.exceptions import (
     ConnectionClosed,
 )
 
-from web3 import (
+from bubble import (
     Web3,
 )
 
-# use same coinbase value as in `web3.py/tests/integration/generate_fixtures/common.py`
+# use same coinbase value as in `bubble.py/tests/integration/generate_fixtures/common.py`
 COINBASE = "0xdc544d1aa88ff8bbd2f2aec754b1f1e99e1812fd"
 
 
@@ -20,4 +20,4 @@ class MiscWebsocketTest:
             )
         )
         with pytest.raises((OSError, ConnectionClosed)):
-            w3.eth.get_block(0)
+            w3.bub.get_block(0)

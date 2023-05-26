@@ -11,24 +11,24 @@ def deploy_contracts(w3, contract, wait_for_transaction):
     for i in range(25):
         tx_hash = contract.constructor().transact()
         wait_for_transaction(w3, tx_hash)
-        yield w3.eth.get_transaction_receipt(tx_hash)["contractAddress"]
+        yield w3.bub.get_transaction_receipt(tx_hash)["contractAddress"]
 
 
 def pad_with_transactions(w3):
-    accounts = w3.eth.accounts
+    accounts = w3.bub.accounts
     for tx_count in range(random.randint(0, 10)):
         _from = accounts[random.randint(0, len(accounts) - 1)]
         _to = accounts[random.randint(0, len(accounts) - 1)]
         value = 50 + tx_count
-        w3.eth.send_transaction({"from": _from, "to": _to, "value": value})
+        w3.bub.send_transaction({"from": _from, "to": _to, "value": value})
 
 
 def single_transaction(w3):
-    accounts = w3.eth.accounts
+    accounts = w3.bub.accounts
     _from = accounts[random.randint(0, len(accounts) - 1)]
     _to = accounts[random.randint(0, len(accounts) - 1)]
     value = 50
-    tx_hash = w3.eth.send_transaction({"from": _from, "to": _to, "value": value})
+    tx_hash = w3.bub.send_transaction({"from": _from, "to": _to, "value": value})
     return tx_hash
 
 
@@ -54,7 +54,7 @@ def test_event_filter_new_events(
 
     expected_match_counter = 0
 
-    while w3.eth.block_number < 50:
+    while w3.bub.block_number < 50:
         is_match = bool(random.randint(0, 1))
         if is_match:
             expected_match_counter += 1
@@ -68,15 +68,15 @@ def test_event_filter_new_events(
 
 
 def test_block_filter(w3):
-    block_filter = w3.eth.filter("latest")
-    while w3.eth.block_number < 50:
+    block_filter = w3.bub.filter("latest")
+    while w3.bub.block_number < 50:
         pad_with_transactions(w3)
 
-    assert len(block_filter.get_new_entries()) == w3.eth.block_number
+    assert len(block_filter.get_new_entries()) == w3.bub.block_number
 
 
 def test_transaction_filter_with_mining(w3):
-    transaction_filter = w3.eth.filter("pending")
+    transaction_filter = w3.bub.filter("pending")
 
     transaction_counter = 0
 
@@ -88,7 +88,7 @@ def test_transaction_filter_with_mining(w3):
 
 
 def test_transaction_filter_without_mining(w3):
-    transaction_filter = w3.eth.filter("pending")
+    transaction_filter = w3.bub.filter("pending")
     transaction_counter = 0
     while transaction_counter < 100:
         single_transaction(w3)
@@ -118,7 +118,7 @@ def test_event_filter_new_events_many_deployed_contracts(
             contract_address = deployed_contract_addresses[
                 random.randint(0, len(deployed_contract_addresses) - 1)
             ]
-            yield w3.eth.contract(
+            yield w3.bub.contract(
                 address=contract_address, abi=emitter_contract_factory.abi
             ).functions.logNoArgs(which=1).transact
 
@@ -133,7 +133,7 @@ def test_event_filter_new_events_many_deployed_contracts(
 
     expected_match_counter = 0
 
-    while w3.eth.block_number < 50:
+    while w3.bub.block_number < 50:
         is_match = bool(random.randint(0, 1))
         if is_match:
             expected_match_counter += 1
@@ -154,7 +154,7 @@ async def async_deploy_contracts(async_w3, contract, async_wait_for_transaction)
     for i in range(25):
         tx_hash = await contract.constructor().transact()
         await async_wait_for_transaction(async_w3, tx_hash)
-        tx = await async_w3.eth.get_transaction_receipt(tx_hash)
+        tx = await async_w3.bub.get_transaction_receipt(tx_hash)
 
         txs.append(tx["contractAddress"])
 
@@ -162,20 +162,20 @@ async def async_deploy_contracts(async_w3, contract, async_wait_for_transaction)
 
 
 async def async_pad_with_transactions(async_w3):
-    accounts = await async_w3.eth.accounts
+    accounts = await async_w3.bub.accounts
     for tx_count in range(random.randint(0, 10)):
         _from = accounts[random.randint(0, len(accounts) - 1)]
         _to = accounts[random.randint(0, len(accounts) - 1)]
         value = 50 + tx_count
-        await async_w3.eth.send_transaction({"from": _from, "to": _to, "value": value})
+        await async_w3.bub.send_transaction({"from": _from, "to": _to, "value": value})
 
 
 async def async_single_transaction(async_w3):
-    accounts = await async_w3.eth.accounts
+    accounts = await async_w3.bub.accounts
     _from = accounts[random.randint(0, len(accounts) - 1)]
     _to = accounts[random.randint(0, len(accounts) - 1)]
     value = 50
-    tx_hash = await async_w3.eth.send_transaction(
+    tx_hash = await async_w3.bub.send_transaction(
         {"from": _from, "to": _to, "value": value}
     )
     return tx_hash
@@ -203,8 +203,8 @@ async def test_async_event_filter_new_events(
 
     expected_match_counter = 0
 
-    eth_block_number = await async_w3.eth.block_number
-    while eth_block_number < 50:
+    bub_block_number = await async_w3.bub.block_number
+    while bub_block_number < 50:
         is_match = bool(random.randint(0, 1))
         if is_match:
             expected_match_counter += 1
@@ -214,7 +214,7 @@ async def test_async_event_filter_new_events(
             continue
         await non_matching_transact()
         await async_pad_with_transactions(async_w3)
-        eth_block_number = await async_w3.eth.block_number
+        bub_block_number = await async_w3.bub.block_number
 
     new_entries = await event_filter.get_new_entries()
     assert len(new_entries) == expected_match_counter
@@ -222,21 +222,21 @@ async def test_async_event_filter_new_events(
 
 @pytest.mark.asyncio
 async def test_async_block_filter(async_w3):
-    block_filter = await async_w3.eth.filter("latest")
+    block_filter = await async_w3.bub.filter("latest")
 
-    eth_block_number = await async_w3.eth.block_number
-    while eth_block_number < 50:
+    bub_block_number = await async_w3.bub.block_number
+    while bub_block_number < 50:
         await async_pad_with_transactions(async_w3)
-        eth_block_number = await async_w3.eth.block_number
+        bub_block_number = await async_w3.bub.block_number
 
     new_entries = await block_filter.get_new_entries()
-    eth_block_number = await async_w3.eth.block_number
-    assert len(new_entries) == eth_block_number
+    bub_block_number = await async_w3.bub.block_number
+    assert len(new_entries) == bub_block_number
 
 
 @pytest.mark.asyncio
 async def async_test_transaction_filter_with_mining(async_w3):
-    transaction_filter = await async_w3.eth.filter("pending")
+    transaction_filter = await async_w3.bub.filter("pending")
     transaction_counter = 0
     while transaction_counter < 100:
         await async_single_transaction(async_w3)
@@ -248,7 +248,7 @@ async def async_test_transaction_filter_with_mining(async_w3):
 
 @pytest.mark.asyncio
 async def test_async_transaction_filter_without_mining(async_w3):
-    transaction_filter = await async_w3.eth.filter("pending")
+    transaction_filter = await async_w3.bub.filter("pending")
     transaction_counter = 0
     while transaction_counter < 100:
         await async_single_transaction(async_w3)
@@ -278,7 +278,7 @@ async def test_async_event_filter_new_events_many_deployed_contracts(
             contract_address = deployed_contract_addresses[
                 random.randint(0, len(deployed_contract_addresses) - 1)
             ]
-            yield async_w3.eth.contract(
+            yield async_w3.bub.contract(
                 address=contract_address, abi=async_emitter_contract_factory.abi
             ).functions.logNoArgs(which=1).transact
 
@@ -295,8 +295,8 @@ async def test_async_event_filter_new_events_many_deployed_contracts(
 
     expected_match_counter = 0
 
-    eth_block_number = await async_w3.eth.block_number
-    while eth_block_number < 50:
+    bub_block_number = await async_w3.bub.block_number
+    while bub_block_number < 50:
         is_match = bool(random.randint(0, 1))
         if is_match:
             expected_match_counter += 1
@@ -305,7 +305,7 @@ async def test_async_event_filter_new_events_many_deployed_contracts(
             continue
         await non_matching_transact.__anext__()
         await async_pad_with_transactions(async_w3)
-        eth_block_number = await async_w3.eth.block_number
+        bub_block_number = await async_w3.bub.block_number
 
     new_entries = await event_filter.get_new_entries()
     assert len(new_entries) == expected_match_counter

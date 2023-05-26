@@ -4,7 +4,7 @@ from eth_utils.toolz import (
     dissoc,
 )
 
-from web3.exceptions import (
+from bubble.exceptions import (
     Web3ValidationError,
 )
 
@@ -106,7 +106,7 @@ def test_build_transaction_with_gas_price_strategy_set(
     def my_gas_price_strategy(w3, transaction_params):
         return 5
 
-    w3.eth.set_gas_price_strategy(my_gas_price_strategy)
+    w3.bub.set_gas_price_strategy(my_gas_price_strategy)
     txn = build_transaction(
         contract=math_contract, contract_function="incrementCounter"
     )
@@ -369,7 +369,7 @@ async def test_async_build_transaction_with_gas_price_strategy_set(
     def my_gas_price_strategy(async_w3, transaction_params):
         return 5
 
-    async_w3.eth.set_gas_price_strategy(my_gas_price_strategy)
+    async_w3.bub.set_gas_price_strategy(my_gas_price_strategy)
     txn = await async_build_transaction(
         contract=async_math_contract, contract_function="incrementCounter"
     )

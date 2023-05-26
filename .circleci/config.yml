@@ -1,12 +1,12 @@
 version: 2.1
 
 parameters:
-  geth_version:
-    # update default value when updating geth integration test fixture
+  bub_version:
+    # update default value when updating bub integration test fixture
     default: "v1.11.5"
     type: string
-  pygeth_version:
-    # update default value when updating geth integration test fixture
+  pybub_version:
+    # update default value when updating bub integration test fixture
     default: "3.12.0"
     type: string
   go_version:
@@ -38,7 +38,7 @@ common: &common
           - ~/.local
           - ./eggs
           - ~/.ethash
-          - ~/.py-geth
+          - ~/.py-bub
         key: cache-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
   resource_class: xlarge
 
@@ -58,8 +58,8 @@ docs_steps: &docs_steps
           python -m pip install --upgrade pip
           python -m pip install tox
     - run:
-        name: install web3
-        command: pip install -U web3
+        name: install bubble
+        command: pip install -U bubble
     - run:
         name: run tox
         command: python -m tox -r
@@ -70,11 +70,11 @@ docs_steps: &docs_steps
           - ~/.local
           - ./eggs
           - ~/.ethash
-          - ~/.py-geth
+          - ~/.py-bub
         key: cache-docs-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
   resource_class: xlarge
 
-geth_steps: &geth_steps
+bub_steps: &bub_steps
   working_directory: ~/repo
   resource_class: xlarge
   steps:
@@ -88,14 +88,14 @@ geth_steps: &geth_steps
           python -m pip install --upgrade pip
           python -m pip install tox
     - run:
-        name: build geth if missing
+        name: build bub if missing
         command: |
           mkdir -p $HOME/.ethash
-          pip install --user "py-geth>=<< pipeline.parameters.pygeth_version >>"
+          pip install --user "py-bub>=<< pipeline.parameters.pybub_version >>"
           export GOROOT=/usr/local/go
-          echo << pipeline.parameters.geth_version >>
-          export GETH_BINARY="$HOME/.py-geth/geth-<< pipeline.parameters.geth_version >>/bin/geth"
-          if [ ! -e "$GETH_BINARY" ]; then
+          echo << pipeline.parameters.bub_version >>
+          export BUB_BINARY="$HOME/.py-bub/bub-<< pipeline.parameters.bub_version >>/bin/bub"
+          if [ ! -e "$BUB_BINARY" ]; then
             curl -O https://storage.googleapis.com/golang/go<< pipeline.parameters.go_version >>.linux-amd64.tar.gz
             tar xvf go<< pipeline.parameters.go_version >>.linux-amd64.tar.gz
             sudo chown -R root:root ./go
@@ -103,11 +103,11 @@ geth_steps: &geth_steps
             sudo ln -s /usr/local/go/bin/go /usr/local/bin/go
             sudo apt-get update;
             sudo apt-get install -y build-essential;
-            python -m geth.install << pipeline.parameters.geth_version >>;
+            python -m bub.install << pipeline.parameters.bub_version >>;
           fi
-          sudo ln -s /home/circleci/.py-geth/geth-<< pipeline.parameters.geth_version >>/bin/geth /usr/local/bin/geth
-          geth version
-          geth makedag 0 $HOME/.ethash
+          sudo ln -s /home/circleci/.py-bub/bub-<< pipeline.parameters.bub_version >>/bin/bub /usr/local/bin/bub
+          bub version
+          bub makedag 0 $HOME/.ethash
     - run:
         name: run tox
         command: python -m tox -r
@@ -118,10 +118,10 @@ geth_steps: &geth_steps
           - ~/.local
           - ./eggs
           - ~/.ethash
-          - ~/.py-geth
+          - ~/.py-bub
         key: cache-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
 
-geth_custom_steps: &geth_custom_steps
+bub_custom_steps: &bub_custom_steps
   working_directory: ~/repo
   steps:
     - checkout
@@ -134,12 +134,12 @@ geth_custom_steps: &geth_custom_steps
           python -m pip install --upgrade pip
           python -m pip install tox
     - run:
-        name: use a pre-built geth binary
+        name: use a pre-built bub binary
         command: |
           mkdir -p $HOME/.ethash
           export GOROOT=/usr/local/go
-          export GETH_BINARY="./custom_geth"
-          echo 'export GETH_BINARY="./custom_geth"' >> $BASH_ENV
+          export BUB_BINARY="./custom_bub"
+          echo 'export BUB_BINARY="./custom_bub"' >> $BASH_ENV
           curl -O https://storage.googleapis.com/golang/go<< pipeline.parameters.go_version >>.linux-amd64.tar.gz
           tar xvf go<< pipeline.parameters.go_version >>.linux-amd64.tar.gz
           sudo chown -R root:root ./go
@@ -147,8 +147,8 @@ geth_custom_steps: &geth_custom_steps
           sudo ln -s /usr/local/go/bin/go /usr/local/bin/go
           sudo apt-get update;
           sudo apt-get install -y build-essential;
-          ./custom_geth version
-          ./custom_geth makedag 0 $HOME/.ethash
+          ./custom_bub version
+          ./custom_bub makedag 0 $HOME/.ethash
     - run:
         name: run tox
         command: python -m tox -r
@@ -264,49 +264,49 @@ jobs:
       WEB3_INFURA_PROJECT_ID: $WEB3_INFURA_PROJECT_ID
 
   py37-integration-goethereum-ipc:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.7
     environment:
       TOXENV: py37-integration-goethereum-ipc
 
   py37-integration-goethereum-ipc_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.7
     environment:
       TOXENV: py37-integration-goethereum-ipc_flaky
 
   py37-integration-goethereum-http:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.7
     environment:
       TOXENV: py37-integration-goethereum-http
 
   py37-integration-goethereum-http_async:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.7
     environment:
       TOXENV: py37-integration-goethereum-http_async
 
   py37-integration-goethereum-http_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.7
     environment:
       TOXENV: py37-integration-goethereum-http_flaky
 
   py37-integration-goethereum-ws:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.7
     environment:
       TOXENV: py37-integration-goethereum-ws
 
   py37-integration-goethereum-ws_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.7
     environment:
@@ -318,7 +318,7 @@ jobs:
       - image: cimg/python:3.7
     environment:
       TOXENV: py37-integration-ethtester
-      ETHEREUM_TESTER_CHAIN_BACKEND: eth_tester.backends.PyEVMBackend
+      ETHEREUM_TESTER_CHAIN_BACKEND: bub_tester.backends.PyEVMBackend
 
   py37-wheel-cli:
     <<: *common
@@ -361,49 +361,49 @@ jobs:
       WEB3_INFURA_PROJECT_ID: $WEB3_INFURA_PROJECT_ID
 
   py38-integration-goethereum-ipc:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.8
     environment:
       TOXENV: py38-integration-goethereum-ipc
 
   py38-integration-goethereum-ipc_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.8
     environment:
       TOXENV: py38-integration-goethereum-ipc_flaky
 
   py38-integration-goethereum-http:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.8
     environment:
       TOXENV: py38-integration-goethereum-http
 
   py38-integration-goethereum-http_async:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.8
     environment:
       TOXENV: py38-integration-goethereum-http_async
 
   py38-integration-goethereum-http_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.8
     environment:
       TOXENV: py38-integration-goethereum-http_flaky
 
   py38-integration-goethereum-ws:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.8
     environment:
       TOXENV: py38-integration-goethereum-ws
 
   py38-integration-goethereum-ws_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.8
     environment:
@@ -415,7 +415,7 @@ jobs:
       - image: cimg/python:3.8
     environment:
       TOXENV: py38-integration-ethtester
-      ETHEREUM_TESTER_CHAIN_BACKEND: eth_tester.backends.PyEVMBackend
+      ETHEREUM_TESTER_CHAIN_BACKEND: bub_tester.backends.PyEVMBackend
 
   py38-wheel-cli:
     <<: *common
@@ -457,49 +457,49 @@ jobs:
       WEB3_INFURA_PROJECT_ID: $WEB3_INFURA_PROJECT_ID
 
   py39-integration-goethereum-ipc:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.9
     environment:
       TOXENV: py39-integration-goethereum-ipc
 
   py39-integration-goethereum-ipc_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.9
     environment:
       TOXENV: py39-integration-goethereum-ipc_flaky
 
   py39-integration-goethereum-http:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.9
     environment:
       TOXENV: py39-integration-goethereum-http
 
   py39-integration-goethereum-http_async:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.9
     environment:
       TOXENV: py39-integration-goethereum-http_async
 
   py39-integration-goethereum-http_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.9
     environment:
       TOXENV: py39-integration-goethereum-http_flaky
 
   py39-integration-goethereum-ws:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.9
     environment:
       TOXENV: py39-integration-goethereum-ws
 
   py39-integration-goethereum-ws_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.9
     environment:
@@ -511,7 +511,7 @@ jobs:
       - image: cimg/python:3.9
     environment:
       TOXENV: py39-integration-ethtester
-      ETHEREUM_TESTER_CHAIN_BACKEND: eth_tester.backends.PyEVMBackend
+      ETHEREUM_TESTER_CHAIN_BACKEND: bub_tester.backends.PyEVMBackend
 
   py39-wheel-cli:
     <<: *common
@@ -553,49 +553,49 @@ jobs:
       WEB3_INFURA_PROJECT_ID: $WEB3_INFURA_PROJECT_ID
 
   py310-integration-goethereum-ipc:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.10
     environment:
       TOXENV: py310-integration-goethereum-ipc
 
   py310-integration-goethereum-ipc_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.10
     environment:
       TOXENV: py310-integration-goethereum-ipc_flaky
 
   py310-integration-goethereum-http:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.10
     environment:
       TOXENV: py310-integration-goethereum-http
 
   py310-integration-goethereum-http_async:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.10
     environment:
       TOXENV: py310-integration-goethereum-http_async
 
   py310-integration-goethereum-http_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.10
     environment:
       TOXENV: py310-integration-goethereum-http_flaky
 
   py310-integration-goethereum-ws:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.10
     environment:
       TOXENV: py310-integration-goethereum-ws
 
   py310-integration-goethereum-ws_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.10
     environment:
@@ -607,7 +607,7 @@ jobs:
       - image: cimg/python:3.10
     environment:
       TOXENV: py310-integration-ethtester
-      ETHEREUM_TESTER_CHAIN_BACKEND: eth_tester.backends.PyEVMBackend
+      ETHEREUM_TESTER_CHAIN_BACKEND: bub_tester.backends.PyEVMBackend
 
   py310-wheel-cli:
     <<: *common
@@ -655,49 +655,49 @@ jobs:
       WEB3_INFURA_PROJECT_ID: $WEB3_INFURA_PROJECT_ID
 
   py311-integration-goethereum-ipc:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.11
     environment:
       TOXENV: py311-integration-goethereum-ipc
 
   py311-integration-goethereum-ipc_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.11
     environment:
       TOXENV: py311-integration-goethereum-ipc_flaky
 
   py311-integration-goethereum-http:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.11
     environment:
       TOXENV: py311-integration-goethereum-http
 
   py311-integration-goethereum-http_async:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.11
     environment:
       TOXENV: py311-integration-goethereum-http_async
 
   py311-integration-goethereum-http_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.11
     environment:
       TOXENV: py311-integration-goethereum-http_flaky
 
   py311-integration-goethereum-ws:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.11
     environment:
       TOXENV: py311-integration-goethereum-ws
 
   py311-integration-goethereum-ws_flaky:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.11
     environment:
@@ -709,7 +709,7 @@ jobs:
       - image: cimg/python:3.11
     environment:
       TOXENV: py311-integration-ethtester
-      ETHEREUM_TESTER_CHAIN_BACKEND: eth_tester.backends.PyEVMBackend
+      ETHEREUM_TESTER_CHAIN_BACKEND: bub_tester.backends.PyEVMBackend
 
   py311-wheel-cli:
     <<: *common
@@ -719,7 +719,7 @@ jobs:
           TOXENV: py311-wheel-cli
 
   benchmark:
-    <<: *geth_steps
+    <<: *bub_steps
     docker:
       - image: cimg/python:3.10
     environment:

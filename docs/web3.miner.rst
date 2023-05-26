@@ -1,19 +1,19 @@
 Miner API
 =========
 
-.. py:module:: web3.geth.miner
+.. py:module:: web3.bub.miner
 
-The ``web3.geth.miner`` object exposes methods to interact with the RPC APIs under
-the ``miner_`` namespace that are supported by the Geth client.
+The ``web3.bub.miner`` object exposes methods to interact with the RPC APIs under
+the ``miner_`` namespace that are supported by the Bub client.
 
 
 Methods
 -------
 
-The following methods are available on the ``web3.geth.miner`` namespace.
+The following methods are available on the ``web3.bub.miner`` namespace.
 
 
-.. py:method:: GethMiner.make_dag(number)
+.. py:method:: NodeMiner.make_dag(number)
 
     * Delegates to ``miner_makeDag`` RPC Method
 
@@ -21,16 +21,16 @@ The following methods are available on the ``web3.geth.miner`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.miner.make_dag(10000)
+        >>> web3.bub.miner.make_dag(10000)
 
 
-.. py:method:: GethMiner.makeDAG(number)
+.. py:method:: NodeMiner.makeDAG(number)
 
    .. warning:: Deprecated: This method is deprecated in favor of
-      :meth:`~GethMiner.make_dag`
+      :meth:`~NodeMiner.make_dag`
 
 
-.. py:method:: GethMiner.set_extra(extra)
+.. py:method:: NodeMiner.set_extra(extra)
 
     * Delegates to ``miner_setExtra`` RPC Method
 
@@ -39,15 +39,15 @@ The following methods are available on the ``web3.geth.miner`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.miner.set_extra('abcdefghijklmnopqrstuvwxyzABCDEF')
+        >>> web3.bub.miner.set_extra('abcdefghijklmnopqrstuvwxyzABCDEF')
 
-.. py:method:: GethMiner.setExtra(extra)
+.. py:method:: NodeMiner.setExtra(extra)
 
    .. warning:: Deprecated: This method is deprecated in favor of
-      :meth:`~GethMiner.set_extra`
+      :meth:`~NodeMiner.set_extra`
 
 
-.. py:method:: GethMiner.set_gas_price(gas_price)
+.. py:method:: NodeMiner.set_gas_price(gas_price)
 
     * Delegates to ``miner_setGasPrice`` RPC Method
 
@@ -57,16 +57,16 @@ The following methods are available on the ``web3.geth.miner`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.miner.set_gas_price(19999999999)
+        >>> web3.bub.miner.set_gas_price(19999999999)
 
 
-.. py:method:: GethMiner.setGasPrice(gas_price)
+.. py:method:: NodeMiner.setGasPrice(gas_price)
 
    .. warning:: Deprecated: This method is deprecated in favor of
-      :meth:`~GethMiner.set_gas_price`
+      :meth:`~NodeMiner.set_gas_price`
 
 
-.. py:method:: GethMiner.start(num_threads)
+.. py:method:: NodeMiner.start(num_threads)
 
     * Delegates to ``miner_start`` RPC Method
 
@@ -74,10 +74,10 @@ The following methods are available on the ``web3.geth.miner`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.miner.start(2)
+        >>> web3.bub.miner.start(2)
 
 
-.. py:method:: GethMiner.stop()
+.. py:method:: NodeMiner.stop()
 
     * Delegates to ``miner_stop`` RPC Method
 
@@ -85,10 +85,10 @@ The following methods are available on the ``web3.geth.miner`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.miner.stop()
+        >>> web3.bub.miner.stop()
 
 
-.. py:method:: GethMiner.start_auto_dag()
+.. py:method:: NodeMiner.start_auto_dag()
 
     * Delegates to ``miner_startAutoDag`` RPC Method
 
@@ -96,15 +96,15 @@ The following methods are available on the ``web3.geth.miner`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.miner.start_auto_dag()
+        >>> web3.bub.miner.start_auto_dag()
 
-.. py:method:: GethMiner.startAutoDag()
+.. py:method:: NodeMiner.startAutoDag()
 
    .. warning:: Deprecated: This method is deprecated in favor of
-      :meth:`~GethMiner.start_auto_dag`
+      :meth:`~NodeMiner.start_auto_dag`
 
 
-.. py:method:: GethMiner.stop_auto_dag()
+.. py:method:: NodeMiner.stop_auto_dag()
 
     * Delegates to ``miner_stopAutoDag`` RPC Method
 
@@ -112,9 +112,9 @@ The following methods are available on the ``web3.geth.miner`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.miner.stop_auto_dag()
+        >>> web3.bub.miner.stop_auto_dag()
 
-.. py:method:: GethMiner.stopAutoDag()
+.. py:method:: NodeMiner.stopAutoDag()
 
    .. warning:: Deprecated: This method is deprecated in favor of
-      :meth:`~GethMiner.stop_auto_dag`
+      :meth:`~NodeMiner.stop_auto_dag`

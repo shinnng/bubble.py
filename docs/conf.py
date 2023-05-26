@@ -1,5 +1,5 @@
 #
-# web3.py documentation build configuration file, created by
+# bubble.py documentation build configuration file, created by
 # sphinx-quickstart on Thu Oct 16 20:43:24 2014.
 #
 # This file is execfile()d with the current directory set to its
@@ -53,7 +53,7 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "web3.py"
+project = "bubble.py"
 copyright = "2023, Ethereum Foundation"
 
 __version__ = setup_version
@@ -80,16 +80,16 @@ release = __version__
 # directories to ignore when looking for source files.
 exclude_patterns = [
     "_build",
-    "web3.rst",
+    "bubble.rst",
     "modules.rst",
-    "web3.auto.rst",
-    "web3.gas_strategies.rst",
-    "web3.middleware.rst",
-    "web3.providers.rst",
-    "web3.providers.eth_tester.rst",
-    "web3.scripts.*",
-    "web3.testing.rst",
-    "web3.tools.*",
+    "bubble.auto.rst",
+    "bubble.gas_strategies.rst",
+    "bubble.middleware.rst",
+    "bubble.providers.rst",
+    "bubble.providers.bub_tester.rst",
+    "bubble.scripts.*",
+    "bubble.testing.rst",
+    "bubble.tools.*",
 ]
 
 # The reST default role (used for this markup: `text`) to use for all
@@ -251,7 +251,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [("index", "web3", "web3.py Documentation", ["Piper Merriam"], 1)]
+man_pages = [("index", "bubble", "bubble.py Documentation", ["Piper Merriam"], 1)]
 
 # If true, show URL addresses after external links.
 # man_show_urls = False
@@ -265,10 +265,10 @@ man_pages = [("index", "web3", "web3.py Documentation", ["Piper Merriam"], 1)]
 texinfo_documents = [
     (
         "index",
-        "web3.py",
-        "web3.py Documentation",
+        "bubble.py",
+        "bubble.py Documentation",
         "Piper Merriam",
-        "web3.py",
+        "bubble.py",
         "Backend agnostic Ethereum client interactions.",
         "Miscellaneous",
     ),

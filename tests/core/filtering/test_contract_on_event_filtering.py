@@ -169,7 +169,7 @@ def test_on_sync_filter_with_event_name_and_non_indexed_argument(
 def test_filter_with_contract_address(
     w3, emitter, emitter_contract_event_ids, wait_for_transaction
 ):
-    event_filter = w3.eth.filter(filter_params={"address": emitter.address})
+    event_filter = w3.bub.filter(filter_params={"address": emitter.address})
     txn_hash = emitter.functions.logNoArgs(
         emitter_contract_event_ids.LogNoArguments
     ).transact()
@@ -415,7 +415,7 @@ async def test_on_async_filter_with_event_name_and_non_indexed_argument(
 async def test_async_filter_with_contract_address(
     async_w3, async_emitter, emitter_contract_event_ids, async_wait_for_transaction
 ):
-    event_filter = await async_w3.eth.filter(
+    event_filter = await async_w3.bub.filter(
         filter_params={"address": async_emitter.address}
     )
     txn_hash = await async_emitter.functions.logNoArgs(

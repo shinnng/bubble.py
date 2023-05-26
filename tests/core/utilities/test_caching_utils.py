@@ -5,7 +5,7 @@ from concurrent.futures import (
 import pytest
 import threading
 
-from web3._utils.async_caching import (
+from bubble._utils.async_caching import (
     async_lock,
 )
 

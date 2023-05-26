@@ -4,7 +4,7 @@ import time
 
 import websockets
 
-from web3._utils.threads import (
+from bubble._utils.threads import (
     Timeout,
 )
 
@@ -53,22 +53,22 @@ async def wait_for_ws(endpoint_uri, timeout=10):
 
 async def _async_wait_for_block_fixture_logic(async_w3, block_number=1, timeout=None):
     if not timeout:
-        current_block_number = await async_w3.eth.block_number  # type:ignore
+        current_block_number = await async_w3.bub.block_number  # type:ignore
         timeout = (block_number - current_block_number) * 3
     poll_delay_counter = PollDelayCounter()
     with Timeout(timeout) as timeout:
-        eth_block_number = await async_w3.eth.block_number
-        while eth_block_number < block_number:
+        bub_block_number = await async_w3.bub.block_number
+        while bub_block_number < block_number:
             await async_w3.manager.coro_request("evm_mine", [])
             await timeout.async_sleep(poll_delay_counter())
-            eth_block_number = await async_w3.eth.block_number
+            bub_block_number = await async_w3.bub.block_number
 
 
 async def _async_wait_for_transaction_fixture_logic(async_w3, txn_hash, timeout=120):
     poll_delay_counter = PollDelayCounter()
     with Timeout(timeout) as timeout:
         while True:
-            txn_receipt = await async_w3.eth.get_transaction_receipt(txn_hash)
+            txn_receipt = await async_w3.bub.get_transaction_receipt(txn_hash)
             if txn_receipt is not None:
                 break
             asyncio.sleep(poll_delay_counter())

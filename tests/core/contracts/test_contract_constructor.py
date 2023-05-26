@@ -4,7 +4,7 @@ from eth_utils import (
     decode_hex,
 )
 
-from web3._utils.contract_sources.contract_data.constructor_contracts import (
+from bubble._utils.contract_sources.contract_data.constructor_contracts import (
     CONSTRUCTOR_WITH_ADDRESS_ARGUMENT_CONTRACT_RUNTIME,
     CONSTRUCTOR_WITH_ARGUMENTS_CONTRACT_RUNTIME,
     SIMPLE_CONSTRUCTOR_CONTRACT_RUNTIME,
@@ -29,7 +29,7 @@ def test_contract_constructor_gas_estimate_no_constructor(w3, math_contract_fact
     gas_estimate = math_contract_factory.constructor().estimate_gas()
 
     deploy_txn = math_contract_factory.constructor().transact()
-    txn_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -41,7 +41,7 @@ def test_contract_constructor_gas_estimate_with_block_id(w3, math_contract_facto
         block_identifier=block_identifier
     )
     deploy_txn = math_contract_factory.constructor().transact()
-    txn_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -53,7 +53,7 @@ def test_contract_constructor_gas_estimate_without_arguments(
     gas_estimate = simple_constructor_contract_factory.constructor().estimate_gas()
 
     deploy_txn = simple_constructor_contract_factory.constructor().transact()
-    txn_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -81,7 +81,7 @@ def test_contract_constructor_gas_estimate_with_arguments_non_strict(
     deploy_txn = non_strict_contract_with_constructor_args_factory.constructor(
         *constructor_args, **constructor_kwargs
     ).transact()
-    txn_receipt = w3_non_strict_abi.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3_non_strict_abi.bub.wait_for_transaction_receipt(deploy_txn)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -97,7 +97,7 @@ def test_contract_constructor_gas_estimate_with_address_argument(
     deploy_txn = contract_with_constructor_address_factory.constructor(
         address_conversion_func("0x16D9983245De15E7A9A73bC586E01FF6E08dE737")
     ).transact()
-    txn_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -108,13 +108,13 @@ def test_contract_constructor_transact_no_constructor(
 ):
     deploy_txn = math_contract_factory.constructor().transact()
 
-    txn_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = address_conversion_func(txn_receipt["contractAddress"])
 
-    blockchain_code = w3.eth.get_code(contract_address)
+    blockchain_code = w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(math_contract_runtime)
 
 
@@ -125,13 +125,13 @@ def test_contract_constructor_transact_without_arguments(
 ):
     deploy_txn = simple_constructor_contract_factory.constructor().transact()
 
-    txn_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = address_conversion_func(txn_receipt["contractAddress"])
 
-    blockchain_code = w3.eth.get_code(contract_address)
+    blockchain_code = w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(SIMPLE_CONSTRUCTOR_CONTRACT_RUNTIME)
 
 
@@ -157,13 +157,13 @@ def test_contract_constructor_transact_with_arguments_non_strict(
         *constructor_args, **constructor_kwargs
     ).transact()
 
-    txn_receipt = w3_non_strict_abi.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3_non_strict_abi.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = address_conversion_func(txn_receipt["contractAddress"])
 
-    blockchain_code = w3_non_strict_abi.eth.get_code(contract_address)
+    blockchain_code = w3_non_strict_abi.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(CONSTRUCTOR_WITH_ARGUMENTS_CONTRACT_RUNTIME)
     assert (
         expected_a
@@ -187,11 +187,11 @@ def test_contract_constructor_transact_with_address_argument(
     deploy_txn = contract_with_constructor_address_factory.constructor(
         TEST_ADDRESS
     ).transact()
-    txn_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
     assert txn_receipt["contractAddress"]
     contract_address = address_conversion_func(txn_receipt["contractAddress"])
-    blockchain_code = w3.eth.get_code(contract_address)
+    blockchain_code = w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(
         CONSTRUCTOR_WITH_ADDRESS_ARGUMENT_CONTRACT_RUNTIME
     )
@@ -212,15 +212,15 @@ def test_contract_constructor_build_transaction_no_constructor(
     w3, math_contract_factory, address_conversion_func
 ):
     txn_hash = math_contract_factory.constructor().transact(
-        {"from": address_conversion_func(w3.eth.accounts[0])}
+        {"from": address_conversion_func(w3.bub.accounts[0])}
     )
-    txn = w3.eth.get_transaction(txn_hash)
-    nonce = w3.eth.get_transaction_count(w3.eth.coinbase)
+    txn = w3.bub.get_transaction(txn_hash)
+    nonce = w3.bub.get_transaction_count(w3.bub.coinbase)
     unsent_txn = math_contract_factory.constructor().build_transaction({"nonce": nonce})
     assert txn["data"] == unsent_txn["data"]
 
-    new_txn_hash = w3.eth.send_transaction(unsent_txn)
-    new_txn = w3.eth.get_transaction(new_txn_hash)
+    new_txn_hash = w3.bub.send_transaction(unsent_txn)
+    new_txn = w3.bub.get_transaction(new_txn_hash)
     assert new_txn["data"] == unsent_txn["data"]
     assert new_txn["nonce"] == nonce
 
@@ -229,15 +229,15 @@ def test_contract_constructor_build_transaction_without_arguments(
     w3, math_contract_factory, address_conversion_func
 ):
     txn_hash = math_contract_factory.constructor().transact(
-        {"from": address_conversion_func(w3.eth.accounts[0])}
+        {"from": address_conversion_func(w3.bub.accounts[0])}
     )
-    txn = w3.eth.get_transaction(txn_hash)
-    nonce = w3.eth.get_transaction_count(w3.eth.coinbase)
+    txn = w3.bub.get_transaction(txn_hash)
+    nonce = w3.bub.get_transaction_count(w3.bub.coinbase)
     unsent_txn = math_contract_factory.constructor().build_transaction({"nonce": nonce})
     assert txn["data"] == unsent_txn["data"]
 
-    new_txn_hash = w3.eth.send_transaction(unsent_txn)
-    new_txn = w3.eth.get_transaction(new_txn_hash)
+    new_txn_hash = w3.bub.send_transaction(unsent_txn)
+    new_txn = w3.bub.get_transaction(new_txn_hash)
     assert new_txn["data"] == unsent_txn["data"]
     assert new_txn["nonce"] == nonce
 
@@ -260,16 +260,16 @@ def test_contract_constructor_build_transaction_with_arguments(
 ):
     txn_hash = non_strict_contract_with_constructor_args_factory.constructor(
         *constructor_args, **constructor_kwargs
-    ).transact({"from": address_conversion_func(w3_non_strict_abi.eth.accounts[0])})
-    txn = w3_non_strict_abi.eth.get_transaction(txn_hash)
-    nonce = w3_non_strict_abi.eth.get_transaction_count(w3_non_strict_abi.eth.coinbase)
+    ).transact({"from": address_conversion_func(w3_non_strict_abi.bub.accounts[0])})
+    txn = w3_non_strict_abi.bub.get_transaction(txn_hash)
+    nonce = w3_non_strict_abi.bub.get_transaction_count(w3_non_strict_abi.bub.coinbase)
     unsent_txn = non_strict_contract_with_constructor_args_factory.constructor(
         *constructor_args, **constructor_kwargs
     ).build_transaction({"nonce": nonce})
     assert txn["data"] == unsent_txn["data"]
 
-    new_txn_hash = w3_non_strict_abi.eth.send_transaction(unsent_txn)
-    new_txn = w3_non_strict_abi.eth.get_transaction(new_txn_hash)
+    new_txn_hash = w3_non_strict_abi.bub.send_transaction(unsent_txn)
+    new_txn = w3_non_strict_abi.bub.get_transaction(new_txn_hash)
     assert new_txn["data"] == unsent_txn["data"]
     assert new_txn["nonce"] == nonce
 
@@ -290,7 +290,7 @@ async def test_async_contract_constructor_gas_estimate_no_constructor(
     gas_estimate = await async_math_contract_factory.constructor().estimate_gas()
 
     deploy_txn = await async_math_contract_factory.constructor().transact()
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -305,7 +305,7 @@ async def test_async_contract_constructor_gas_estimate_with_block_id(
         block_identifier=block_identifier
     )
     deploy_txn = await async_math_contract_factory.constructor().transact()
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -322,7 +322,7 @@ async def test_async_contract_constructor_gas_estimate_without_arguments(
     deploy_txn = (
         await async_simple_constructor_contract_factory.constructor().transact()
     )
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -355,7 +355,7 @@ async def test_async_contract_constructor_gas_estimate_with_arguments_non_strict
             *constructor_args, **constructor_kwargs
         ).transact()
     )
-    txn_receipt = await async_w3_non_strict_abi.eth.wait_for_transaction_receipt(
+    txn_receipt = await async_w3_non_strict_abi.bub.wait_for_transaction_receipt(
         deploy_txn
     )
     gas_used = txn_receipt.get("gasUsed")
@@ -378,7 +378,7 @@ async def test_async_contract_constructor_with_address_argument_gas_estimate(
     deploy_txn = await async_constructor_with_address_arg_contract_factory.constructor(
         address_conversion_func("0x16D9983245De15E7A9A73bC586E01FF6E08dE737")
     ).transact()
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
     gas_used = txn_receipt.get("gasUsed")
 
     assert abs(gas_estimate - gas_used) < 21000
@@ -393,13 +393,13 @@ async def test_async_contract_constructor_transact_no_constructor(
 ):
     deploy_txn = await async_math_contract_factory.constructor().transact()
 
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = address_conversion_func(txn_receipt["contractAddress"])
 
-    blockchain_code = await async_w3.eth.get_code(contract_address)
+    blockchain_code = await async_w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(math_contract_runtime)
 
 
@@ -413,13 +413,13 @@ async def test_async_contract_constructor_transact_without_arguments(
         await async_simple_constructor_contract_factory.constructor().transact()
     )
 
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = address_conversion_func(txn_receipt["contractAddress"])
 
-    blockchain_code = await async_w3.eth.get_code(contract_address)
+    blockchain_code = await async_w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(SIMPLE_CONSTRUCTOR_CONTRACT_RUNTIME)
 
 
@@ -448,7 +448,7 @@ async def test_async_contract_constructor_transact_with_arguments_non_strict(
         ).transact()
     )
 
-    txn_receipt = await async_w3_non_strict_abi.eth.wait_for_transaction_receipt(
+    txn_receipt = await async_w3_non_strict_abi.bub.wait_for_transaction_receipt(
         deploy_txn
     )
     assert txn_receipt is not None
@@ -456,7 +456,7 @@ async def test_async_contract_constructor_transact_with_arguments_non_strict(
     assert txn_receipt["contractAddress"]
     contract_address = address_conversion_func(txn_receipt["contractAddress"])
 
-    blockchain_code = await async_w3_non_strict_abi.eth.get_code(contract_address)
+    blockchain_code = await async_w3_non_strict_abi.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(CONSTRUCTOR_WITH_ARGUMENTS_CONTRACT_RUNTIME)
     assert (
         expected_a
@@ -485,11 +485,11 @@ async def test_async_contract_constructor_transact_with_address_arguments(
     deploy_txn = await async_constructor_with_address_arg_contract_factory.constructor(
         TEST_ADDRESS
     ).transact()
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
     assert txn_receipt["contractAddress"]
     contract_address = address_conversion_func(txn_receipt["contractAddress"])
-    blockchain_code = await async_w3.eth.get_code(contract_address)
+    blockchain_code = await async_w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(
         CONSTRUCTOR_WITH_ADDRESS_ARGUMENT_CONTRACT_RUNTIME
     )
@@ -515,20 +515,20 @@ async def test_async_contract_constructor_build_transaction_to_field_error(
 async def test_async_contract_constructor_build_transaction_no_constructor(
     async_w3, async_math_contract_factory, address_conversion_func
 ):
-    async_w3_accounts = await async_w3.eth.accounts
+    async_w3_accounts = await async_w3.bub.accounts
     txn_hash = await async_math_contract_factory.constructor().transact(
         {"from": address_conversion_func(async_w3_accounts[0])}
     )
-    txn = await async_w3.eth.get_transaction(txn_hash)
-    async_w3_coinbase = await async_w3.eth.coinbase
-    nonce = await async_w3.eth.get_transaction_count(async_w3_coinbase)
+    txn = await async_w3.bub.get_transaction(txn_hash)
+    async_w3_coinbase = await async_w3.bub.coinbase
+    nonce = await async_w3.bub.get_transaction_count(async_w3_coinbase)
     unsent_txn = await async_math_contract_factory.constructor().build_transaction(
         {"nonce": nonce}
     )
     assert txn["data"] == unsent_txn["data"]
 
-    new_txn_hash = await async_w3.eth.send_transaction(unsent_txn)
-    new_txn = await async_w3.eth.get_transaction(new_txn_hash)
+    new_txn_hash = await async_w3.bub.send_transaction(unsent_txn)
+    new_txn = await async_w3.bub.get_transaction(new_txn_hash)
     assert new_txn["data"] == unsent_txn["data"]
     assert new_txn["nonce"] == nonce
 
@@ -537,20 +537,20 @@ async def test_async_contract_constructor_build_transaction_no_constructor(
 async def test_async_contract_constructor_build_transaction_without_arguments(
     async_w3, async_math_contract_factory, address_conversion_func
 ):
-    async_w3_accounts = await async_w3.eth.accounts
+    async_w3_accounts = await async_w3.bub.accounts
     txn_hash = await async_math_contract_factory.constructor().transact(
         {"from": address_conversion_func(async_w3_accounts[0])}
     )
-    txn = await async_w3.eth.get_transaction(txn_hash)
-    async_w3_coinbase = await async_w3.eth.coinbase
-    nonce = await async_w3.eth.get_transaction_count(async_w3_coinbase)
+    txn = await async_w3.bub.get_transaction(txn_hash)
+    async_w3_coinbase = await async_w3.bub.coinbase
+    nonce = await async_w3.bub.get_transaction_count(async_w3_coinbase)
     unsent_txn = await async_math_contract_factory.constructor().build_transaction(
         {"nonce": nonce}
     )
     assert txn["data"] == unsent_txn["data"]
 
-    new_txn_hash = await async_w3.eth.send_transaction(unsent_txn)
-    new_txn = await async_w3.eth.get_transaction(new_txn_hash)
+    new_txn_hash = await async_w3.bub.send_transaction(unsent_txn)
+    new_txn = await async_w3.bub.get_transaction(new_txn_hash)
     assert new_txn["data"] == unsent_txn["data"]
     assert new_txn["nonce"] == nonce
 
@@ -572,15 +572,15 @@ async def test_async_contract_constructor_build_transaction_with_arguments(
     constructor_kwargs,
     address_conversion_func,
 ):
-    async_w3_accounts = await async_w3_non_strict_abi.eth.accounts
+    async_w3_accounts = await async_w3_non_strict_abi.bub.accounts
     txn_hash = (
         await async_non_strict_constructor_with_args_contract_factory.constructor(
             *constructor_args, **constructor_kwargs
         ).transact({"from": address_conversion_func(async_w3_accounts[0])})
     )
-    txn = await async_w3_non_strict_abi.eth.get_transaction(txn_hash)
-    async_w3_coinbase = await async_w3_non_strict_abi.eth.coinbase
-    nonce = await async_w3_non_strict_abi.eth.get_transaction_count(async_w3_coinbase)
+    txn = await async_w3_non_strict_abi.bub.get_transaction(txn_hash)
+    async_w3_coinbase = await async_w3_non_strict_abi.bub.coinbase
+    nonce = await async_w3_non_strict_abi.bub.get_transaction_count(async_w3_coinbase)
     unsent_txn = (
         await async_non_strict_constructor_with_args_contract_factory.constructor(
             *constructor_args, **constructor_kwargs
@@ -588,7 +588,7 @@ async def test_async_contract_constructor_build_transaction_with_arguments(
     )
     assert txn["data"] == unsent_txn["data"]
 
-    new_txn_hash = await async_w3_non_strict_abi.eth.send_transaction(unsent_txn)
-    new_txn = await async_w3_non_strict_abi.eth.get_transaction(new_txn_hash)
+    new_txn_hash = await async_w3_non_strict_abi.bub.send_transaction(unsent_txn)
+    new_txn = await async_w3_non_strict_abi.bub.get_transaction(new_txn_hash)
     assert new_txn["data"] == unsent_txn["data"]
     assert new_txn["nonce"] == nonce

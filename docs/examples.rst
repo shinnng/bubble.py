@@ -11,13 +11,13 @@ Looking up blocks
 -----------------
 
 Blocks can be looked up by either their number or hash using the
-``web3.eth.get_block`` API.  Block hashes should be in their hexadecimal
+``web3.bub.get_block`` API.  Block hashes should be in their hexadecimal
 representation.  Block numbers
 
 .. code-block:: python
 
     # get a block by number
-    >>> web3.eth.get_block(12345)
+    >>> web3.bub.get_block(12345)
     {
         'author': '0xad5C1768e5974C231b2148169da064e61910f31a',
         'difficulty': 735512610763,
@@ -45,7 +45,7 @@ representation.  Block numbers
     }
 
     # get a block by it's hash
-    >>> web3.eth.get_block('0x767c2bfb3bdee3f78676c1285cd757bcd5d8c272cef2eb30d9733800a78c0b6d')
+    >>> web3.bub.get_block('0x767c2bfb3bdee3f78676c1285cd757bcd5d8c272cef2eb30d9733800a78c0b6d')
     {...}
 
 
@@ -53,33 +53,33 @@ Getting the latest block
 ------------------------
 
 You can also retrieve the latest block using the string ``'latest'`` in the
-``web3.eth.get_block`` API.
+``web3.bub.get_block`` API.
 
 .. code-block:: python
 
-    >>> web3.eth.get_block('latest')
+    >>> web3.bub.get_block('latest')
     {...}
 
 
 If you want to know the latest block number you can use the
-``web3.eth.block_number`` property.
+``web3.bub.block_number`` property.
 
 .. code-block:: python
 
-    >>> web3.eth.block_number
+    >>> web3.bub.block_number
     4194803
 
 
 Checking the balance of an account
 ----------------------------------
 
-To find the amount of ether owned by an account, use the :meth:`~web3.eth.Eth.get_balance` method.
+To find the amount of ether owned by an account, use the :meth:`~web3.bub.Bub.get_balance` method.
 At the time of writing, the account with the `most ether <https://etherscan.io/accounts/1>`_
 has a public address of 0x742d35Cc6634C0532925a3b844Bc454e4438f44e.
 
 .. code-block:: python
 
-   >>> web3.eth.get_balance('0x742d35Cc6634C0532925a3b844Bc454e4438f44e')
+   >>> web3.bub.get_balance('0x742d35Cc6634C0532925a3b844Bc454e4438f44e')
    3841357360894980500000001
 
 Note that this number is not denominated in ether, but instead in the smallest unit of value in
@@ -136,7 +136,7 @@ Web3 can help you convert between denominations.  The following denominations ar
 +--------------+---------------------------------+
 | mether       | 1000000000000000000000000       |
 +--------------+---------------------------------+
-| gether       | 1000000000000000000000000000    |
+| buber       | 1000000000000000000000000000    |
 +--------------+---------------------------------+
 | tether       | 1000000000000000000000000000000 |
 +--------------+---------------------------------+
@@ -178,8 +178,8 @@ Sending transactions
 
 There are a few options for sending transactions:
 
-- :meth:`~web3.eth.Eth.send_transaction`
-- :meth:`~web3.eth.Eth.send_raw_transaction`
+- :meth:`~web3.bub.Bub.send_transaction`
+- :meth:`~web3.bub.Bub.send_raw_transaction`
 - Calling :meth:`~web3.contract.ContractFunction.transact` on a contract function
 - Utilizing :meth:`~web3.middleware.construct_sign_and_send_raw_middleware`
 
@@ -189,11 +189,11 @@ For more context, see the :doc:`transactions` Guide.
 Looking up transactions
 -----------------------
 
-You can look up transactions using the ``web3.eth.get_transaction`` function.
+You can look up transactions using the ``web3.bub.get_transaction`` function.
 
 .. code-block:: python
 
-    >>> web3.eth.get_transaction('0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060')
+    >>> web3.bub.get_transaction('0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060')
     {
         'blockHash': '0x4e3a3754410177e6937ef1f84bba68ea139e8d1a2258c5f85db9f1cd715a1bdd',
         'blockNumber': 46147,
@@ -226,12 +226,12 @@ throw :class:`web3.exceptions.TransactionNotFound`.
 Looking up receipts
 -------------------
 
-Transaction receipts can be retrieved using the ``web3.eth.get_transaction_receipt`` API.
+Transaction receipts can be retrieved using the ``web3.bub.get_transaction_receipt`` API.
 
 
 .. code-block:: python
 
-    >>> web3.eth.get_transaction_receipt('0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060')
+    >>> web3.bub.get_transaction_receipt('0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060')
     {
         'blockHash': '0x4e3a3754410177e6937ef1f84bba68ea139e8d1a2258c5f85db9f1cd715a1bdd',
         'blockNumber': 46147,
@@ -266,7 +266,7 @@ instance, you can read data and execute transactions.
     # Configure w3, e.g., w3 = Web3(...)
     address = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F988'
     abi = '[{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"address","name":"minter_","type":"address"},...'
-    contract_instance = w3.eth.contract(address=address, abi=abi)
+    contract_instance = w3.bub.contract(address=address, abi=abi)
 
     # read state:
     contract_instance.functions.storedValue().call()
@@ -312,7 +312,7 @@ The following example demonstrates a few things:
     import time
     import pprint
 
-    from web3.providers.eth_tester import EthereumTesterProvider
+    from web3.providers.bub_tester import EthereumTesterProvider
     from web3 import Web3
     from eth_tester import PyEVMBackend
     from solcx import compile_source
@@ -325,11 +325,11 @@ The following example demonstrates a few things:
 
 
     def deploy_contract(w3, contract_interface):
-        tx_hash = w3.eth.contract(
+        tx_hash = w3.bub.contract(
             abi=contract_interface['abi'],
             bytecode=contract_interface['bin']).constructor().transact()
 
-        address = w3.eth.get_transaction_receipt(tx_hash)['contractAddress']
+        address = w3.bub.get_transaction_receipt(tx_hash)['contractAddress']
         return address
 
 
@@ -343,7 +343,7 @@ The following example demonstrates a few things:
     address = deploy_contract(w3, contract_interface)
     print(f'Deployed {contract_id} to: {address}\n')
 
-    store_var_contract = w3.eth.contract(address=address, abi=contract_interface["abi"])
+    store_var_contract = w3.bub.contract(address=address, abi=contract_interface["abi"])
 
     gas_estimate = store_var_contract.functions.setVar(255).estimate_gas()
     print(f'Gas estimate to transact with setVar: {gas_estimate}')
@@ -351,7 +351,7 @@ The following example demonstrates a few things:
     if gas_estimate < 100000:
          print("Sending transaction to setVar(255)\n")
          tx_hash = store_var_contract.functions.setVar(255).transact()
-         receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+         receipt = w3.bub.wait_for_transaction_receipt(tx_hash)
          print("Transaction receipt mined:")
          pprint.pprint(dict(receipt))
          print("\nWas transaction successful?")
@@ -474,16 +474,16 @@ contract which conforms to this standard.
     w3 = Web3(Web3.EthereumTesterProvider())
     bytecode = '6060604052341561000c57fe5b604051602080610acb833981016040528080519060200190919050505b620f42408114151561003b5760006000fd5b670de0b6b3a76400008102600281905550600254600060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505b505b610a27806100a46000396000f30060606040523615610097576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806306fdde0314610099578063095ea7b31461013257806318160ddd1461018957806323b872dd146101af578063313ce5671461022557806370a082311461025157806395d89b411461029b578063a9059cbb14610334578063dd62ed3e1461038b575bfe5b34156100a157fe5b6100a96103f4565b60405180806020018281038252838181518152602001915080519060200190808383600083146100f8575b8051825260208311156100f8576020820191506020810190506020830392506100d4565b505050905090810190601f1680156101245780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b341561013a57fe5b61016f600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803590602001909190505061042e565b604051808215151515815260200191505060405180910390f35b341561019157fe5b610199610521565b6040518082815260200191505060405180910390f35b34156101b757fe5b61020b600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff16906020019091908035906020019091905050610527565b604051808215151515815260200191505060405180910390f35b341561022d57fe5b610235610791565b604051808260ff1660ff16815260200191505060405180910390f35b341561025957fe5b610285600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610796565b6040518082815260200191505060405180910390f35b34156102a357fe5b6102ab6107e0565b60405180806020018281038252838181518152602001915080519060200190808383600083146102fa575b8051825260208311156102fa576020820191506020810190506020830392506102d6565b505050905090810190601f1680156103265780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b341561033c57fe5b610371600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803590602001909190505061081a565b604051808215151515815260200191505060405180910390f35b341561039357fe5b6103de600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610973565b6040518082815260200191505060405180910390f35b604060405190810160405280600981526020017f54657374546f6b656e000000000000000000000000000000000000000000000081525081565b600081600160003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055508273ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925846040518082815260200191505060405180910390a3600190505b92915050565b60025481565b600081600060008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205410806105f1575081600160008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002054105b156105fc5760006000fd5b81600060008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254019250508190555081600060008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254039250508190555081600160008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600082825403925050819055508273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef846040518082815260200191505060405180910390a3600190505b9392505050565b601281565b6000600060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205490505b919050565b604060405190810160405280600481526020017f544553540000000000000000000000000000000000000000000000000000000081525081565b600081600060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205410156108695760006000fd5b81600060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254039250508190555081600060008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600082825401925050819055508273ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef846040518082815260200191505060405180910390a3600190505b92915050565b6000600160008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205490505b929150505600a165627a7a723058205071371ee2a4a1be3c96e77d939cdc26161a256fdd638efc08bd33dfc65d3b850029'
     ABI = '[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function","stateMutability":"view"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function","stateMutability":"nonpayable"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function","stateMutability":"view"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function","stateMutability":"nonpayable"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function","stateMutability":"view"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function","stateMutability":"view"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function","stateMutability":"view"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function","stateMutability":"nonpayable"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function","stateMutability":"view"},{"inputs":[{"name":"_totalSupply","type":"uint256"}],"payable":false,"type":"constructor","stateMutability":"nonpayable"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"}]'
-    factory = w3.eth.contract(abi=ABI, bytecode=bytecode)
-    alice, bob = w3.eth.accounts[0], w3.eth.accounts[1]
+    factory = w3.bub.contract(abi=ABI, bytecode=bytecode)
+    alice, bob = w3.bub.accounts[0], w3.bub.accounts[1]
     assert alice == '0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf', alice
     assert bob == '0x2B5AD5c4795c026514f8317c7a215E218DcCD6cF', bob
     tx_hash = factory.constructor(1000000).transact({'from': alice, 'gas': 899000, 'gasPrice': Web3.to_wei(1, 'gwei')})
     assert tx_hash == HexBytes('0x49e3da72a95e4074a9eaea7b438c73ca154627d317e58abeae914e3769a15044'), tx_hash
-    txn_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(tx_hash)
     assert txn_receipt['contractAddress'] == '0xF2E246BB76DF876Cef8b38ae84130F4F55De395b', txn_receipt['contractAddress']
     contract_address = txn_receipt['contractAddress']
-    contract = w3.eth.contract(contract_address, abi=ABI)
+    contract = w3.bub.contract(contract_address, abi=ABI)
     total_supply = contract.functions.totalSupply().call()
     decimals = 10 ** 18
     assert total_supply == 1000000 * decimals, total_supply
@@ -505,7 +505,7 @@ contract and the ``ERC20`` ABI.
 
 .. doctest::
 
-    >>> contract = w3.eth.contract(contract_address, abi=ABI)
+    >>> contract = w3.bub.contract(contract_address, abi=ABI)
     >>> contract.address
     '0xF2E246BB76DF876Cef8b38ae84130F4F55De395b'
 
@@ -563,7 +563,7 @@ Next we can transfer some tokens from ``alice`` to ``bob`` using the contract's
 .. doctest::
 
     >>> tx_hash = contract.functions.transfer(bob, 100).transact({'from': alice})
-    >>> tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    >>> tx_receipt = w3.bub.wait_for_transaction_receipt(tx_hash)
     >>> contract.functions.balanceOf(alice).call()
     999999999999999999999900
     >>> contract.functions.balanceOf(bob).call()
@@ -582,7 +582,7 @@ spend using the ``allowance`` function.
     >>> contract.functions.allowance(alice, bob).call()
     0
     >>> tx_hash = contract.functions.approve(bob, 200).transact({'from': alice})
-    >>> tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    >>> tx_receipt = w3.bub.wait_for_transaction_receipt(tx_hash)
     >>> contract.functions.allowance(alice, bob).call()
     200
 
@@ -600,7 +600,7 @@ When someone has an allowance they can transfer those tokens using the
     >>> contract.functions.balanceOf(bob).call()
     100
     >>> tx_hash = contract.functions.transferFrom(alice, bob, 75).transact({'from': bob})
-    >>> tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    >>> tx_receipt = w3.bub.wait_for_transaction_receipt(tx_hash)
     >>> contract.functions.allowance(alice, bob).call()
     125
     >>> contract.functions.balanceOf(bob).call()
@@ -634,10 +634,10 @@ appropriately in the following way:
 
     w3 = Web3(WebsocketProvider(...))
 
-    myContract = w3.eth.contract(address=...)
+    myContract = w3.bub.contract(address=...)
     myData = b'data for offchain lookup function call'
 
-    # preflight with an `eth_call` and handle the exception
+    # preflight with an `bub_call` and handle the exception
     try:
         myContract.functions.revertsWithOffchainLookup(myData).call(ccip_read_enabled=False)
     except OffchainLookup as ocl:
@@ -645,8 +645,8 @@ appropriately in the following way:
         data_for_callback_function = handle_offchain_lookup(ocl.payload)
         tx['data'] = data_for_callback_function
 
-        # send the built transaction with `eth_sendTransaction` or sign and send with `eth_sendRawTransaction`
-        tx_hash = w3.eth.send_transaction(tx)
+        # send the built transaction with `bub_sendTransaction` or sign and send with `bub_sendRawTransaction`
+        tx_hash = w3.bub.send_transaction(tx)
 
 Contract Unit Tests in Python
 -----------------------------
@@ -688,20 +688,20 @@ Inject the middleware into the middleware onion
 
 .. code-block:: python
 
-    from web3.middleware import geth_poa_middleware
-    w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+    from web3.middleware import node_poa_middleware
+    w3.middleware_onion.inject(node_poa_middleware, layer=0)
 
 Just remember that you have to sign all transactions locally, as infura does not handle any keys from your wallet ( refer to `this`_  )
 
 
-..  _this: https://web3py.readthedocs.io/en/stable/web3.eth.account.html#local-vs-hosted-nodes
+..  _this: https://web3py.readthedocs.io/en/stable/web3.bub.account.html#local-vs-hosted-nodes
 
 .. code-block:: python
 
     transaction = contract.functions.function_Name(params).build_transaction()
     transaction.update({ 'gas' : appropriate_gas_amount })
-    transaction.update({ 'nonce' : w3.eth.get_transaction_count('Your_Wallet_Address') })
-    signed_tx = w3.eth.account.sign_transaction(transaction, private_key)
+    transaction.update({ 'nonce' : w3.bub.get_transaction_count('Your_Wallet_Address') })
+    signed_tx = w3.bub.account.sign_transaction(transaction, private_key)
 
 P.S : the two updates are done to the transaction dictionary, since a raw transaction might not contain gas & nonce amounts, so you have to add them manually.
 
@@ -709,8 +709,8 @@ And finally, send the transaction
 
 .. code-block:: python
 
-    txn_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-    txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    txn_hash = w3.bub.send_raw_transaction(signed_tx.rawTransaction)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(txn_hash)
 
 Tip : afterwards you can use the value stored in ``txn_hash``, in an explorer like `etherscan`_ to view the transaction's details
 
@@ -762,21 +762,21 @@ In this example, we show how to fetch all events of a certain event type from th
 
 * How to deal with interruptions in long running processes
 
-* How to deal with `eth_getLogs` JSON-RPC call query limitations
+* How to deal with `bub_getLogs` JSON-RPC call query limitations
 
 * How to handle Ethereum minor chain reorganisations in (near) real-time data
 
 
-eth_getLogs limitations
+bub_getLogs limitations
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Ethereum JSON-RPC API servers, like Geth, do not provide easy to paginate over events, only over blocks. There's no request that can find the first block with an event or how many events occur within a range of blocks. The only feedback the JSON-RPC service will give you is whether the `eth_getLogs` call failed.
+Ethereum JSON-RPC API servers, like Bub, do not provide easy to paginate over events, only over blocks. There's no request that can find the first block with an event or how many events occur within a range of blocks. The only feedback the JSON-RPC service will give you is whether the `bub_getLogs` call failed.
 
 In this example script, we provide two kinds of heuristics to deal with this issue. The script scans events in a chunk of blocks (start block number - end block number). Then it uses two methods to find how many events there are likely to be in a block window:
 
 * Dynamically set the block range window size, while never exceeding a threshold (e.g., 10,000 blocks).
 
-* In the case `eth_getLogs` JSON-PRC call gives a timeout error, decrease the end block number and try again with a smaller block range window.
+* In the case `bub_getLogs` JSON-PRC call gives a timeout error, decrease the end block number and try again with a smaller block range window.
 
 
 Example code
@@ -796,7 +796,7 @@ The following example code is divided into a reusable ``EventScanner`` class and
 
 * only supports ``HTTPS`` providers, because JSON-RPC retry logic depends on the implementation details of the underlying protocol,
 
-* disables the standard ``http_retry_request_middleware`` because it does not know how to handle the shrinking block range window for ``eth_getLogs``, and
+* disables the standard ``http_retry_request_middleware`` because it does not know how to handle the shrinking block range window for ``bub_getLogs``, and
 
 * consumes around 20k JSON-RPC API calls.
 
@@ -823,7 +823,7 @@ The script can be run with: ``python ./eventscanner.py <your JSON-RPC API URL>``
     from eth_abi.codec import ABICodec
 
     # Currently this method is not exposed over official web3 API,
-    # but we need it to construct eth_getLogs parameters
+    # but we need it to construct bub_getLogs parameters
     from web3._utils.filters import construct_event_filter_params
     from web3._utils.events import get_event_data
 
@@ -886,7 +886,7 @@ The script can be run with: ``python ./eventscanner.py <your JSON-RPC API URL>``
         For example, you can get all transfers from all tokens in the same scan.
 
         You *should* disable the default `http_retry_request_middleware` on your provider for Web3,
-        because it cannot correctly throttle and decrease the `eth_getLogs` block number range.
+        because it cannot correctly throttle and decrease the `bub_getLogs` block number range.
         """
 
         def __init__(self, w3: Web3, contract: Contract, state: EventScannerState, events: List, filters: Dict[str, Any],
@@ -927,7 +927,7 @@ The script can be run with: ``python ./eventscanner.py <your JSON-RPC API URL>``
         def get_block_timestamp(self, block_num) -> datetime.datetime:
             """Get Ethereum block timestamp"""
             try:
-                block_info = self.w3.eth.getBlock(block_num)
+                block_info = self.w3.bub.getBlock(block_num)
             except BlockNotFound:
                 # Block was not mined yet,
                 # minor chain reorganisation?
@@ -955,7 +955,7 @@ The script can be run with: ``python ./eventscanner.py <your JSON-RPC API URL>``
 
             # Do not scan all the way to the final block, as this
             # block might not be mined yet
-            return self.w3.eth.blockNumber - 1
+            return self.w3.bub.blockNumber - 1
 
         def get_last_scanned_block(self) -> int:
             return self.state.get_last_scanned_block()
@@ -994,7 +994,7 @@ The script can be run with: ``python ./eventscanner.py <your JSON-RPC API URL>``
                                                            from_block=_start_block,
                                                            to_block=_end_block)
 
-                # Do `n` retries on `eth_getLogs`,
+                # Do `n` retries on `bub_getLogs`,
                 # throttle down block range if needed
                 end_block, events = _retry_web3_call(
                     _fetch_events,
@@ -1104,7 +1104,7 @@ The script can be run with: ``python ./eventscanner.py <your JSON-RPC API URL>``
                 if progress_callback:
                     progress_callback(start_block, end_block, current_block, end_block_timestamp, chunk_size, len(new_entries))
 
-                # Try to guess how many blocks to fetch over `eth_getLogs` API next time
+                # Try to guess how many blocks to fetch over `bub_getLogs` API next time
                 chunk_size = self.estimate_next_chunk_size(chunk_size, len(new_entries))
 
                 # Set where the next chunk starts
@@ -1118,7 +1118,7 @@ The script can be run with: ``python ./eventscanner.py <your JSON-RPC API URL>``
     def _retry_web3_call(func, start_block, end_block, retries, delay) -> Tuple[int, list]:
         """A custom retry loop to throttle down block range.
 
-        If our JSON-RPC server cannot serve all incoming `eth_getLogs` in a single request,
+        If our JSON-RPC server cannot serve all incoming `bub_getLogs` in a single request,
         we retry and throttle down block range for every retry.
 
         For example, Go Ethereum does not indicate what is an acceptable response size.
@@ -1141,7 +1141,7 @@ The script can be run with: ``python ./eventscanner.py <your JSON-RPC API URL>``
                     # Give some more verbose info than the default middleware
                     logger.warning(
                         f"Retrying events for block range {start_block} - {end_block} ({end_block-start_block}) failed with {e} , retrying in {delay} seconds")
-                    # Decrease the `eth_getBlocks` range
+                    # Decrease the `bub_getBlocks` range
                     end_block = start_block + ((end_block - start_block) // 2)
                     # Let the JSON-RPC to recover e.g. from restart
                     time.sleep(delay)
@@ -1157,12 +1157,12 @@ The script can be run with: ``python ./eventscanner.py <your JSON-RPC API URL>``
             argument_filters: Dict[str, Any],
             from_block: int,
             to_block: int) -> Iterable:
-        """Get events using eth_getLogs API.
+        """Get events using bub_getLogs API.
 
         This method is detached from any contract instance.
 
         This is a stateless method, as opposed to create_filter.
-        It can be safely called against nodes which do not provide `eth_newFilter` API, like Infura.
+        It can be safely called against nodes which do not provide `bub_newFilter` API, like Infura.
         """
 
         if from_block is None:
@@ -1194,11 +1194,11 @@ The script can be run with: ``python ./eventscanner.py <your JSON-RPC API URL>``
             toBlock=to_block
         )
 
-        logger.debug(f"Querying eth_getLogs with the following parameters: {event_filter_params}")
+        logger.debug(f"Querying bub_getLogs with the following parameters: {event_filter_params}")
 
         # Call JSON-RPC API on your Ethereum node.
         # get_logs() returns raw AttributedDict entries
-        logs = w3.eth.get_logs(event_filter_params)
+        logs = w3.bub.get_logs(event_filter_params)
 
         # Convert raw binary data to Python proxy objects as described by ABI
         all_events = []
@@ -1218,7 +1218,7 @@ The script can be run with: ``python ./eventscanner.py <your JSON-RPC API URL>``
         # The demo supports persistant state by using a JSON file.
         # You will need an Ethereum node for this.
         # Running this script will consume around 20k JSON-RPC calls.
-        # With locally running Geth, the script takes 10 minutes.
+        # With locally running Bub, the script takes 10 minutes.
         # The resulting JSON state file is 2.9 MB.
         import sys
         import json
@@ -1373,7 +1373,7 @@ The script can be run with: ``python ./eventscanner.py <your JSON-RPC API URL>``
             provider = HTTPProvider(api_url)
 
             # Remove the default JSON-RPC retry middleware
-            # as it correctly cannot handle eth_getLogs block range
+            # as it correctly cannot handle bub_getLogs block range
             # throttle down.
             provider.middlewares.clear()
 
@@ -1381,7 +1381,7 @@ The script can be run with: ``python ./eventscanner.py <your JSON-RPC API URL>``
 
             # Prepare stub ERC-20 contract object
             abi = json.loads(ABI)
-            ERC20 = w3.eth.contract(abi=abi)
+            ERC20 = w3.bub.contract(abi=abi)
 
             # Restore/create our persistent state
             state = JSONifiedState()

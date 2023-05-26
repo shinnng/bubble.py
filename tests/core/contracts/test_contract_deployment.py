@@ -4,10 +4,10 @@ from eth_utils import (
     decode_hex,
 )
 
-from web3 import (
+from bubble import (
     constants,
 )
-from web3._utils.contract_sources.contract_data.constructor_contracts import (
+from bubble._utils.contract_sources.contract_data.constructor_contracts import (
     CONSTRUCTOR_WITH_ADDRESS_ARGUMENT_CONTRACT_RUNTIME,
     CONSTRUCTOR_WITH_ARGUMENTS_CONTRACT_RUNTIME,
     SIMPLE_CONSTRUCTOR_CONTRACT_RUNTIME,
@@ -19,13 +19,13 @@ def test_contract_deployment_no_constructor(
 ):
     deploy_txn = math_contract_factory.constructor().transact()
 
-    txn_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = txn_receipt["contractAddress"]
 
-    blockchain_code = w3.eth.get_code(contract_address)
+    blockchain_code = w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(math_contract_runtime)
 
 
@@ -35,13 +35,13 @@ def test_contract_deployment_with_constructor_without_args(
 ):
     deploy_txn = simple_constructor_contract_factory.constructor().transact()
 
-    txn_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = txn_receipt["contractAddress"]
 
-    blockchain_code = w3.eth.get_code(contract_address)
+    blockchain_code = w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(SIMPLE_CONSTRUCTOR_CONTRACT_RUNTIME)
 
 
@@ -61,13 +61,13 @@ def test_contract_deployment_with_constructor_with_arguments_strict_by_default(
         1234, constructor_arg
     ).transact()
 
-    txn_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = txn_receipt["contractAddress"]
 
-    blockchain_code = w3.eth.get_code(contract_address)
+    blockchain_code = w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(CONSTRUCTOR_WITH_ARGUMENTS_CONTRACT_RUNTIME)
 
 
@@ -79,13 +79,13 @@ def test_contract_deployment_with_constructor_with_arguments_non_strict(
         1234, "abcd"
     ).transact()
 
-    txn_receipt = w3_non_strict_abi.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3_non_strict_abi.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = txn_receipt["contractAddress"]
 
-    blockchain_code = w3_non_strict_abi.eth.get_code(contract_address)
+    blockchain_code = w3_non_strict_abi.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(CONSTRUCTOR_WITH_ARGUMENTS_CONTRACT_RUNTIME)
 
 
@@ -107,13 +107,13 @@ def test_contract_deployment_with_constructor_with_address_argument(
         "0x16D9983245De15E7A9A73bC586E01FF6E08dE737",
     ).transact()
 
-    txn_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = txn_receipt["contractAddress"]
 
-    blockchain_code = w3.eth.get_code(contract_address)
+    blockchain_code = w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(
         CONSTRUCTOR_WITH_ADDRESS_ARGUMENT_CONTRACT_RUNTIME
     )
@@ -125,13 +125,13 @@ async def test_async_contract_deployment_no_constructor(
 ):
     deploy_txn = await async_math_contract_factory.constructor().transact()
 
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = txn_receipt["contractAddress"]
 
-    blockchain_code = await async_w3.eth.get_code(contract_address)
+    blockchain_code = await async_w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(math_contract_runtime)
 
 
@@ -144,13 +144,13 @@ async def test_async_contract_deployment_with_constructor_no_args(
         await async_simple_constructor_contract_factory.constructor().transact()
     )
 
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = txn_receipt["contractAddress"]
 
-    blockchain_code = await async_w3.eth.get_code(contract_address)
+    blockchain_code = await async_w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(SIMPLE_CONSTRUCTOR_CONTRACT_RUNTIME)
 
 
@@ -171,13 +171,13 @@ async def test_async_contract_deployment_with_constructor_arguments(
         1234, constructor_arg
     ).transact()
 
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = txn_receipt["contractAddress"]
 
-    blockchain_code = await async_w3.eth.get_code(contract_address)
+    blockchain_code = await async_w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(CONSTRUCTOR_WITH_ARGUMENTS_CONTRACT_RUNTIME)
 
 
@@ -192,7 +192,7 @@ async def test_async_contract_deployment_with_constructor_with_arguments_non_str
         ).transact()
     )
 
-    txn_receipt = await async_w3_non_strict_abi.eth.wait_for_transaction_receipt(
+    txn_receipt = await async_w3_non_strict_abi.bub.wait_for_transaction_receipt(
         deploy_txn
     )
     assert txn_receipt is not None
@@ -200,7 +200,7 @@ async def test_async_contract_deployment_with_constructor_with_arguments_non_str
     assert txn_receipt["contractAddress"]
     contract_address = txn_receipt["contractAddress"]
 
-    blockchain_code = await async_w3_non_strict_abi.eth.get_code(contract_address)
+    blockchain_code = await async_w3_non_strict_abi.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(CONSTRUCTOR_WITH_ARGUMENTS_CONTRACT_RUNTIME)
 
 
@@ -226,13 +226,13 @@ async def test_async_contract_deployment_with_constructor_with_address_argument(
         "0x16D9983245De15E7A9A73bC586E01FF6E08dE737",
     ).transact()
 
-    txn_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
+    txn_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert txn_receipt is not None
 
     assert txn_receipt["contractAddress"]
     contract_address = txn_receipt["contractAddress"]
 
-    blockchain_code = await async_w3.eth.get_code(contract_address)
+    blockchain_code = await async_w3.bub.get_code(contract_address)
     assert blockchain_code == decode_hex(
         CONSTRUCTOR_WITH_ADDRESS_ARGUMENT_CONTRACT_RUNTIME
     )

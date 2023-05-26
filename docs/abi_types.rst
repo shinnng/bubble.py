@@ -47,7 +47,7 @@ section for an example on using the flag and more details.
 
     Also of note, all modules on the ``Web3`` class will inherit the value of this flag,
     since all modules use the parent ``w3`` object reference under the hood. This means
-    that ``w3.eth.w3.strict_bytes_type_checking`` will always have the same value as
+    that ``w3.bub.w3.strict_bytes_type_checking`` will always have the same value as
     ``w3.strict_bytes_type_checking``.
 
 

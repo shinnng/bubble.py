@@ -10,21 +10,21 @@ from eth_utils import (
     to_tuple,
 )
 
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3._utils.caching import (
+from bubble._utils.caching import (
     generate_cache_key,
 )
-from web3._utils.formatters import (
+from bubble._utils.formatters import (
     hex_to_integer,
 )
-from web3.middleware import (
+from bubble.middleware import (
     construct_error_generator_middleware,
     construct_latest_block_based_cache_middleware,
     construct_result_generator_middleware,
 )
-from web3.providers.base import (
+from bubble.providers.base import (
     BaseProvider,
 )
 
@@ -111,8 +111,8 @@ def construct_block_data_middleware():
 
         return construct_result_generator_middleware(
             {
-                "eth_getBlockByNumber": _get_block_by_number,
-                "eth_getBlockByHash": _get_block_by_hash,
+                "bub_getBlockByNumber": _get_block_by_number,
+                "bub_getBlockByHash": _get_block_by_hash,
                 "evm_mine": _evm_mine,
             }
         )
@@ -165,7 +165,7 @@ def test_latest_block_based_cache_middleware_pulls_from_cache(
     w3.middleware_onion.add(block_data_middleware)
     w3.middleware_onion.add(result_generator_middleware)
 
-    current_block_hash = w3.eth.get_block("latest")["hash"]
+    current_block_hash = w3.bub.get_block("latest")["hash"]
 
     def cache_class():
         return {
@@ -268,20 +268,20 @@ def test_latest_block_cache_middleware_does_not_cache_get_latest_block(
     w3.middleware_onion.add(block_data_middleware)
     w3.middleware_onion.add(result_generator_middleware)
 
-    current_block_hash = w3.eth.get_block("latest")["hash"]
+    current_block_hash = w3.bub.get_block("latest")["hash"]
 
     def cache_class():
         return {
             generate_cache_key(
-                (current_block_hash, "eth_getBlockByNumber", ["latest"])
+                (current_block_hash, "bub_getBlockByNumber", ["latest"])
             ): {"result": "value-a"},
         }
 
     w3.middleware_onion.add(
         construct_latest_block_based_cache_middleware(
             cache_class=cache_class,
-            rpc_whitelist={"eth_getBlockByNumber"},
+            rpc_whitelist={"bub_getBlockByNumber"},
         )
     )
 
-    assert w3.manager.request_blocking("eth_getBlockByNumber", ["latest"]) != "value-a"
+    assert w3.manager.request_blocking("bub_getBlockByNumber", ["latest"]) != "value-a"

@@ -9,7 +9,7 @@ from ens import (
     UnauthorizedError,
     UnownedName,
 )
-from web3 import (
+from bubble import (
     Web3,
 )
 
@@ -19,34 +19,34 @@ API at: https://github.com/carver/ens.py/issues/2
 
 SETUP_NAME_TEST_CASES = (
     (
-        "tester.eth",
-        "tester.eth",
+        "tester.bub",
+        "tester.bub",
         "2a7ac1c833d35677c2ff34a908951de142cc1653de6080ad4e38f4c9cc00aafe",
     ),
     (
-        "TESTER.eth",
-        "tester.eth",
+        "TESTER.bub",
+        "tester.bub",
         "2a7ac1c833d35677c2ff34a908951de142cc1653de6080ad4e38f4c9cc00aafe",
     ),
     (
-        "tester．eth",
-        "tester.eth",
+        "tester．bub",
+        "tester.bub",
         "2a7ac1c833d35677c2ff34a908951de142cc1653de6080ad4e38f4c9cc00aafe",
     ),
     (
-        "tester。eth",
-        "tester.eth",
+        "tester。bub",
+        "tester.bub",
         "2a7ac1c833d35677c2ff34a908951de142cc1653de6080ad4e38f4c9cc00aafe",
     ),
     (
-        "tester｡eth",
-        "tester.eth",
+        "tester｡bub",
+        "tester.bub",
         "2a7ac1c833d35677c2ff34a908951de142cc1653de6080ad4e38f4c9cc00aafe",
     ),
     # confirm that set-owner works
     (
-        "lots.of.subdomains.tester.eth",
-        "lots.of.subdomains.tester.eth",
+        "lots.of.subdomains.tester.bub",
+        "lots.of.subdomains.tester.bub",
         "0d62a759aa1f1c9680de8603a12a5eb175cd1bfa79426229868eba99f4dce692",
     ),
 )
@@ -59,9 +59,9 @@ def TEST_ADDRESS(address_conversion_func):
 
 @pytest.mark.parametrize("name, normalized_name, namehash_hex", SETUP_NAME_TEST_CASES)
 def test_setup_name(ens, name, normalized_name, namehash_hex):
-    address = ens.w3.eth.accounts[3]
+    address = ens.w3.bub.accounts[3]
     assert not ens.name(address)
-    owner = ens.owner("tester.eth")
+    owner = ens.owner("tester.bub")
 
     ens.setup_name(name, address)
     assert ens.name(address) == normalized_name
@@ -74,7 +74,7 @@ def test_setup_name(ens, name, normalized_name, namehash_hex):
     assert ens.owner(name) == owner
 
     # setup name to point to new address
-    new_address = ens.w3.eth.accounts[4]
+    new_address = ens.w3.bub.accounts[4]
     ens.setup_address(name, None)
     ens.setup_name(name, new_address)
 
@@ -92,17 +92,17 @@ def test_setup_name(ens, name, normalized_name, namehash_hex):
 
 
 def test_cannot_set_name_on_mismatch_address(ens, TEST_ADDRESS):
-    ens.setup_address("mismatch-reverse.tester.eth", TEST_ADDRESS)
+    ens.setup_address("mismatch-reverse.tester.bub", TEST_ADDRESS)
     with pytest.raises(AddressMismatch):
         ens.setup_name(
-            "mismatch-reverse.tester.eth", "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413"
+            "mismatch-reverse.tester.bub", "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413"
         )
 
 
 def test_setup_name_default_address(ens):
-    name = "reverse-defaults-to-forward.tester.eth"
-    owner = ens.owner("tester.eth")
-    new_resolution = ens.w3.eth.accounts[-1]
+    name = "reverse-defaults-to-forward.tester.bub"
+    owner = ens.owner("tester.bub")
+    new_resolution = ens.w3.bub.accounts[-1]
     ens.setup_address(name, new_resolution)
     assert not ens.name(new_resolution)
     assert ens.owner(name) == owner
@@ -113,8 +113,8 @@ def test_setup_name_default_address(ens):
 
 
 def test_setup_name_default_to_owner(ens):
-    name = "reverse-defaults-to-owner.tester.eth"
-    new_owner = ens.w3.eth.accounts[-1]
+    name = "reverse-defaults-to-owner.tester.bub"
+    new_owner = ens.w3.bub.accounts[-1]
     ens.setup_owner(name, new_owner)
     assert not ens.name(new_owner)
     assert ens.owner(name) == new_owner
@@ -126,7 +126,7 @@ def test_setup_name_default_to_owner(ens):
 
 def test_setup_name_unowned_exception(ens):
     with pytest.raises(UnownedName):
-        ens.setup_name("unowned-name.tester.eth")
+        ens.setup_name("unowned-name.tester.bub")
 
 
 def test_setup_name_unauthorized(ens, TEST_ADDRESS):
@@ -136,13 +136,13 @@ def test_setup_name_unauthorized(ens, TEST_ADDRESS):
 
 def test_setup_reverse_dict_unmodified(ens):
     # setup
-    owner = ens.owner("tester.eth")
-    eth = ens.w3.eth
+    owner = ens.owner("tester.bub")
+    eth = ens.w3.bub
     start_count = eth.get_transaction_count(owner)
 
-    address = ens.w3.eth.accounts[3]
+    address = ens.w3.bub.accounts[3]
     transact = {}
-    ens.setup_name("tester.eth", address, transact=transact)
+    ens.setup_name("tester.bub", address, transact=transact)
 
     # even though a transaction was issued, the dict argument was not modified
     assert eth.get_transaction_count(owner) > start_count
@@ -158,11 +158,11 @@ def test_setup_reverse_dict_unmodified(ens):
 @pytest.mark.asyncio
 @pytest.mark.parametrize("name, normalized_name, namehash_hex", SETUP_NAME_TEST_CASES)
 async def test_async_setup_name(async_ens, name, normalized_name, namehash_hex):
-    accounts = await async_ens.w3.eth.accounts
+    accounts = await async_ens.w3.bub.accounts
     address = accounts[3]
 
     assert not await async_ens.name(address)
-    owner = await async_ens.owner("tester.eth")
+    owner = await async_ens.owner("tester.bub")
 
     await async_ens.setup_name(name, address)
     assert await async_ens.name(address) == normalized_name
@@ -195,10 +195,10 @@ async def test_async_setup_name(async_ens, name, normalized_name, namehash_hex):
 
 @pytest.mark.asyncio
 async def test_async_setup_name_default_address(async_ens):
-    name = "reverse-defaults-to-forward.tester.eth"
-    owner = await async_ens.owner("tester.eth")
+    name = "reverse-defaults-to-forward.tester.bub"
+    owner = await async_ens.owner("tester.bub")
 
-    accounts = await async_ens.w3.eth.accounts
+    accounts = await async_ens.w3.bub.accounts
     new_resolution = accounts[-1]
 
     await async_ens.setup_address(name, new_resolution)
@@ -212,8 +212,8 @@ async def test_async_setup_name_default_address(async_ens):
 
 @pytest.mark.asyncio
 async def test_async_setup_name_default_to_owner(async_ens):
-    name = "reverse-defaults-to-owner.tester.eth"
-    accounts = await async_ens.w3.eth.accounts
+    name = "reverse-defaults-to-owner.tester.bub"
+    accounts = await async_ens.w3.bub.accounts
     new_owner = accounts[-1]
 
     await async_ens.setup_owner(name, new_owner)
@@ -227,14 +227,14 @@ async def test_async_setup_name_default_to_owner(async_ens):
 @pytest.mark.asyncio
 async def test_async_setup_reverse_dict_unmodified(async_ens):
     # setup
-    owner = await async_ens.owner("tester.eth")
-    eth = async_ens.w3.eth
+    owner = await async_ens.owner("tester.bub")
+    eth = async_ens.w3.bub
     start_count = await eth.get_transaction_count(owner)
 
     accounts = await eth.accounts
     address = accounts[3]
     transact = {}
-    await async_ens.setup_name("tester.eth", address, transact=transact)
+    await async_ens.setup_name("tester.bub", address, transact=transact)
 
     # even though a transaction was issued, the dict argument was not modified
     assert await eth.get_transaction_count(owner) > start_count
@@ -247,7 +247,7 @@ async def test_async_setup_reverse_dict_unmodified(async_ens):
 @pytest.mark.asyncio
 async def test_async_setup_name_unowned_exception(async_ens):
     with pytest.raises(UnownedName):
-        await async_ens.setup_name("unowned-name.tester.eth")
+        await async_ens.setup_name("unowned-name.tester.bub")
 
 
 @pytest.mark.asyncio
@@ -258,8 +258,8 @@ async def test_async_setup_name_unauthorized(async_ens, TEST_ADDRESS):
 
 @pytest.mark.asyncio
 async def test_async_cannot_set_name_on_mismatch_address(async_ens, TEST_ADDRESS):
-    await async_ens.setup_address("mismatch-reverse.tester.eth", TEST_ADDRESS)
+    await async_ens.setup_address("mismatch-reverse.tester.bub", TEST_ADDRESS)
     with pytest.raises(AddressMismatch):
         await async_ens.setup_name(
-            "mismatch-reverse.tester.eth", "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413"
+            "mismatch-reverse.tester.bub", "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413"
         )

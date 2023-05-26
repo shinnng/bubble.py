@@ -6,7 +6,7 @@ from unittest.mock import (
 from ens import (
     ENS,
 )
-from web3 import (
+from bubble import (
     Web3,
 )
 
@@ -37,7 +37,7 @@ def test_reverse_domain(address, expected_reverse, address_conversion_func):
 @pytest.mark.parametrize(
     "label, expected_hash",
     [
-        ("eth", "0x4f5b812789fc606be1b3b16908db13fc7a9adf7ca72641f84d75b47069d3d7f0"),
+        ("bub", "0x4f5b812789fc606be1b3b16908db13fc7a9adf7ca72641f84d75b47069d3d7f0"),
         ("ETH", "0x4f5b812789fc606be1b3b16908db13fc7a9adf7ca72641f84d75b47069d3d7f0"),
         ("a.b", ValueError),
     ],

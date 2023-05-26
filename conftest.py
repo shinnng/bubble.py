@@ -4,15 +4,15 @@ import pytest_asyncio
 import time
 import warnings
 
-from web3._utils.threads import (
+from bubble._utils.threads import (
     Timeout,
 )
-from web3.main import (
+from bubble.main import (
     Web3,
 )
-from web3.providers.eth_tester import (
-    AsyncEthereumTesterProvider,
-    EthereumTesterProvider,
+from bubble.providers.bub_tester import (
+    AsyncBubereumTesterProvider,
+    BubbleTesterProvider,
 )
 
 from tests.utils import (
@@ -28,7 +28,7 @@ def sleep_interval():
 
 
 def is_testrpc_provider(provider):
-    return isinstance(provider, EthereumTesterProvider)
+    return isinstance(provider, BubbleTesterProvider)
 
 
 @pytest.fixture()
@@ -45,7 +45,7 @@ def wait_for_miner_start():
     def _wait_for_miner_start(w3, timeout=60):
         poll_delay_counter = PollDelayCounter()
         with Timeout(timeout) as timeout:
-            while not w3.eth.mining or not w3.eth.hashrate:
+            while not w3.bub.mining or not w3.bub.hashrate:
                 time.sleep(poll_delay_counter())
                 timeout.check()
 
@@ -56,10 +56,10 @@ def wait_for_miner_start():
 def wait_for_block():
     def _wait_for_block(w3, block_number=1, timeout=None):
         if not timeout:
-            timeout = (block_number - w3.eth.block_number) * 3
+            timeout = (block_number - w3.bub.block_number) * 3
         poll_delay_counter = PollDelayCounter()
         with Timeout(timeout) as timeout:
-            while w3.eth.block_number < block_number:
+            while w3.bub.block_number < block_number:
                 w3.manager.request_blocking("evm_mine", [])
                 timeout.sleep(poll_delay_counter())
 
@@ -72,7 +72,7 @@ def wait_for_transaction():
         poll_delay_counter = PollDelayCounter()
         with Timeout(timeout) as timeout:
             while True:
-                txn_receipt = w3.eth.get_transaction_receipt(txn_hash)
+                txn_receipt = w3.bub.get_transaction_receipt(txn_hash)
                 if txn_receipt is not None:
                     break
                 time.sleep(poll_delay_counter())
@@ -85,12 +85,12 @@ def wait_for_transaction():
 
 @pytest.fixture()
 def w3():
-    return Web3(EthereumTesterProvider())
+    return Web3(BubbleTesterProvider())
 
 
 @pytest.fixture(scope="module")
 def w3_non_strict_abi():
-    w3 = Web3(EthereumTesterProvider())
+    w3 = Web3(BubbleTesterProvider())
     w3.strict_bytes_type_checking = False
     return w3
 
@@ -104,7 +104,7 @@ def print_warnings():
 
 
 def is_async_testrpc_provider(provider):
-    return isinstance(provider, AsyncEthereumTesterProvider)
+    return isinstance(provider, AsyncBubereumTesterProvider)
 
 
 @pytest.fixture()

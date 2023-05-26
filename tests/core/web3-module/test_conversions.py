@@ -6,10 +6,10 @@ from hexbytes import (
     HexBytes,
 )
 
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3.datastructures import (
+from bubble.datastructures import (
     AttributeDict,
 )
 

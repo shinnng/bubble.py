@@ -26,24 +26,24 @@ from hexbytes import (
     HexBytes,
 )
 
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     InvalidAddress,
 )
-from web3.middleware import (
+from bubble.middleware import (
     construct_result_generator_middleware,
     construct_sign_and_send_raw_middleware,
 )
-from web3.middleware.signing import (
+from bubble.middleware.signing import (
     gen_normalized_accounts,
 )
-from web3.providers import (
+from bubble.providers import (
     BaseProvider,
 )
-from web3.providers.eth_tester import (
-    EthereumTesterProvider,
+from bubble.providers.bub_tester import (
+    BubbleTesterProvider,
 )
 
 PRIVATE_KEY_1 = to_bytes(
@@ -93,9 +93,9 @@ class DummyProvider(BaseProvider):
 def result_generator_middleware():
     return construct_result_generator_middleware(
         {
-            "eth_sendRawTransaction": lambda *args: args,
+            "bub_sendRawTransaction": lambda *args: args,
             "net_version": lambda *_: 1,
-            "eth_chainId": lambda *_: "0x02",
+            "bub_chainId": lambda *_: "0x02",
         }
     )
 
@@ -118,85 +118,85 @@ def hex_to_bytes(s):
 @pytest.mark.parametrize(
     "method,key_object,from_,expected",
     (
-        ("eth_sendTransaction", SAME_KEY_MIXED_TYPE, ADDRESS_2, NotImplementedError),
+        ("bub_sendTransaction", SAME_KEY_MIXED_TYPE, ADDRESS_2, NotImplementedError),
         (
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             SAME_KEY_MIXED_TYPE,
             ADDRESS_1,
-            "eth_sendRawTransaction",
+            "bub_sendRawTransaction",
         ),
         (
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             MIXED_KEY_MIXED_TYPE,
             ADDRESS_2,
-            "eth_sendRawTransaction",
+            "bub_sendRawTransaction",
         ),
         (
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             MIXED_KEY_MIXED_TYPE,
             ADDRESS_1,
-            "eth_sendRawTransaction",
+            "bub_sendRawTransaction",
         ),
-        ("eth_sendTransaction", SAME_KEY_SAME_TYPE, ADDRESS_2, NotImplementedError),
+        ("bub_sendTransaction", SAME_KEY_SAME_TYPE, ADDRESS_2, NotImplementedError),
         (
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             SAME_KEY_SAME_TYPE,
             ADDRESS_1,
-            "eth_sendRawTransaction",
+            "bub_sendRawTransaction",
         ),
         (
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             MIXED_KEY_SAME_TYPE,
             ADDRESS_2,
-            "eth_sendRawTransaction",
+            "bub_sendRawTransaction",
         ),
         (
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             MIXED_KEY_SAME_TYPE,
             ADDRESS_1,
-            "eth_sendRawTransaction",
+            "bub_sendRawTransaction",
         ),
         (
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             SAME_KEY_MIXED_TYPE[0],
             ADDRESS_1,
-            "eth_sendRawTransaction",
+            "bub_sendRawTransaction",
         ),
         (
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             SAME_KEY_MIXED_TYPE[1],
             ADDRESS_1,
-            "eth_sendRawTransaction",
+            "bub_sendRawTransaction",
         ),
         (
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             SAME_KEY_MIXED_TYPE[2],
             ADDRESS_1,
-            "eth_sendRawTransaction",
+            "bub_sendRawTransaction",
         ),
         (
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             SAME_KEY_MIXED_TYPE[3],
             ADDRESS_1,
-            "eth_sendRawTransaction",
+            "bub_sendRawTransaction",
         ),
         (
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             SAME_KEY_MIXED_TYPE[4],
             ADDRESS_1,
-            "eth_sendRawTransaction",
+            "bub_sendRawTransaction",
         ),
-        ("eth_sendTransaction", SAME_KEY_MIXED_TYPE[0], ADDRESS_2, NotImplementedError),
-        ("eth_sendTransaction", SAME_KEY_MIXED_TYPE[1], ADDRESS_2, NotImplementedError),
-        ("eth_sendTransaction", SAME_KEY_MIXED_TYPE[2], ADDRESS_2, NotImplementedError),
-        ("eth_sendTransaction", SAME_KEY_MIXED_TYPE[3], ADDRESS_2, NotImplementedError),
-        ("eth_sendTransaction", SAME_KEY_MIXED_TYPE[4], ADDRESS_2, NotImplementedError),
-        ("eth_call", MIXED_KEY_MIXED_TYPE, ADDRESS_1, NotImplementedError),
+        ("bub_sendTransaction", SAME_KEY_MIXED_TYPE[0], ADDRESS_2, NotImplementedError),
+        ("bub_sendTransaction", SAME_KEY_MIXED_TYPE[1], ADDRESS_2, NotImplementedError),
+        ("bub_sendTransaction", SAME_KEY_MIXED_TYPE[2], ADDRESS_2, NotImplementedError),
+        ("bub_sendTransaction", SAME_KEY_MIXED_TYPE[3], ADDRESS_2, NotImplementedError),
+        ("bub_sendTransaction", SAME_KEY_MIXED_TYPE[4], ADDRESS_2, NotImplementedError),
+        ("bub_call", MIXED_KEY_MIXED_TYPE, ADDRESS_1, NotImplementedError),
         (
-            "eth_sendTransaction",
+            "bub_sendTransaction",
             SAME_KEY_SAME_TYPE,
             hex_to_bytes(ADDRESS_1),
-            "eth_sendRawTransaction",
+            "bub_sendRawTransaction",
         ),
     ),
 )
@@ -252,7 +252,7 @@ def assert_method_and_txn_signed(actual, expected):
 
 @pytest.fixture()
 def w3():
-    return Web3(EthereumTesterProvider())
+    return Web3(BubbleTesterProvider())
 
 
 @pytest.mark.parametrize(
@@ -284,10 +284,10 @@ def fund_account(w3):
     # fund local account
     tx_value = w3.to_wei(10, "ether")
     for address in (ADDRESS_1, ADDRESS_2):
-        w3.eth.send_transaction(
-            {"to": address, "from": w3.eth.accounts[0], "gas": 21000, "value": tx_value}
+        w3.bub.send_transaction(
+            {"to": address, "from": w3.bub.accounts[0], "gas": 21000, "value": tx_value}
         )
-        assert w3.eth.get_balance(address) == tx_value
+        assert w3.bub.get_balance(address) == tx_value
 
 
 @pytest.mark.parametrize(
@@ -360,17 +360,17 @@ def test_signed_transaction(w3, fund_account, transaction, expected, key_object,
     w3.middleware_onion.add(construct_sign_and_send_raw_middleware(key_object))
 
     # Drop any falsy addresses
-    to_from = valfilter(bool, {"to": w3.eth.accounts[0], "from": from_})
+    to_from = valfilter(bool, {"to": w3.bub.accounts[0], "from": from_})
 
     _transaction = merge(transaction, to_from)
 
     if isinstance(expected, type) and issubclass(expected, Exception):
         with pytest.raises(expected):
-            w3.eth.send_transaction(_transaction)
+            w3.bub.send_transaction(_transaction)
     else:
-        start_balance = w3.eth.get_balance(_transaction.get("from", w3.eth.accounts[0]))
-        w3.eth.send_transaction(_transaction)
-        assert w3.eth.get_balance(_transaction.get("from")) <= start_balance + expected
+        start_balance = w3.bub.get_balance(_transaction.get("from", w3.bub.accounts[0]))
+        w3.bub.send_transaction(_transaction)
+        assert w3.bub.get_balance(_transaction.get("from")) <= start_balance + expected
 
 
 @pytest.mark.parametrize(
@@ -392,7 +392,7 @@ def test_sign_and_send_raw_middleware_with_byte_addresses(
     w3_dummy.middleware_onion.add(construct_sign_and_send_raw_middleware(private_key))
 
     actual = w3_dummy.manager.request_blocking(
-        "eth_sendTransaction",
+        "bub_sendTransaction",
         [
             {
                 "to": to_,
@@ -406,5 +406,5 @@ def test_sign_and_send_raw_middleware_with_byte_addresses(
     )
     raw_txn = actual[1][0]
     actual_method = actual[0]
-    assert actual_method == "eth_sendRawTransaction"
+    assert actual_method == "bub_sendRawTransaction"
     assert isinstance(raw_txn, bytes)

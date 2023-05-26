@@ -1,19 +1,19 @@
-Geth API
+Bub API
 ========
 
-.. py:module:: web3.geth
+.. py:module:: web3.bub
 
-The ``web3.geth`` object exposes modules that enable you to interact with the JSON-RPC endpoints supported by `Geth <https://github.com/ethereum/go-ethereum/wiki/Management-APIs>`_ that are not defined in the standard set of Ethereum JSONRPC endpoints according to `EIP 1474 <https://github.com/ethereum/EIPs/pull/1474>`_.
+The ``web3.bub`` object exposes modules that enable you to interact with the JSON-RPC endpoints supported by `Bub <https://github.com/ethereum/go-ethereum/wiki/Management-APIs>`_ that are not defined in the standard set of Ethereum JSONRPC endpoints according to `EIP 1474 <https://github.com/ethereum/EIPs/pull/1474>`_.
 
-GethAdmin API
+NodeAdmin API
 ~~~~~~~~~~~~~
 
-The following methods are available on the ``web3.geth.admin`` namespace.
+The following methods are available on the ``web3.node.admin`` namespace.
 
-.. py:module:: web3.geth.admin
+.. py:module:: web3.node.admin
 
-The ``web3.geth.admin`` object exposes methods to interact with the RPC APIs under the
-``admin_`` namespace that are supported by the Geth client.
+The ``web3.node.admin`` object exposes methods to interact with the RPC APIs under the
+``admin_`` namespace that are supported by the Bub client.
 
 .. py:method:: datadir()
 
@@ -23,7 +23,7 @@ The ``web3.geth.admin`` object exposes methods to interact with the RPC APIs und
 
     .. code-block:: python
 
-        >>> web3.geth.admin.datadir()
+        >>> web3.node.admin.datadir()
         '/Users/piper/Library/Ethereum'
 
 
@@ -35,13 +35,13 @@ The ``web3.geth.admin`` object exposes methods to interact with the RPC APIs und
 
     .. code-block:: python
 
-        >>> web3.geth.admin.node_info()
+        >>> web3.node.admin.node_info()
         {
             'enode': 'enode://e54eebad24dce1f6d246bea455ffa756d97801582420b9ed681a2ea84bf376d0bd87ae8dd6dc06cdb862a2ca89ecabe1be1050be35b4e70d62bc1a092cb7e2d3@[::]:30303',
             'id': 'e54eebad24dce1f6d246bea455ffa756d97801582420b9ed681a2ea84bf376d0bd87ae8dd6dc06cdb862a2ca89ecabe1be1050be35b4e70d62bc1a092cb7e2d3',
             'ip': '::',
             'listenAddr': '[::]:30303',
-            'name': 'Geth/v1.4.11-stable-fed692f6/darwin/go1.7',
+            'name': 'Bub/v1.4.11-stable-fed692f6/darwin/go1.7',
             'ports': {'discovery': 30303, 'listener': 30303},
             'protocols': {
                 'eth': {
@@ -62,12 +62,12 @@ The ``web3.geth.admin`` object exposes methods to interact with the RPC APIs und
 
     .. code-block:: python
 
-        >>> web3.geth.admin.peers()
+        >>> web3.node.admin.peers()
         [
             {
                 'caps': ['eth/63'],
                 'id': '146e8e3e2460f1e18939a5da37c4a79f149c8b9837240d49c7d94c122f30064e07e4a42ae2c2992d0f8e7e6f68a30e7e9ad31d524349ec9d17effd2426a37b40',
-                'name': 'Geth/v1.4.10-stable/windows/go1.6.2',
+                'name': 'Bub/v1.4.10-stable/windows/go1.6.2',
                 'network': {
                     'localAddress': '10.0.3.115:64478',
                     'remoteAddress': '72.208.167.127:30303',
@@ -83,7 +83,7 @@ The ``web3.geth.admin`` object exposes methods to interact with the RPC APIs und
             {
                 'caps': ['eth/62', 'eth/63'],
                 'id': '76cb6cd3354be081923a90dfd4cda40aa78b307cc3cf4d5733dc32cc171d00f7c08356e9eb2ea47eab5aad7a15a3419b859139e3f762e1e1ebf5a04f530dcef7',
-                'name': 'Geth/v1.4.10-stable-5f55d95a/linux/go1.5.1',
+                'name': 'Bub/v1.4.10-stable-5f55d95a/linux/go1.5.1',
                 'network': {
                     'localAddress': '10.0.3.115:64784',
                     'remoteAddress': '60.205.92.119:30303',
@@ -108,7 +108,7 @@ The ``web3.geth.admin`` object exposes methods to interact with the RPC APIs und
 
     .. code-block:: python
 
-        >>> web3.geth.admin.add_peer('enode://e54eebad24dce1f6d246bea455ffa756d97801582420b9ed681a2ea84bf376d0bd87ae8dd6dc06cdb862a2ca89ecabe1be1050be35b4e70d62bc1a092cb7e2d3@52.71.255.237:30303')
+        >>> web3.node.admin.add_peer('enode://e54eebad24dce1f6d246bea455ffa756d97801582420b9ed681a2ea84bf376d0bd87ae8dd6dc06cdb862a2ca89ecabe1be1050be35b4e70d62bc1a092cb7e2d3@52.71.255.237:30303')
         True
 
 
@@ -123,7 +123,7 @@ The ``web3.geth.admin`` object exposes methods to interact with the RPC APIs und
 
     .. code-block:: python
 
-        >>> web3.geth.admin.start_http()
+        >>> web3.node.admin.start_http()
         True
 
 
@@ -138,7 +138,7 @@ The ``web3.geth.admin`` object exposes methods to interact with the RPC APIs und
 
     .. code-block:: python
 
-        >>> web3.geth.admin.start_ws()
+        >>> web3.node.admin.start_ws()
         True
 
 
@@ -150,7 +150,7 @@ The ``web3.geth.admin`` object exposes methods to interact with the RPC APIs und
 
     .. code-block:: python
 
-        >>> web3.geth.admin.stop_http()
+        >>> web3.node.admin.stop_http()
         True
 
 
@@ -162,16 +162,16 @@ The ``web3.geth.admin`` object exposes methods to interact with the RPC APIs und
 
     .. code-block:: python
 
-        >>> web3.geth.admin.stop_ws()
+        >>> web3.node.admin.stop_ws()
         True
 
 
-.. py:module:: web3.geth.personal
+.. py:module:: web3.node.personal
 
-GethPersonal API
+NodePersonaler API
 ~~~~~~~~~~~~~~~~
 
-The following methods are available on the ``web3.geth.personal`` namespace.
+The following methods are available on the ``web3.node.personal`` namespace.
 
 .. py:method:: ec_recover(message, signature)
 
@@ -181,9 +181,9 @@ The following methods are available on the ``web3.geth.personal`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.personal.sign('snakesnax', '0x9ad3c920dce5cea9a31d69467bb8d7c954e5acff', '')
+        >>> web3.node.personal.sign('snakesnax', '0x9ad3c920dce5cea9a31d69467bb8d7c954e5acff', '')
         '0x8eb502165dec388af1c45c4bc835fd1852eaf358316ae5d248a40af8cd8dd7dc6373a6e606d8b411f788718b8b09a6cf87d980639731f530e4481148f14abfdf1b'
-        >>> web3.geth.personal.ec_recover('snakesnax', '0x8eb502165dec388af1c45c4bc835fd1852eaf358316ae5d248a40af8cd8dd7dc6373a6e606d8b411f788718b8b09a6cf87d980639731f530e4481148f14abfdf1b')
+        >>> web3.node.personal.ec_recover('snakesnax', '0x8eb502165dec388af1c45c4bc835fd1852eaf358316ae5d248a40af8cd8dd7dc6373a6e606d8b411f788718b8b09a6cf87d980639731f530e4481148f14abfdf1b')
         '0x9ad3c920dce5cea9a31d69467bb8d7c954e5acff'
 
 
@@ -196,7 +196,7 @@ The following methods are available on the ``web3.geth.personal`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.personal.import_raw_key(some_private_key, 'the-passphrase')
+        >>> web3.node.personal.import_raw_key(some_private_key, 'the-passphrase')
         '0xd3CdA913deB6f67967B99D67aCDFa1712C293601'
 
 
@@ -208,7 +208,7 @@ The following methods are available on the ``web3.geth.personal`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.personal.list_accounts()
+        >>> web3.node.personal.list_accounts()
         ['0xd3CdA913deB6f67967B99D67aCDFa1712C293601']
 
 
@@ -216,11 +216,11 @@ The following methods are available on the ``web3.geth.personal`` namespace.
 
     * Delegates to ``personal_listWallets`` RPC Method
 
-    Returns the list of wallets managed by Geth.
+    Returns the list of wallets managed by Bub.
 
     .. code-block:: python
 
-        >>> web3.geth.personal.list_wallets()
+        >>> web3.node.personal.list_wallets()
         [{
             accounts: [{
                 address: "0x44f705f3c31017856777f2931c2f09f240dd800b",
@@ -239,7 +239,7 @@ The following methods are available on the ``web3.geth.personal`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.personal.lock_account('0xd3CdA913deB6f67967B99D67aCDFa1712C293601')
+        >>> web3.node.personal.lock_account('0xd3CdA913deB6f67967B99D67aCDFa1712C293601')
         True
 
 
@@ -252,7 +252,7 @@ The following methods are available on the ``web3.geth.personal`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.personal.new_account('the-passphrase')
+        >>> web3.node.personal.new_account('the-passphrase')
         '0xd3CdA913deB6f67967B99D67aCDFa1712C293601'
 
 
@@ -271,7 +271,7 @@ The following methods are available on the ``web3.geth.personal`` namespace.
     
     .. code-block:: python
 
-        >>> web3.geth.personal.sign('snakesnax', '0x9ad3c920dce5cea9a31d69467bb8d7c954e5acff', '')
+        >>> web3.node.personal.sign('snakesnax', '0x9ad3c920dce5cea9a31d69467bb8d7c954e5acff', '')
         '0x8eb502165dec388af1c45c4bc835fd1852eaf358316ae5d248a40af8cd8dd7dc6373a6e606d8b411f788718b8b09a6cf87d980639731f530e4481148f14abfdf1b'
 
 
@@ -281,28 +281,28 @@ The following methods are available on the ``web3.geth.personal`` namespace.
 
     Unlocks the given ``account`` for ``duration`` seconds.
     If ``duration`` is ``None``, then the account will remain unlocked
-    for the current default duration set by Geth. If ``duration`` is set to ``0``,
+    for the current default duration set by Bub. If ``duration`` is set to ``0``,
     the account will remain unlocked indefinitely.
     Returns a ``boolean`` signifying whether the account was unlocked successfully.
 
     .. code-block:: python
 
-        >>> web3.geth.personal.unlock_account('0xd3CdA913deB6f67967B99D67aCDFa1712C293601', 'wrong-passphrase')
+        >>> web3.node.personal.unlock_account('0xd3CdA913deB6f67967B99D67aCDFa1712C293601', 'wrong-passphrase')
         False
-        >>> web3.geth.personal.unlock_account('0xd3CdA913deB6f67967B99D67aCDFa1712C293601', 'the-passphrase')
+        >>> web3.node.personal.unlock_account('0xd3CdA913deB6f67967B99D67aCDFa1712C293601', 'the-passphrase')
         True
 
 
-.. py:module:: web3.geth.txpool
+.. py:module:: web3.node.txpool
 
-GethTxPool API
+NodeTxPool API
 ~~~~~~~~~~~~~~
 
-The ``web3.geth.txpool`` object exposes methods to interact with the RPC APIs under
-the ``txpool_`` namespace. These methods are only exposed under the ``geth`` namespace
+The ``web3.node.txpool`` object exposes methods to interact with the RPC APIs under
+the ``txpool_`` namespace. These methods are only exposed under the ``bub`` namespace
 since they are not standard.
 
-The following methods are available on the ``web3.geth.txpool`` namespace.
+The following methods are available on the ``web3.node.txpool`` namespace.
 
 .. py:method:: TxPool.inspect()
 
@@ -314,7 +314,7 @@ The following methods are available on the ``web3.geth.txpool`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.txpool.inspect()
+        >>> web3.node.txpool.inspect()
         {
             'pending': {
                 '0x26588a9301b0428d95e6Fc3A5024fcE8BEc12D51': {
@@ -390,7 +390,7 @@ The following methods are available on the ``web3.geth.txpool`` namespace.
 
     .. code-block:: python
 
-        >>> web3.geth.txpool.content()
+        >>> web3.node.txpool.content()
         {
           'pending': {
             '0x0216D5032f356960Cd3749C31Ab34eEFF21B3395': {

@@ -1,6 +1,6 @@
 import pytest
 
-from web3.utils.address import (
+from bubble.utils.address import (
     get_create2_address,
     get_create_address,
 )

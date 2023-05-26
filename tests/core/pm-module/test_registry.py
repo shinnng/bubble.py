@@ -2,7 +2,7 @@ from eth_utils import (
     is_address,
 )
 
-from web3.pm import (
+from bubble.pm import (
     ERC1319Registry,
     SimpleRegistry,
 )

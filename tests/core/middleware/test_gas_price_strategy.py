@@ -3,7 +3,7 @@ from unittest.mock import (
     Mock,
 )
 
-from web3.middleware import (
+from bubble.middleware import (
     gas_price_strategy_middleware,
 )
 
@@ -18,8 +18,8 @@ def the_gas_price_strategy_middleware(w3):
 
 
 def test_gas_price_generated(the_gas_price_strategy_middleware):
-    the_gas_price_strategy_middleware.w3.eth.generate_gas_price.return_value = 5
-    method = "eth_sendTransaction"
+    the_gas_price_strategy_middleware.w3.bub.generate_gas_price.return_value = 5
+    method = "bub_sendTransaction"
     params = (
         {
             "to": "0x0",
@@ -27,7 +27,7 @@ def test_gas_price_generated(the_gas_price_strategy_middleware):
         },
     )
     the_gas_price_strategy_middleware(method, params)
-    the_gas_price_strategy_middleware.w3.eth.generate_gas_price.assert_called_once_with(
+    the_gas_price_strategy_middleware.w3.bub.generate_gas_price.assert_called_once_with(
         {
             "to": "0x0",
             "value": 1,
@@ -46,8 +46,8 @@ def test_gas_price_generated(the_gas_price_strategy_middleware):
 
 
 def test_gas_price_not_overridden(the_gas_price_strategy_middleware):
-    the_gas_price_strategy_middleware.w3.eth.generate_gas_price.return_value = 5
-    method = "eth_sendTransaction"
+    the_gas_price_strategy_middleware.w3.bub.generate_gas_price.return_value = 5
+    method = "bub_sendTransaction"
     params = (
         {
             "to": "0x0",
@@ -71,8 +71,8 @@ def test_gas_price_not_overridden(the_gas_price_strategy_middleware):
 def test_gas_price_not_set_without_gas_price_strategy(
     the_gas_price_strategy_middleware,
 ):
-    the_gas_price_strategy_middleware.w3.eth.generate_gas_price.return_value = None
-    method = "eth_sendTransaction"
+    the_gas_price_strategy_middleware.w3.bub.generate_gas_price.return_value = None
+    method = "bub_sendTransaction"
     params = (
         {
             "to": "0x0",
@@ -89,5 +89,5 @@ def test_not_generate_gas_price_when_not_send_transaction_rpc(
     the_gas_price_strategy_middleware,
 ):
     the_gas_price_strategy_middleware.w3.getGasPriceStrategy = Mock()
-    the_gas_price_strategy_middleware("eth_getBalance", [])
+    the_gas_price_strategy_middleware("bub_getBalance", [])
     the_gas_price_strategy_middleware.w3.getGasPriceStrategy.assert_not_called()

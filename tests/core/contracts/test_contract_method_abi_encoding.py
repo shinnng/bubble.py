@@ -1,10 +1,10 @@
 import json
 import pytest
 
-from web3 import (
+from bubble import (
     constants,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     Web3ValidationError,
 )
 
@@ -63,7 +63,7 @@ ABI_D = json.loads(
     ),
 )
 def test_contract_abi_encoding(w3, abi, arguments, data, expected):
-    contract = w3.eth.contract(abi=abi)
+    contract = w3.bub.contract(abi=abi)
     actual = contract.encodeABI("a", arguments, data=data)
     assert actual == expected
 
@@ -115,13 +115,13 @@ def test_contract_abi_encoding(w3, abi, arguments, data, expected):
 def test_contract_abi_encoding_non_strict(
     w3_non_strict_abi, abi, arguments, data, expected
 ):
-    contract = w3_non_strict_abi.eth.contract(abi=abi)
+    contract = w3_non_strict_abi.bub.contract(abi=abi)
     actual = contract.encodeABI("a", arguments, data=data)
     assert actual == expected
 
 
 def test_contract_abi_encoding_kwargs(w3):
-    contract = w3.eth.contract(abi=ABI_D)
+    contract = w3.bub.contract(abi=ABI_D)
     kwargs = {
         "b": [
             "0x5595c210956e7721f9b692e702708556aa9aabb14ea163e96afa56ffbe9fa809",
@@ -144,7 +144,7 @@ def test_contract_abi_encoding_kwargs(w3):
     ),
 )
 def test_contract_abi_encoding_strict_with_error(w3, arguments):
-    contract = w3.eth.contract(abi=ABI_C)
+    contract = w3.bub.contract(abi=ABI_C)
     with pytest.raises(Web3ValidationError):
         contract.encodeABI("a", arguments, data=None)
 
@@ -194,6 +194,6 @@ def test_contract_abi_encoding_strict_with_error(w3, arguments):
     ),
 )
 def test_contract_abi_encoding_strict(w3, abi, arguments, data, expected):
-    contract = w3.eth.contract(abi=abi)
+    contract = w3.bub.contract(abi=abi)
     actual = contract.encodeABI("a", arguments, data=data)
     assert actual == expected

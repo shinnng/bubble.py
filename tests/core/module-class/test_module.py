@@ -1,10 +1,10 @@
 import pytest
 
-from web3 import (
-    EthereumTesterProvider,
+from bubble import (
+    BubbleTesterProvider,
     Web3,
 )
-from web3.method import (
+from bubble.method import (
     Method,
 )
 
@@ -12,7 +12,7 @@ from web3.method import (
 @pytest.fixture
 def web3_with_external_modules(module1, module2, module3):
     return Web3(
-        EthereumTesterProvider(),
+        BubbleTesterProvider(),
         external_modules={
             "module1": module1,
             "module2": (
@@ -30,47 +30,47 @@ def test_attach_methods_to_module(web3_with_external_modules):
 
     w3.module1.attach_methods(
         {
-            # set `property1` on `module1` with `eth_chainId` RPC endpoint
-            "property1": Method("eth_chainId", is_property=True),
-            # set `method1` on `module1` with `eth_getBalance` RPC endpoint
-            "method1": Method("eth_getBalance"),
+            # set `property1` on `module1` with `bub_chainId` RPC endpoint
+            "property1": Method("bub_chainId", is_property=True),
+            # set `method1` on `module1` with `bub_getBalance` RPC endpoint
+            "method1": Method("bub_getBalance"),
         }
     )
 
-    assert w3.eth.chain_id == 131277322940537
+    assert w3.bub.chain_id == 131277322940537
     assert w3.module1.property1 == 131277322940537
 
-    coinbase = w3.eth.coinbase
-    assert w3.eth.get_balance(coinbase, "latest") == 1000000000000000000000000
+    coinbase = w3.bub.coinbase
+    assert w3.bub.get_balance(coinbase, "latest") == 1000000000000000000000000
     assert w3.module1.method1(coinbase, "latest") == 1000000000000000000000000
 
     w3.module2.submodule1.attach_methods(
         {
-            # set `method2` on `module2.submodule1` with `eth_blockNumber` RPC endpoint
-            "method2": Method("eth_blockNumber", is_property=True)
+            # set `method2` on `module2.submodule1` with `bub_blockNumber` RPC endpoint
+            "method2": Method("bub_blockNumber", is_property=True)
         }
     )
 
-    assert w3.eth.block_number == 0
+    assert w3.bub.block_number == 0
     assert w3.module2.submodule1.method2 == 0
 
-    w3.eth.attach_methods({"get_block2": Method("eth_getBlockByNumber")})
+    w3.bub.attach_methods({"get_block2": Method("bub_getBlockByNumber")})
 
-    assert w3.eth.get_block("latest")["number"] == 0
-    assert w3.eth.get_block("pending")["number"] == 1
+    assert w3.bub.get_block("latest")["number"] == 0
+    assert w3.bub.get_block("pending")["number"] == 1
 
-    assert w3.eth.get_block2("latest")["number"] == 0
-    assert w3.eth.get_block2("pending")["number"] == 1
+    assert w3.bub.get_block2("latest")["number"] == 0
+    assert w3.bub.get_block2("pending")["number"] == 1
 
 
 def test_attach_methods_with_mungers(web3_with_external_modules):
     w3 = web3_with_external_modules
 
-    # `method1` uses `eth_getBlockByNumber` but makes use of unique mungers
+    # `method1` uses `bub_getBlockByNumber` but makes use of unique mungers
     w3.module1.attach_methods(
         {
             "method1": Method(
-                "eth_getBlockByNumber",
+                "bub_getBlockByNumber",
                 mungers=[
                     lambda _method, block_id, full_transactions: (
                         block_id,
@@ -87,11 +87,11 @@ def test_attach_methods_with_mungers(web3_with_external_modules):
     )
 
     w3.provider.ethereum_tester.mine_block()
-    assert w3.eth.get_block(0, False)["baseFeePerGas"] == 1000000000
-    assert w3.eth.get_block(1, False)["baseFeePerGas"] == 875000000
+    assert w3.bub.get_block(0, False)["baseFeePerGas"] == 1000000000
+    assert w3.bub.get_block(1, False)["baseFeePerGas"] == 875000000
 
     # Testing the mungers work:
-    # `method1` also calls 'eth_getBlockByNumber' but subtracts 1
+    # `method1` also calls 'bub_getBlockByNumber' but subtracts 1
     # from the user-provided `block_id`
     # due to the second munger. So, `0` from above is a `1` here and `1` is `2`.
     assert w3.module1.method1(1, False)["baseFeePerGas"] == 1000000000

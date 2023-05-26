@@ -5,17 +5,17 @@ def test_sync_filter_against_pending_transactions(
     w3,
     wait_for_transaction,
 ):
-    txn_filter = w3.eth.filter("pending")
-    txn_1_hash = w3.eth.send_transaction(
+    txn_filter = w3.bub.filter("pending")
+    txn_1_hash = w3.bub.send_transaction(
         {
-            "from": w3.eth.coinbase,
+            "from": w3.bub.coinbase,
             "to": "0xd3CdA913deB6f67967B99D67aCDFa1712C293601",
             "value": 12345,
         }
     )
-    txn_2_hash = w3.eth.send_transaction(
+    txn_2_hash = w3.bub.send_transaction(
         {
-            "from": w3.eth.coinbase,
+            "from": w3.bub.coinbase,
             "to": "0xd3CdA913deB6f67967B99D67aCDFa1712C293601",
             "value": 54321,
         }
@@ -34,18 +34,18 @@ def test_sync_filter_against_pending_transactions(
 async def test_async_filter_against_pending_transactions(
     async_w3, async_wait_for_transaction
 ):
-    txn_filter = await async_w3.eth.filter("pending")
-    async_w3_eth_coinbase = await async_w3.eth.coinbase
-    txn_1_hash = await async_w3.eth.send_transaction(
+    txn_filter = await async_w3.bub.filter("pending")
+    async_w3_bub_coinbase = await async_w3.bub.coinbase
+    txn_1_hash = await async_w3.bub.send_transaction(
         {
-            "from": async_w3_eth_coinbase,
+            "from": async_w3_bub_coinbase,
             "to": "0xd3CdA913deB6f67967B99D67aCDFa1712C293601",
             "value": 12345,
         }
     )
-    txn_2_hash = await async_w3.eth.send_transaction(
+    txn_2_hash = await async_w3.bub.send_transaction(
         {
-            "from": async_w3_eth_coinbase,
+            "from": async_w3_bub_coinbase,
             "to": "0xd3CdA913deB6f67967B99D67aCDFa1712C293601",
             "value": 54321,
         }

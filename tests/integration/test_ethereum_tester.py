@@ -13,35 +13,35 @@ from eth_utils import (
     is_integer,
 )
 
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3._utils.contract_sources.contract_data._custom_contract_data import (
+from bubble._utils.contract_sources.contract_data._custom_contract_data import (
     EMITTER_ENUM,
 )
-from web3._utils.module_testing import (
+from bubble._utils.module_testing import (
     EthModuleTest,
     GoEthereumPersonalModuleTest,
     NetModuleTest,
     Web3ModuleTest,
 )
-from web3.providers.eth_tester import (
-    EthereumTesterProvider,
+from bubble.providers.bub_tester import (
+    BubbleTesterProvider,
 )
-from web3.types import (  # noqa: F401
+from bubble.types import (  # noqa: F401
     BlockData,
 )
 
 
 @pytest.fixture(scope="module")
-def eth_tester():
-    _eth_tester = EthereumTester()
-    return _eth_tester
+def bub_tester():
+    _bub_tester = EthereumTester()
+    return _bub_tester
 
 
 @pytest.fixture(scope="module")
-def eth_tester_provider(eth_tester):
-    provider = EthereumTesterProvider(eth_tester)
+def eth_tester_provider(bub_tester):
+    provider = BubbleTesterProvider(bub_tester)
     return provider
 
 
@@ -57,14 +57,14 @@ def w3(eth_tester_provider):
 @pytest.fixture(scope="module")
 def math_contract_deploy_txn_hash(w3, math_contract_factory):
     deploy_txn_hash = math_contract_factory.constructor().transact(
-        {"from": w3.eth.coinbase}
+        {"from": w3.bub.coinbase}
     )
     return deploy_txn_hash
 
 
 @pytest.fixture(scope="module")
 def math_contract(w3, math_contract_factory, math_contract_deploy_txn_hash):
-    deploy_receipt = w3.eth.wait_for_transaction_receipt(math_contract_deploy_txn_hash)
+    deploy_receipt = w3.bub.wait_for_transaction_receipt(math_contract_deploy_txn_hash)
     assert is_dict(deploy_receipt)
     contract_address = deploy_receipt["contractAddress"]
     assert is_checksum_address(contract_address)
@@ -84,14 +84,14 @@ def math_contract_address(math_contract, address_conversion_func):
 @pytest.fixture(scope="module")
 def emitter_contract_deploy_txn_hash(w3, emitter_contract_factory):
     deploy_txn_hash = emitter_contract_factory.constructor().transact(
-        {"from": w3.eth.coinbase}
+        {"from": w3.bub.coinbase}
     )
     return deploy_txn_hash
 
 
 @pytest.fixture(scope="module")
 def emitter_contract(w3, emitter_contract_factory, emitter_contract_deploy_txn_hash):
-    deploy_receipt = w3.eth.wait_for_transaction_receipt(
+    deploy_receipt = w3.bub.wait_for_transaction_receipt(
         emitter_contract_deploy_txn_hash
     )
     assert is_dict(deploy_receipt)
@@ -108,24 +108,24 @@ def emitter_contract_address(emitter_contract, address_conversion_func):
 @pytest.fixture(scope="module")
 def empty_block(w3):
     w3.testing.mine()
-    block = w3.eth.get_block("latest")
+    block = w3.bub.get_block("latest")
     assert not block["transactions"]
     return block
 
 
 @pytest.fixture(scope="module")
 def block_with_txn(w3):
-    txn_hash = w3.eth.send_transaction(
+    txn_hash = w3.bub.send_transaction(
         {
-            "from": w3.eth.coinbase,
-            "to": w3.eth.coinbase,
+            "from": w3.bub.coinbase,
+            "to": w3.bub.coinbase,
             "value": 1,
             "gas": 21000,
             "gas_price": 1000000000,  # needs to be greater than base_fee post London
         }
     )
-    txn = w3.eth.get_transaction(txn_hash)
-    block = w3.eth.get_block(txn["blockNumber"])
+    txn = w3.bub.get_transaction(txn_hash)
+    block = w3.bub.get_block(txn["blockNumber"])
     return block
 
 
@@ -142,11 +142,11 @@ def block_with_txn_with_log(w3, emitter_contract):
         arg1=54321,
     ).transact(
         {
-            "from": w3.eth.coinbase,
+            "from": w3.bub.coinbase,
         }
     )
-    txn = w3.eth.get_transaction(txn_hash)
-    block = w3.eth.get_block(txn["blockNumber"])
+    txn = w3.bub.get_transaction(txn_hash)
+    block = w3.bub.get_block(txn["blockNumber"])
     return block
 
 
@@ -161,14 +161,14 @@ def txn_hash_with_log(block_with_txn_with_log):
 @pytest.fixture(scope="module")
 def revert_contract_deploy_txn_hash(w3, revert_contract_factory):
     deploy_txn_hash = revert_contract_factory.constructor().transact(
-        {"from": w3.eth.coinbase}
+        {"from": w3.bub.coinbase}
     )
     return deploy_txn_hash
 
 
 @pytest.fixture(scope="module")
 def revert_contract(w3, revert_contract_factory, revert_contract_deploy_txn_hash):
-    deploy_receipt = w3.eth.wait_for_transaction_receipt(
+    deploy_receipt = w3.bub.wait_for_transaction_receipt(
         revert_contract_deploy_txn_hash
     )
     assert is_dict(deploy_receipt)
@@ -183,9 +183,9 @@ def revert_contract(w3, revert_contract_factory, revert_contract_deploy_txn_hash
 @pytest.fixture(scope="module")
 def offchain_lookup_contract(w3, offchain_lookup_contract_factory):
     deploy_txn_hash = offchain_lookup_contract_factory.constructor().transact(
-        {"from": w3.eth.coinbase}
+        {"from": w3.bub.coinbase}
     )
-    deploy_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn_hash)
+    deploy_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn_hash)
     assert is_dict(deploy_receipt)
     contract_address = deploy_receipt["contractAddress"]
     assert is_checksum_address(contract_address)
@@ -199,17 +199,17 @@ UNLOCKABLE_PRIVATE_KEY = (
 
 @pytest.fixture(scope="module")
 def unlockable_account_pw():
-    return "web3-testing"
+    return "bubble-testing"
 
 
 @pytest.fixture(scope="module")
 def unlockable_account(w3, unlockable_account_pw):
-    account = w3.geth.personal.import_raw_key(
+    account = w3.node.personal.import_raw_key(
         UNLOCKABLE_PRIVATE_KEY, unlockable_account_pw
     )
-    w3.eth.send_transaction(
+    w3.bub.send_transaction(
         {
-            "from": w3.eth.coinbase,
+            "from": w3.bub.coinbase,
             "to": account,
             "value": w3.to_wei(10, "ether"),
             "gas": 21000,
@@ -220,9 +220,9 @@ def unlockable_account(w3, unlockable_account_pw):
 
 @pytest.fixture
 def unlocked_account(w3, unlockable_account, unlockable_account_pw):
-    w3.geth.personal.unlock_account(unlockable_account, unlockable_account_pw)
+    w3.node.personal.unlock_account(unlockable_account, unlockable_account_pw)
     yield unlockable_account
-    w3.geth.personal.lock_account(unlockable_account)
+    w3.node.personal.lock_account(unlockable_account)
 
 
 @pytest.fixture()
@@ -232,17 +232,17 @@ def unlockable_account_dual_type(unlockable_account, address_conversion_func):
 
 @pytest.fixture
 def unlocked_account_dual_type(w3, unlockable_account_dual_type, unlockable_account_pw):
-    w3.geth.personal.unlock_account(unlockable_account_dual_type, unlockable_account_pw)
+    w3.node.personal.unlock_account(unlockable_account_dual_type, unlockable_account_pw)
     yield unlockable_account_dual_type
-    w3.geth.personal.lock_account(unlockable_account_dual_type)
+    w3.node.personal.lock_account(unlockable_account_dual_type)
 
 
 @pytest.fixture(scope="module")
 def funded_account_for_raw_txn(w3):
     account = "0x39EEed73fb1D3855E90Cbd42f348b3D7b340aAA6"
-    w3.eth.send_transaction(
+    w3.bub.send_transaction(
         {
-            "from": w3.eth.coinbase,
+            "from": w3.bub.coinbase,
             "to": account,
             "value": w3.to_wei(10, "ether"),
             "gas": 21000,
@@ -282,142 +282,142 @@ def disable_auto_mine(func):
 
 
 class TestEthereumTesterEthModule(EthModuleTest):
-    test_eth_max_priority_fee_with_fee_history_calculation = not_implemented(
-        EthModuleTest.test_eth_max_priority_fee_with_fee_history_calculation, ValueError
+    test_bub_max_priority_fee_with_fee_history_calculation = not_implemented(
+        EthModuleTest.test_bub_max_priority_fee_with_fee_history_calculation, ValueError
     )
-    test_eth_sign = not_implemented(EthModuleTest.test_eth_sign, ValueError)
-    test_eth_sign_ens_names = not_implemented(
-        EthModuleTest.test_eth_sign_ens_names, ValueError
+    test_bub_sign = not_implemented(EthModuleTest.test_bub_sign, ValueError)
+    test_bub_sign_ens_names = not_implemented(
+        EthModuleTest.test_bub_sign_ens_names, ValueError
     )
-    test_eth_sign_typed_data = not_implemented(
-        EthModuleTest.test_eth_sign_typed_data, ValueError
+    test_bub_sign_typed_data = not_implemented(
+        EthModuleTest.test_bub_sign_typed_data, ValueError
     )
-    test_eth_sign_transaction_legacy = not_implemented(
-        EthModuleTest.test_eth_sign_transaction_legacy, ValueError
+    test_bub_sign_transaction_legacy = not_implemented(
+        EthModuleTest.test_bub_sign_transaction_legacy, ValueError
     )
-    test_eth_sign_transaction = not_implemented(
-        EthModuleTest.test_eth_sign_transaction, ValueError
+    test_bub_sign_transaction = not_implemented(
+        EthModuleTest.test_bub_sign_transaction, ValueError
     )
-    test_eth_sign_transaction_hex_fees = not_implemented(
-        EthModuleTest.test_eth_sign_transaction_hex_fees, ValueError
+    test_bub_sign_transaction_hex_fees = not_implemented(
+        EthModuleTest.test_bub_sign_transaction_hex_fees, ValueError
     )
-    test_eth_sign_transaction_ens_names = not_implemented(
-        EthModuleTest.test_eth_sign_transaction_ens_names, ValueError
+    test_bub_sign_transaction_ens_names = not_implemented(
+        EthModuleTest.test_bub_sign_transaction_ens_names, ValueError
     )
-    test_eth_submit_hashrate = not_implemented(
-        EthModuleTest.test_eth_submit_hashrate, ValueError
+    test_bub_submit_hashrate = not_implemented(
+        EthModuleTest.test_bub_submit_hashrate, ValueError
     )
-    test_eth_submit_work = not_implemented(
-        EthModuleTest.test_eth_submit_work, ValueError
+    test_bub_submit_work = not_implemented(
+        EthModuleTest.test_bub_submit_work, ValueError
     )
-    test_eth_get_raw_transaction = not_implemented(
-        EthModuleTest.test_eth_get_raw_transaction, ValueError
+    test_bub_get_raw_transaction = not_implemented(
+        EthModuleTest.test_bub_get_raw_transaction, ValueError
     )
-    test_eth_get_raw_transaction_raises_error = not_implemented(
-        EthModuleTest.test_eth_get_raw_transaction, ValueError
+    test_bub_get_raw_transaction_raises_error = not_implemented(
+        EthModuleTest.test_bub_get_raw_transaction, ValueError
     )
-    test_eth_get_raw_transaction_by_block = not_implemented(
-        EthModuleTest.test_eth_get_raw_transaction_by_block, ValueError
+    test_bub_get_raw_transaction_by_block = not_implemented(
+        EthModuleTest.test_bub_get_raw_transaction_by_block, ValueError
     )
-    test_eth_get_raw_transaction_by_block_raises_error = not_implemented(
-        EthModuleTest.test_eth_get_raw_transaction_by_block, ValueError
+    test_bub_get_raw_transaction_by_block_raises_error = not_implemented(
+        EthModuleTest.test_bub_get_raw_transaction_by_block, ValueError
     )
-    test_eth_replace_transaction_already_mined = not_implemented(
-        EthModuleTest.test_eth_replace_transaction_already_mined, ValueError
+    test_bub_replace_transaction_already_mined = not_implemented(
+        EthModuleTest.test_bub_replace_transaction_already_mined, ValueError
     )
 
-    def test_eth_getBlockByHash_pending(self, w3: "Web3") -> None:
-        block = w3.eth.get_block("pending")
+    def test_bub_getBlockByHash_pending(self, w3: "Web3") -> None:
+        block = w3.bub.get_block("pending")
         assert block["hash"] is not None
 
-    @pytest.mark.xfail(reason="eth_feeHistory is not implemented on eth-tester")
-    def test_eth_fee_history(self, w3: "Web3"):
-        super().test_eth_fee_history(w3)
+    @pytest.mark.xfail(reason="bub_feeHistory is not implemented on eth-tester")
+    def test_bub_fee_history(self, w3: "Web3"):
+        super().test_bub_fee_history(w3)
 
-    @pytest.mark.xfail(reason="eth_feeHistory is not implemented on eth-tester")
-    def test_eth_fee_history_with_integer(self, w3: "Web3"):
-        super().test_eth_fee_history_with_integer(w3)
+    @pytest.mark.xfail(reason="bub_feeHistory is not implemented on eth-tester")
+    def test_bub_fee_history_with_integer(self, w3: "Web3"):
+        super().test_bub_fee_history_with_integer(w3)
 
-    @pytest.mark.xfail(reason="eth_feeHistory is not implemented on eth-tester")
-    def test_eth_fee_history_no_reward_percentiles(self, w3: "Web3"):
-        super().test_eth_fee_history_no_reward_percentiles(w3)
+    @pytest.mark.xfail(reason="bub_feeHistory is not implemented on eth-tester")
+    def test_bub_fee_history_no_reward_percentiles(self, w3: "Web3"):
+        super().test_bub_fee_history_no_reward_percentiles(w3)
 
     @disable_auto_mine
-    def test_eth_get_transaction_receipt_unmined(
-        self, eth_tester, w3, unlocked_account
+    def test_bub_get_transaction_receipt_unmined(
+        self, bub_tester, w3, unlocked_account
     ):
-        super().test_eth_get_transaction_receipt_unmined(w3, unlocked_account)
+        super().test_bub_get_transaction_receipt_unmined(w3, unlocked_account)
 
     @disable_auto_mine
-    def test_eth_replace_transaction_legacy(self, eth_tester, w3, unlocked_account):
-        super().test_eth_replace_transaction_legacy(w3, unlocked_account)
+    def test_bub_replace_transaction_legacy(self, bub_tester, w3, unlocked_account):
+        super().test_bub_replace_transaction_legacy(w3, unlocked_account)
 
     @disable_auto_mine
-    def test_eth_replace_transaction(self, eth_tester, w3, unlocked_account):
-        super().test_eth_replace_transaction(w3, unlocked_account)
+    def test_bub_replace_transaction(self, bub_tester, w3, unlocked_account):
+        super().test_bub_replace_transaction(w3, unlocked_account)
 
     @disable_auto_mine
     @pytest.mark.xfail(
         reason="py-evm does not raise on EIP-1559 transaction underpriced"
     )
     # TODO: This might also be an issue in py-evm worth looking into. See reason above.
-    def test_eth_replace_transaction_underpriced(
-        self, eth_tester, w3, unlocked_account
+    def test_bub_replace_transaction_underpriced(
+        self, bub_tester, w3, unlocked_account
     ):
-        super().test_eth_replace_transaction_underpriced(w3, unlocked_account)
+        super().test_bub_replace_transaction_underpriced(w3, unlocked_account)
 
     @disable_auto_mine
-    def test_eth_replace_transaction_incorrect_nonce(
-        self, eth_tester, w3, unlocked_account
+    def test_bub_replace_transaction_incorrect_nonce(
+        self, bub_tester, w3, unlocked_account
     ):
-        super().test_eth_replace_transaction_incorrect_nonce(w3, unlocked_account)
+        super().test_bub_replace_transaction_incorrect_nonce(w3, unlocked_account)
 
     @disable_auto_mine
-    def test_eth_replace_transaction_gas_price_too_low(
-        self, eth_tester, w3, unlocked_account
+    def test_bub_replace_transaction_gas_price_too_low(
+        self, bub_tester, w3, unlocked_account
     ):
-        super().test_eth_replace_transaction_gas_price_too_low(w3, unlocked_account)
+        super().test_bub_replace_transaction_gas_price_too_low(w3, unlocked_account)
 
     @disable_auto_mine
-    def test_eth_replace_transaction_gas_price_defaulting_minimum(
-        self, eth_tester, w3, unlocked_account
+    def test_bub_replace_transaction_gas_price_defaulting_minimum(
+        self, bub_tester, w3, unlocked_account
     ):
-        super().test_eth_replace_transaction_gas_price_defaulting_minimum(
+        super().test_bub_replace_transaction_gas_price_defaulting_minimum(
             w3, unlocked_account
         )
 
     @disable_auto_mine
-    def test_eth_replace_transaction_gas_price_defaulting_strategy_higher(
-        self, eth_tester, w3, unlocked_account
+    def test_bub_replace_transaction_gas_price_defaulting_strategy_higher(
+        self, bub_tester, w3, unlocked_account
     ):
-        super().test_eth_replace_transaction_gas_price_defaulting_strategy_higher(
+        super().test_bub_replace_transaction_gas_price_defaulting_strategy_higher(
             w3, unlocked_account
         )
 
     @disable_auto_mine
-    def test_eth_replace_transaction_gas_price_defaulting_strategy_lower(
-        self, eth_tester, w3, unlocked_account
+    def test_bub_replace_transaction_gas_price_defaulting_strategy_lower(
+        self, bub_tester, w3, unlocked_account
     ):
-        super().test_eth_replace_transaction_gas_price_defaulting_strategy_lower(
+        super().test_bub_replace_transaction_gas_price_defaulting_strategy_lower(
             w3, unlocked_account
         )
 
     @disable_auto_mine
-    def test_eth_modify_transaction_legacy(self, eth_tester, w3, unlocked_account):
-        super().test_eth_modify_transaction_legacy(w3, unlocked_account)
+    def test_bub_modify_transaction_legacy(self, bub_tester, w3, unlocked_account):
+        super().test_bub_modify_transaction_legacy(w3, unlocked_account)
 
     @disable_auto_mine
-    def test_eth_modify_transaction(self, eth_tester, w3, unlocked_account):
-        super().test_eth_modify_transaction(w3, unlocked_account)
+    def test_bub_modify_transaction(self, bub_tester, w3, unlocked_account):
+        super().test_bub_modify_transaction(w3, unlocked_account)
 
     @disable_auto_mine
-    def test_eth_call_old_contract_state(
-        self, eth_tester, w3, math_contract, unlocked_account
+    def test_bub_call_old_contract_state(
+        self, bub_tester, w3, math_contract, unlocked_account
     ):
         # For now, ethereum tester cannot give call results in the pending block.
         # Once that feature is added, then delete the except/else blocks.
         try:
-            super().test_eth_call_old_contract_state(
+            super().test_bub_call_old_contract_state(
                 w3, math_contract, unlocked_account
             )
         except AssertionError as err:
@@ -431,42 +431,42 @@ class TestEthereumTesterEthModule(EthModuleTest):
             )
 
     @pytest.mark.xfail(reason="json-rpc method is not implemented on eth-tester")
-    def test_eth_get_storage_at(self, w3, emitter_contract_address):
-        super().test_eth_get_storage_at(w3, emitter_contract_address)
+    def test_bub_get_storage_at(self, w3, emitter_contract_address):
+        super().test_bub_get_storage_at(w3, emitter_contract_address)
 
     @pytest.mark.xfail(reason="json-rpc method is not implemented on eth-tester")
-    def test_eth_get_storage_at_ens_name(self, w3, emitter_contract_address):
-        super().test_eth_get_storage_at_ens_name(w3, emitter_contract_address)
+    def test_bub_get_storage_at_ens_name(self, w3, emitter_contract_address):
+        super().test_bub_get_storage_at_ens_name(w3, emitter_contract_address)
 
-    def test_eth_estimate_gas_with_block(self, w3, unlocked_account_dual_type):
-        super().test_eth_estimate_gas_with_block(w3, unlocked_account_dual_type)
+    def test_bub_estimate_gas_with_block(self, w3, unlocked_account_dual_type):
+        super().test_bub_estimate_gas_with_block(w3, unlocked_account_dual_type)
 
-    def test_eth_chain_id(self, w3):
-        chain_id = w3.eth.chain_id
+    def test_bub_chain_id(self, w3):
+        chain_id = w3.bub.chain_id
         assert is_integer(chain_id)
         assert chain_id == 131277322940537
 
     @disable_auto_mine
-    def test_eth_wait_for_transaction_receipt_unmined(
-        self, eth_tester, w3, unlocked_account_dual_type
+    def test_bub_wait_for_transaction_receipt_unmined(
+        self, bub_tester, w3, unlocked_account_dual_type
     ):
-        super().test_eth_wait_for_transaction_receipt_unmined(
+        super().test_bub_wait_for_transaction_receipt_unmined(
             w3, unlocked_account_dual_type
         )
 
     @pytest.mark.xfail(
         raises=TypeError, reason="call override param not implemented on eth-tester"
     )
-    def test_eth_call_with_override_code(self, w3, revert_contract):
-        super().test_eth_call_with_override_code(w3, revert_contract)
+    def test_bub_call_with_override_code(self, w3, revert_contract):
+        super().test_bub_call_with_override_code(w3, revert_contract)
 
     @pytest.mark.xfail(
         raises=TypeError, reason="call override param not implemented on eth-tester"
     )
-    def test_eth_call_with_override_param_type_check(self, w3, math_contract):
-        super().test_eth_call_with_override_param_type_check(w3, math_contract)
+    def test_bub_call_with_override_param_type_check(self, w3, math_contract):
+        super().test_bub_call_with_override_param_type_check(w3, math_contract)
 
-    def test_eth_call_revert_with_msg(self, w3, revert_contract, unlocked_account):
+    def test_bub_call_revert_with_msg(self, w3, revert_contract, unlocked_account):
         with pytest.raises(
             TransactionFailed, match="execution reverted: Function has been reverted"
         ):
@@ -477,9 +477,9 @@ class TestEthereumTesterEthModule(EthModuleTest):
                     "to": revert_contract.address,
                 },
             )
-            w3.eth.call(txn_params)
+            w3.bub.call(txn_params)
 
-    def test_eth_call_revert_without_msg(self, w3, revert_contract, unlocked_account):
+    def test_bub_call_revert_without_msg(self, w3, revert_contract, unlocked_account):
         with pytest.raises(TransactionFailed, match="execution reverted"):
             txn_params = revert_contract._prepare_transaction(
                 fn_name="revertWithoutMessage",
@@ -488,9 +488,9 @@ class TestEthereumTesterEthModule(EthModuleTest):
                     "to": revert_contract.address,
                 },
             )
-            w3.eth.call(txn_params)
+            w3.bub.call(txn_params)
 
-    def test_eth_estimate_gas_revert_with_msg(
+    def test_bub_estimate_gas_revert_with_msg(
         self, w3, revert_contract, unlocked_account
     ):
         with pytest.raises(
@@ -503,9 +503,9 @@ class TestEthereumTesterEthModule(EthModuleTest):
                     "to": revert_contract.address,
                 },
             )
-            w3.eth.estimate_gas(txn_params)
+            w3.bub.estimate_gas(txn_params)
 
-    def test_eth_estimate_gas_revert_without_msg(
+    def test_bub_estimate_gas_revert_without_msg(
         self, w3, revert_contract, unlocked_account
     ):
         with pytest.raises(TransactionFailed, match="execution reverted"):
@@ -516,19 +516,19 @@ class TestEthereumTesterEthModule(EthModuleTest):
                     "to": revert_contract.address,
                 },
             )
-            w3.eth.estimate_gas(txn_params)
+            w3.bub.estimate_gas(txn_params)
 
     @disable_auto_mine
-    def test_eth_send_transaction(self, eth_tester, w3, unlocked_account):
-        super().test_eth_send_transaction(w3, unlocked_account)
+    def test_bub_send_transaction(self, bub_tester, w3, unlocked_account):
+        super().test_bub_send_transaction(w3, unlocked_account)
 
     @disable_auto_mine
-    def test_eth_send_transaction_legacy(self, eth_tester, w3, unlocked_account):
-        super().test_eth_send_transaction_legacy(w3, unlocked_account)
+    def test_bub_send_transaction_legacy(self, bub_tester, w3, unlocked_account):
+        super().test_bub_send_transaction_legacy(w3, unlocked_account)
 
     @disable_auto_mine
-    def test_eth_send_raw_transaction(self, eth_tester, w3, unlocked_account):
-        super().test_eth_send_raw_transaction(w3, unlocked_account)
+    def test_bub_send_raw_transaction(self, bub_tester, w3, unlocked_account):
+        super().test_bub_send_raw_transaction(w3, unlocked_account)
 
     @disable_auto_mine
     @pytest.mark.parametrize(
@@ -536,7 +536,7 @@ class TestEthereumTesterEthModule(EthModuleTest):
     )
     def test_gas_price_from_strategy_bypassed_for_dynamic_fee_txn(
         self,
-        eth_tester,
+            bub_tester,
         w3,
         unlocked_account,
         max_fee,
@@ -547,7 +547,7 @@ class TestEthereumTesterEthModule(EthModuleTest):
 
     @disable_auto_mine
     def test_gas_price_from_strategy_bypassed_for_dynamic_fee_txn_no_tip(
-        self, eth_tester, w3, unlocked_account
+        self, bub_tester, w3, unlocked_account
     ):
         super().test_gas_price_from_strategy_bypassed_for_dynamic_fee_txn_no_tip(
             w3,
@@ -557,40 +557,40 @@ class TestEthereumTesterEthModule(EthModuleTest):
     @pytest.mark.xfail(
         raises=ValueError, reason="eth-tester does not have miner_start support"
     )
-    def test_eth_send_transaction_with_nonce(self, eth_tester, w3, unlocked_account):
-        super().test_eth_send_transaction_with_nonce(w3, unlocked_account)
+    def test_bub_send_transaction_with_nonce(self, bub_tester, w3, unlocked_account):
+        super().test_bub_send_transaction_with_nonce(w3, unlocked_account)
 
     @disable_auto_mine
-    def test_eth_send_transaction_default_fees(self, eth_tester, w3, unlocked_account):
-        super().test_eth_send_transaction_default_fees(w3, unlocked_account)
+    def test_bub_send_transaction_default_fees(self, bub_tester, w3, unlocked_account):
+        super().test_bub_send_transaction_default_fees(w3, unlocked_account)
 
     @disable_auto_mine
-    def test_eth_send_transaction_hex_fees(self, eth_tester, w3, unlocked_account):
-        super().test_eth_send_transaction_hex_fees(w3, unlocked_account)
+    def test_bub_send_transaction_hex_fees(self, bub_tester, w3, unlocked_account):
+        super().test_bub_send_transaction_hex_fees(w3, unlocked_account)
 
     @disable_auto_mine
-    def test_eth_send_transaction_no_gas(self, eth_tester, w3, unlocked_account):
-        super().test_eth_send_transaction_no_gas(w3, unlocked_account)
+    def test_bub_send_transaction_no_gas(self, bub_tester, w3, unlocked_account):
+        super().test_bub_send_transaction_no_gas(w3, unlocked_account)
 
     @disable_auto_mine
-    def test_eth_send_transaction_no_max_fee(self, eth_tester, w3, unlocked_account):
-        super().test_eth_send_transaction_no_max_fee(w3, unlocked_account)
+    def test_bub_send_transaction_no_max_fee(self, bub_tester, w3, unlocked_account):
+        super().test_bub_send_transaction_no_max_fee(w3, unlocked_account)
 
-    def test_eth_getBlockByNumber_safe(
+    def test_bub_getBlockByNumber_safe(
         self, w3: "Web3", empty_block: BlockData
     ) -> None:
-        super().test_eth_getBlockByNumber_safe(w3, empty_block)
+        super().test_bub_getBlockByNumber_safe(w3, empty_block)
 
-    def test_eth_getBlockByNumber_finalized(
+    def test_bub_getBlockByNumber_finalized(
         self, w3: "Web3", empty_block: BlockData
     ) -> None:
-        super().test_eth_getBlockByNumber_finalized(w3, empty_block)
+        super().test_bub_getBlockByNumber_finalized(w3, empty_block)
 
-    def test_eth_get_balance_with_block_identifier(self, w3: "Web3") -> None:
+    def test_bub_get_balance_with_block_identifier(self, w3: "Web3") -> None:
         w3.testing.mine()
-        miner_address = w3.eth.get_block(1)["miner"]
-        genesis_balance = w3.eth.get_balance(miner_address, 0)
-        later_balance = w3.eth.get_balance(miner_address, 1)
+        miner_address = w3.bub.get_block(1)["miner"]
+        genesis_balance = w3.bub.get_balance(miner_address, 0)
+        later_balance = w3.bub.get_balance(miner_address, 1)
 
         assert is_integer(genesis_balance)
         assert is_integer(later_balance)
@@ -601,7 +601,7 @@ class TestEthereumTesterNetModule(NetModuleTest):
     pass
 
 
-# Use web3.geth.personal namespace for testing eth-tester
+# Use bubble.node.personal namespace for testing eth-tester
 class TestEthereumTesterPersonalModule(GoEthereumPersonalModuleTest):
     test_personal_sign_and_ecrecover = not_implemented(
         GoEthereumPersonalModuleTest.test_personal_sign_and_ecrecover,
@@ -611,7 +611,7 @@ class TestEthereumTesterPersonalModule(GoEthereumPersonalModuleTest):
     # Test overridden here since eth-tester returns False
     # rather than None for failed unlock
     def test_personal_unlock_account_failure(self, w3, unlockable_account_dual_type):
-        result = w3.geth.personal.unlock_account(
+        result = w3.node.personal.unlock_account(
             unlockable_account_dual_type, "bad-password"
         )
         assert result is False

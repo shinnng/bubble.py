@@ -23,16 +23,16 @@ import pytest
         (["0x" + "00" * 20], "(uint256)", False),
         # Special address behavior
         (
-            "dennisthepeasant.eth",
+            "dennisthepeasant.bub",
             "address",
             True,
         ),  # passes because eth_utils converts to bytes :/
-        ("autonomouscollective.eth", "address", True),
+        ("autonomouscollective.bub", "address", True),
         ("all-TLDs-valid-now.test", "address", True),
         ("ff", "address", True),  # this could theoretically be a top-level domain (TLD)
-        ("0xname.eth", "address", True),  # 0x in name is fine, if it is not a TLD
+        ("0xname.bub", "address", True),  # 0x in name is fine, if it is not a TLD
         (
-            "rejects_invalid_names.eth",
+            "rejects_invalid_names.bub",
             "address",
             False,
         ),  # no underscore in domain names
@@ -58,8 +58,8 @@ import pytest
         (("0x123456", 0), "(bytes2,int128)", False),
         (("0x1234", 0), "(bytes,int128)", True),
         (("1", 0), "(bytes,int128)", False),
-        (("dennisthepeasant.eth", 0), "(address,int128)", True),
-        (("rejects_invalid_domains.eth", 0), "(address,int128)", False),
+        (("dennisthepeasant.bub", 0), "(address,int128)", True),
+        (("rejects_invalid_domains.bub", 0), "(address,int128)", False),
         ((b"anything", 0), "(string,int128)", False),
         ((b"\x80", 0), "(string,int128)", False),
     ),

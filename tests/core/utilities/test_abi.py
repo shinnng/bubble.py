@@ -4,7 +4,7 @@ from typing import (
     NamedTuple,
 )
 
-from web3._utils.abi import (
+from bubble._utils.abi import (
     ExactLengthBytesEncoder,
     abi_data_tree,
     get_aligned_abi_inputs,
@@ -12,7 +12,7 @@ from web3._utils.abi import (
     map_abi_data,
     recursive_dict_to_namedtuple,
 )
-from web3._utils.normalizers import (
+from bubble._utils.normalizers import (
     BASE_RETURN_NORMALIZERS,
     abi_string_to_text,
     addresses_checksummed,

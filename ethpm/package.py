@@ -79,15 +79,15 @@ from ethpm.validation.package import (
 from ethpm.validation.uri import (
     validate_single_matching_uri,
 )
-from web3._utils.validation import (
+from bubble._utils.validation import (
     validate_address,
 )
-from web3.eth import (
+from bubble.bub import (
     Contract,
 )
 
 if TYPE_CHECKING:
-    from web3 import Web3  # noqa: F401
+    from bubble import Web3  # noqa: F401
 
 
 class Package(object):
@@ -115,18 +115,18 @@ class Package(object):
         validate_w3_instance(w3)
 
         self.w3 = w3
-        self.w3.eth._default_contract_factory = cast(Type[Contract], LinkableContract)
+        self.w3.bub._default_contract_factory = cast(Type[Contract], LinkableContract)
         self.manifest = manifest
         self._uri = uri
 
     def update_w3(self, w3: "Web3") -> "Package":
         """
         Returns a new instance of `Package` containing the same manifest,
-        but connected to a different web3 instance.
+        but connected to a different bubble instance.
 
         .. doctest::
 
-           >>> new_w3 = Web3(Web3.EthereumTesterProvider())
+           >>> new_w3 = Web3(Web3.BubbleTesterProvider())
            >>> NewPackage = OwnedPackage.update_w3(new_w3)
            >>> assert NewPackage.w3 == new_w3
            >>> assert OwnedPackage.manifest == NewPackage.manifest
@@ -229,7 +229,7 @@ class Package(object):
 
         - HTTP: `https://api.github.com/repos/:owner/:repo/git/blobs/:file_sha`
 
-        - Registry: `erc1319://registry.eth:1/greeter?version=1.0.0`
+        - Registry: `erc1319://registry.bub:1/greeter?version=1.0.0`
 
         .. code:: python
 
@@ -256,7 +256,7 @@ class Package(object):
 
         In cases where a contract uses a library, the contract factory will have
         unlinked bytecode. The ``ethpm`` package ships with its own subclass of
-        ``web3.contract.Contract``, ``ethpm.contract.LinkableContract`` with a few extra
+        ``bubble.contract.Contract``, ``ethpm.contract.LinkableContract`` with a few extra
         methods and properties related to bytecode linking.
 
         .. code:: python
@@ -286,7 +286,7 @@ class Package(object):
 
         validate_minimal_contract_factory_data(contract_data)
         contract_kwargs = generate_contract_factory_kwargs(contract_data)
-        contract_factory = self.w3.eth.contract(**contract_kwargs)
+        contract_factory = self.w3.bub.contract(**contract_kwargs)
         return contract_factory
 
     def get_contract_instance(self, name: ContractName, address: Address) -> Contract:
@@ -308,7 +308,7 @@ class Package(object):
         contract_kwargs = generate_contract_factory_kwargs(
             self.manifest["contractTypes"][name]
         )
-        contract_instance = self.w3.eth.contract(address=address, **contract_kwargs)
+        contract_instance = self.w3.bub.contract(address=address, **contract_kwargs)
         return contract_instance
 
     #
@@ -373,7 +373,7 @@ class Package(object):
         linked_deployments = get_linked_deployments(deployments)
         if linked_deployments:
             for deployment_data in linked_deployments.values():
-                on_chain_bytecode = self.w3.eth.get_code(deployment_data["address"])
+                on_chain_bytecode = self.w3.bub.get_code(deployment_data["address"])
                 unresolved_linked_refs = normalize_linked_references(
                     deployment_data["runtimeBytecode"]["linkDependencies"]
                 )

@@ -6,7 +6,7 @@ from hexbytes import (
     HexBytes,
 )
 
-from web3 import (
+from bubble import (
     Web3,
 )
 

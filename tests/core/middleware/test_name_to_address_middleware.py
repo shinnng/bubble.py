@@ -1,21 +1,21 @@
 import pytest
 
-from web3 import (
+from bubble import (
     Web3,
     constants,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     InvalidAddress,
 )
-from web3.middleware import (  # noqa: F401
+from bubble.middleware import (  # noqa: F401
     construct_fixture_middleware,
     name_to_address_middleware,
 )
-from web3.providers.base import (
+from bubble.providers.base import (
     BaseProvider,
 )
 
-NAME = "dump.eth"
+NAME = "dump.bub"
 ADDRESS = constants.ADDRESS_ZERO
 BALANCE = 0
 
@@ -42,10 +42,10 @@ def test_pass_name_resolver(w3):
             "net_version": "1",
         }
     )
-    return_balance = construct_fixture_middleware({"eth_getBalance": BALANCE})
+    return_balance = construct_fixture_middleware({"bub_getBalance": BALANCE})
     w3.middleware_onion.inject(return_chain_on_mainnet, layer=0)
     w3.middleware_onion.inject(return_balance, layer=0)
-    assert w3.eth.get_balance(NAME) == BALANCE
+    assert w3.bub.get_balance(NAME) == BALANCE
 
 
 def test_fail_name_resolver(w3):
@@ -55,5 +55,5 @@ def test_fail_name_resolver(w3):
         }
     )
     w3.middleware_onion.inject(return_chain_on_mainnet, layer=0)
-    with pytest.raises(InvalidAddress, match=r".*ethereum\.eth.*"):
-        w3.eth.get_balance("ethereum.eth")
+    with pytest.raises(InvalidAddress, match=r".*ethereum\.bub.*"):
+        w3.bub.get_balance("ethereum.bub")

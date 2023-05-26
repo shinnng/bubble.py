@@ -20,17 +20,17 @@ from tests.core.contracts.utils import (
     async_deploy,
     deploy,
 )
-from web3._utils.abi import (
+from bubble._utils.abi import (
     recursive_dict_to_namedtuple,
 )
-from web3._utils.contract_sources.contract_data.bytes_contracts import (
+from bubble._utils.contract_sources.contract_data.bytes_contracts import (
     BYTES32_CONTRACT_DATA,
     BYTES_CONTRACT_DATA,
 )
-from web3._utils.ens import (
+from bubble._utils.ens import (
     contract_ens_addresses,
 )
-from web3.exceptions import (
+from bubble.exceptions import (
     BadFunctionCallOutput,
     BlockNumberOutofRange,
     FallbackNotFound,
@@ -49,7 +49,7 @@ MULTIPLE_FUNCTIONS = json.loads(
 
 @pytest.fixture(params=[b"\x04\x06", "0x0406"])
 def bytes_contract(w3, request, address_conversion_func):
-    bytes_contract_factory = w3.eth.contract(**BYTES_CONTRACT_DATA)
+    bytes_contract_factory = w3.bub.contract(**BYTES_CONTRACT_DATA)
     return deploy(
         w3, bytes_contract_factory, address_conversion_func, args=[request.param]
     )
@@ -61,7 +61,7 @@ def non_strict_bytes_contract(
     request,
     address_conversion_func,
 ):
-    non_strict_bytes_contract_factory = w3_non_strict_abi.eth.contract(
+    non_strict_bytes_contract_factory = w3_non_strict_abi.bub.contract(
         **BYTES_CONTRACT_DATA
     )
     return deploy(
@@ -79,7 +79,7 @@ def call_transaction():
 
 @pytest.fixture
 def bytes32_contract_factory(w3):
-    return w3.eth.contract(**BYTES32_CONTRACT_DATA)
+    return w3.bub.contract(**BYTES32_CONTRACT_DATA)
 
 
 @pytest.fixture(
@@ -108,7 +108,7 @@ def mismatched_math_contract(
     w3, string_contract_factory, math_contract_factory, address_conversion_func
 ):
     deploy_txn = string_contract_factory.constructor("Caqalai").transact()
-    deploy_receipt = w3.eth.wait_for_transaction_receipt(deploy_txn)
+    deploy_receipt = w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert deploy_receipt is not None
     address = address_conversion_func(deploy_receipt["contractAddress"])
     _mismatched_math_contract = math_contract_factory(address=address)
@@ -294,13 +294,13 @@ def test_call_read_address_variable(contract_with_constructor_address, call):
 def test_init_with_ens_name_arg(w3, contract_with_constructor_address_factory, call):
     with contract_ens_addresses(
         contract_with_constructor_address_factory,
-        [("arg-name.eth", "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413")],
+        [("arg-name.bub", "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413")],
     ):
         address_contract = deploy(
             w3,
             contract_with_constructor_address_factory,
             args=[
-                "arg-name.eth",
+                "arg-name.bub",
             ],
         )
 
@@ -421,20 +421,20 @@ def test_call_address_list_reflector_with_address(
 def test_call_address_reflector_single_name(address_reflector_contract, call):
     with contract_ens_addresses(
         address_reflector_contract,
-        [("dennisthepeasant.eth", "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413")],
+        [("dennisthepeasant.bub", "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413")],
     ):
         result = call(
             contract=address_reflector_contract,
             contract_function="reflect",
-            func_args=["dennisthepeasant.eth"],
+            func_args=["dennisthepeasant.bub"],
         )
         assert result == "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413"
 
 
 def test_call_address_reflector_name_array(address_reflector_contract, call):
     names = [
-        "autonomouscollective.eth",
-        "wedonthavealord.eth",
+        "autonomouscollective.bub",
+        "wedonthavealord.bub",
     ]
     addresses = [
         "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413",
@@ -457,7 +457,7 @@ def test_call_rejects_invalid_ens_name(address_reflector_contract, call):
             call(
                 contract=address_reflector_contract,
                 contract_function="reflect",
-                func_args=["type0.eth"],
+                func_args=["type0.bub"],
             )
 
 
@@ -515,7 +515,7 @@ def test_call_receive_fallback_function(
     assert initial_value == ""
     to = {"to": contract.address}
     merged = {**to, **tx_params}
-    w3.eth.send_transaction(merged)
+    w3.bub.send_transaction(merged)
     final_value = call(contract=contract, contract_function="getText")
     assert final_value == expected
 
@@ -570,7 +570,7 @@ def test_neg_block_indexes_from_the_end(w3, math_contract):
 
 
 def test_returns_data_from_specified_block(w3, math_contract):
-    start_num = w3.eth.get_block("latest").number
+    start_num = w3.bub.get_block("latest").number
     w3.provider.make_request(method="evm_mine", params=[5])
     math_contract.functions.incrementCounter().transact()
     math_contract.functions.incrementCounter().transact()
@@ -625,7 +625,7 @@ def test_function_1_match_identifier_wrong_args_encoding(arrays_contract):
     ),
 )
 def test_function_multiple_error_diagnoses(w3, arg1, arg2, diagnosis):
-    Contract = w3.eth.contract(abi=MULTIPLE_FUNCTIONS)
+    Contract = w3.bub.contract(abi=MULTIPLE_FUNCTIONS)
     regex = message_regex + diagnosis
     with pytest.raises(Web3ValidationError, match=regex):
         if arg2:
@@ -692,13 +692,13 @@ def test_function_wrong_args_for_tuple_collapses_kwargs_in_message(
 
 
 def test_function_no_abi(w3):
-    contract = w3.eth.contract()
+    contract = w3.bub.contract()
     with pytest.raises(NoABIFound):
         contract.functions.thisFunctionDoesNotExist().call()
 
 
 def test_call_abi_no_functions(w3):
-    contract = w3.eth.contract(abi=[])
+    contract = w3.bub.contract(abi=[])
     with pytest.raises(NoABIFunctionsFound):
         contract.functions.thisFunctionDoesNotExist().call()
 
@@ -939,7 +939,7 @@ def test_call_tuple_contract(tuple_contract, method_input, expected):
                     ),
                 ],
             ),
-            "<class 'web3._utils.abi.abi_decoded_namedtuple_factory.<locals>.ABIDecodedNamedTuple'>",  # noqa: E501
+            "<class 'bubble._utils.abi.abi_decoded_namedtuple_factory.<locals>.ABIDecodedNamedTuple'>",  # noqa: E501
             "ABIDecodedNamedTuple(a=123, b=[1, 2], c=[ABIDecodedNamedTuple(x=234, y=[True, False], z=['0x4AD7E79d88650B01EEA2B1f069f01EE9db343d5c', '0xfdF1946A9b40245224488F1a36f4A9ed4844a523', '0xfdF1946A9b40245224488F1a36f4A9ed4844a523']), ABIDecodedNamedTuple(x=345, y=[False, False], z=['0xefd1FF70c185A1C0b125939815225199079096Ee', '0xf35C0784794F3Cd935F5754d3a0EbcE95bEf851e'])])",  # noqa: E501
         ),
     ),
@@ -1093,7 +1093,7 @@ def test_call_nested_tuple_contract(nested_tuple_contract, method_input, expecte
                     ),
                 ],
             ),
-            "<class 'web3._utils.abi.abi_decoded_namedtuple_factory.<locals>.ABIDecodedNamedTuple'>",  # noqa: E501
+            "<class 'bubble._utils.abi.abi_decoded_namedtuple_factory.<locals>.ABIDecodedNamedTuple'>",  # noqa: E501
             "ABIDecodedNamedTuple(t=[ABIDecodedNamedTuple(u=[ABIDecodedNamedTuple(x=1, y=2), ABIDecodedNamedTuple(x=3, y=4), ABIDecodedNamedTuple(x=5, y=6)]), ABIDecodedNamedTuple(u=[ABIDecodedNamedTuple(x=7, y=8), ABIDecodedNamedTuple(x=9, y=10), ABIDecodedNamedTuple(x=11, y=12)])])",  # noqa: E501
         ),
     ),
@@ -1132,15 +1132,15 @@ def test_call_revert_contract(revert_contract):
 
 def test_changing_default_block_identifier(w3, math_contract):
     assert math_contract.caller.counter() == 0
-    assert w3.eth.default_block == "latest"
+    assert w3.bub.default_block == "latest"
 
     math_contract.functions.incrementCounter(7).transact()
     assert math_contract.caller.counter() == 7
 
     assert math_contract.functions.counter().call(block_identifier=1) == 0
-    w3.eth.default_block = 1
+    w3.bub.default_block = 1
     assert math_contract.functions.counter().call(block_identifier=None) == 0
-    w3.eth.default_block = 0x2
+    w3.bub.default_block = 0x2
     assert math_contract.functions.counter().call(block_identifier=None) == 7
 
 
@@ -1149,7 +1149,7 @@ def test_changing_default_block_identifier(w3, math_contract):
 
 @pytest.fixture
 def async_bytes_contract_factory(async_w3):
-    return async_w3.eth.contract(**BYTES_CONTRACT_DATA)
+    return async_w3.bub.contract(**BYTES_CONTRACT_DATA)
 
 
 @pytest_asyncio.fixture(params=[b"\x04\x06", "0x0406"])
@@ -1174,7 +1174,7 @@ async def async_bytes_contract(
     ],
 )
 async def async_bytes32_contract(async_w3, request, address_conversion_func):
-    async_bytes32_contract_factory = async_w3.eth.contract(**BYTES32_CONTRACT_DATA)
+    async_bytes32_contract_factory = async_w3.bub.contract(**BYTES32_CONTRACT_DATA)
     return await async_deploy(
         async_w3,
         async_bytes32_contract_factory,
@@ -1202,7 +1202,7 @@ async def async_mismatched_math_contract(
     address_conversion_func,
 ):
     deploy_txn = await async_string_contract_factory.constructor("Caqalai").transact()
-    deploy_receipt = await async_w3.eth.wait_for_transaction_receipt(deploy_txn)
+    deploy_receipt = await async_w3.bub.wait_for_transaction_receipt(deploy_txn)
     assert deploy_receipt is not None
     address = address_conversion_func(deploy_receipt["contractAddress"])
     _mismatched_math_contract = async_math_contract_factory(address=address)
@@ -1234,7 +1234,7 @@ async def test_async_deploy_with_non_strict_abi_check(
     address_conversion_func,
     args,
 ):
-    async_non_strict_bytes_contract_factory = async_w3_non_strict_abi.eth.contract(
+    async_non_strict_bytes_contract_factory = async_w3_non_strict_abi.bub.contract(
         **BYTES_CONTRACT_DATA
     )
     deployed_contract = await async_deploy(
@@ -1428,13 +1428,13 @@ async def test_async_init_with_ens_name_arg(
 ):
     with contract_ens_addresses(
         async_constructor_with_address_arg_contract_factory,
-        [("arg-name.eth", "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413")],
+        [("arg-name.bub", "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413")],
     ):
         address_contract = await async_deploy(
             async_w3,
             async_constructor_with_address_arg_contract_factory,
             args=[
-                "arg-name.eth",
+                "arg-name.bub",
             ],
         )
 
@@ -1568,12 +1568,12 @@ async def test_async_call_address_reflector_single_name(
 ):
     with contract_ens_addresses(
         async_address_reflector_contract,
-        [("dennisthepeasant.eth", "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413")],
+        [("dennisthepeasant.bub", "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413")],
     ):
         result = await async_call(
             contract=async_address_reflector_contract,
             contract_function="reflect",
-            func_args=["dennisthepeasant.eth"],
+            func_args=["dennisthepeasant.bub"],
         )
         assert result == "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413"
 
@@ -1584,8 +1584,8 @@ async def test_async_call_address_reflector_name_array(
     async_address_reflector_contract, async_call
 ):
     names = [
-        "autonomouscollective.eth",
-        "wedonthavealord.eth",
+        "autonomouscollective.bub",
+        "wedonthavealord.bub",
     ]
     addresses = [
         "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413",
@@ -1614,7 +1614,7 @@ async def test_async_call_rejects_invalid_ens_name(
             await async_call(
                 contract=async_address_reflector_contract,
                 contract_function="reflect",
-                func_args=["type0.eth"],
+                func_args=["type0.bub"],
             )
 
 
@@ -1682,7 +1682,7 @@ async def test_async_call_receive_fallback_function(
     assert initial_value == ""
     to = {"to": contract.address}
     merged = {**to, **tx_params}
-    await async_w3.eth.send_transaction(merged)
+    await async_w3.bub.send_transaction(merged)
     final_value = await async_call(contract=contract, contract_function="getText")
     assert final_value == expected
 
@@ -1781,7 +1781,7 @@ async def test_async_function_1_match_identifier_wrong_args_encoding(
     ),
 )
 async def test_async_function_multiple_error_diagnoses(async_w3, arg1, arg2, diagnosis):
-    Contract = async_w3.eth.contract(abi=MULTIPLE_FUNCTIONS)
+    Contract = async_w3.bub.contract(abi=MULTIPLE_FUNCTIONS)
     regex = message_regex + diagnosis
     with pytest.raises(Web3ValidationError, match=regex):
         if arg2:
@@ -1792,14 +1792,14 @@ async def test_async_function_multiple_error_diagnoses(async_w3, arg1, arg2, dia
 
 @pytest.mark.asyncio
 async def test_async_function_no_abi(async_w3):
-    contract = async_w3.eth.contract()
+    contract = async_w3.bub.contract()
     with pytest.raises(NoABIFound):
         await contract.functions.thisFunctionDoesNotExist().call()
 
 
 @pytest.mark.asyncio
 async def test_async_call_abi_no_functions(async_w3):
-    contract = async_w3.eth.contract(abi=[])
+    contract = async_w3.bub.contract(abi=[])
     with pytest.raises(NoABIFunctionsFound):
         await contract.functions.thisFunctionDoesNotExist().call()
 
@@ -2054,7 +2054,7 @@ async def test_async_call_tuple_contract(async_tuple_contract, method_input, exp
                     ),
                 ],
             ),
-            "<class 'web3._utils.abi.abi_decoded_namedtuple_factory.<locals>.ABIDecodedNamedTuple'>",  # noqa: E501
+            "<class 'bubble._utils.abi.abi_decoded_namedtuple_factory.<locals>.ABIDecodedNamedTuple'>",  # noqa: E501
             "ABIDecodedNamedTuple(a=123, b=[1, 2], c=[ABIDecodedNamedTuple(x=234, y=[True, False], z=['0x4AD7E79d88650B01EEA2B1f069f01EE9db343d5c', '0xfdF1946A9b40245224488F1a36f4A9ed4844a523', '0xfdF1946A9b40245224488F1a36f4A9ed4844a523']), ABIDecodedNamedTuple(x=345, y=[False, False], z=['0xefd1FF70c185A1C0b125939815225199079096Ee', '0xf35C0784794F3Cd935F5754d3a0EbcE95bEf851e'])])",  # noqa: E501
         ),
     ),
@@ -2214,7 +2214,7 @@ async def test_async_call_nested_tuple_contract(
                     ),
                 ],
             ),
-            "<class 'web3._utils.abi.abi_decoded_namedtuple_factory.<locals>.ABIDecodedNamedTuple'>",  # noqa: E501
+            "<class 'bubble._utils.abi.abi_decoded_namedtuple_factory.<locals>.ABIDecodedNamedTuple'>",  # noqa: E501
             "ABIDecodedNamedTuple(t=[ABIDecodedNamedTuple(u=[ABIDecodedNamedTuple(x=1, y=2), ABIDecodedNamedTuple(x=3, y=4), ABIDecodedNamedTuple(x=5, y=6)]), ABIDecodedNamedTuple(u=[ABIDecodedNamedTuple(x=7, y=8), ABIDecodedNamedTuple(x=9, y=10), ABIDecodedNamedTuple(x=11, y=12)])])",  # noqa: E501
         ),
     ),
@@ -2267,7 +2267,7 @@ async def test_async_call_with_one_argument(async_math_contract, call):
 
 @pytest.mark.asyncio
 async def test_async_returns_data_from_specified_block(async_w3, async_math_contract):
-    start_num = await async_w3.eth.get_block("latest")
+    start_num = await async_w3.bub.get_block("latest")
     await async_w3.provider.make_request(method="evm_mine", params=[5])
     await async_math_contract.functions.incrementCounter().transact()
     await async_math_contract.functions.incrementCounter().transact()
@@ -2286,17 +2286,17 @@ async def test_async_returns_data_from_specified_block(async_w3, async_math_cont
 @pytest.mark.asyncio
 async def test_async_changing_default_block_identifier(async_w3, async_math_contract):
     assert await async_math_contract.caller.counter() == 0
-    assert async_w3.eth.default_block == "latest"
+    assert async_w3.bub.default_block == "latest"
 
     await async_math_contract.functions.incrementCounter(7).transact()
     assert await async_math_contract.caller.counter() == 7
 
     assert await async_math_contract.functions.counter().call(block_identifier=1) == 0
-    async_w3.eth.default_block = 1
+    async_w3.bub.default_block = 1
     assert (
         await async_math_contract.functions.counter().call(block_identifier=None) == 0
     )
-    async_w3.eth.default_block = 0x2
+    async_w3.bub.default_block = 0x2
     assert (
         await async_math_contract.functions.counter().call(block_identifier=None) == 7
     )

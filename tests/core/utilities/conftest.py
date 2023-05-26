@@ -1,14 +1,14 @@
 import pytest
 
-from web3.main import (
+from bubble.main import (
     Web3,
 )
-from web3.providers.eth_tester import (
-    EthereumTesterProvider,
+from bubble.providers.bub_tester import (
+    BubbleTesterProvider,
 )
 
 
 @pytest.fixture(scope="module")
 def w3():
-    provider = EthereumTesterProvider()
+    provider = BubbleTesterProvider()
     return Web3(provider)

@@ -10,16 +10,16 @@ from eth_utils.toolz import (
     compose,
 )
 
-from web3 import (
-    EthereumTesterProvider,
+from bubble import (
+    BubbleTesterProvider,
     Web3,
 )
-from web3.method import (
+from bubble.method import (
     Method,
     _apply_request_formatters,
     default_root_munger,
 )
-from web3.module import (
+from bubble.module import (
     Module,
     apply_result_formatters,
 )
@@ -28,17 +28,17 @@ from web3.module import (
 def test_method_accepts_callable_for_selector():
     method = Method(
         mungers=[],
-        json_rpc_method=lambda *_: "eth_method",
+        json_rpc_method=lambda *_: "bub_method",
     )
-    assert method.method_selector_fn() == "eth_method"
+    assert method.method_selector_fn() == "bub_method"
 
 
 def test_method_selector_fn_accepts_str():
     method = Method(
         is_property=True,
-        json_rpc_method="eth_method",
+        json_rpc_method="bub_method",
     )
-    assert method.method_selector_fn() == "eth_method"
+    assert method.method_selector_fn() == "bub_method"
 
 
 def test_method_selector_fn_invalid_arg():
@@ -53,7 +53,7 @@ def test_method_selector_fn_invalid_arg():
 def test_get_formatters_default_formatter_for_falsy_config():
     method = Method(
         mungers=[],
-        json_rpc_method="eth_method",
+        json_rpc_method="bub_method",
     )
 
     default_request_formatters = method.request_formatters(method.method_selector_fn())
@@ -75,19 +75,19 @@ def test_get_formatters_default_formatter_for_falsy_config():
 def test_get_formatters_non_falsy_config_retrieval():
     method = Method(
         mungers=[],
-        json_rpc_method="eth_getBalance",
+        json_rpc_method="bub_getBalance",
     )
     method_name = method.method_selector_fn()
     first_formatter = (method.request_formatters(method_name).first,)
     all_other_formatters = method.request_formatters(method_name).funcs
     assert len(first_formatter + all_other_formatters) == 2
-    assert (method.request_formatters("eth_getBalance").first,) == first_formatter
+    assert (method.request_formatters("bub_getBalance").first,) == first_formatter
 
 
 def test_input_munger_parameter_passthrough_matching_arity():
     method = Method(
         mungers=[lambda m, z, y: ["success"]],
-        json_rpc_method="eth_method",
+        json_rpc_method="bub_method",
     )
     assert method.input_munger(object(), ["first", "second"], {}) == ["success"]
 
@@ -95,7 +95,7 @@ def test_input_munger_parameter_passthrough_matching_arity():
 def test_input_munger_parameter_passthrough_mismatch_arity():
     method = Method(
         mungers=[lambda m, z, y: "success"],
-        json_rpc_method="eth_method",
+        json_rpc_method="bub_method",
     )
     with pytest.raises(TypeError):
         method.input_munger(object(), ["first", "second", "third"], {})
@@ -103,7 +103,7 @@ def test_input_munger_parameter_passthrough_mismatch_arity():
 
 def test_default_input_munger_with_no_input_parameters():
     method = Method(
-        json_rpc_method="eth_method",
+        json_rpc_method="bub_method",
     )
     assert method.input_munger(object(), [], {}) == []
 
@@ -114,14 +114,14 @@ def test_default_input_munger_with_no_input_parameters():
 def test_empty_input_munger_with_no_input_parameters(empty):
     method = Method(
         mungers=empty,
-        json_rpc_method="eth_method",
+        json_rpc_method="bub_method",
     )
     assert method.input_munger(object(), [], {}) == []
 
 
 def test_default_input_munger_with_input_parameters():
     method = Method(
-        json_rpc_method="eth_method",
+        json_rpc_method="bub_method",
     )
     assert method.input_munger(object(), [1], {}) == [1]
 
@@ -132,7 +132,7 @@ def test_default_input_munger_with_input_parameters():
 def test_empty_input_mungers_with_input_parameters(empty):
     method = Method(
         mungers=empty,
-        json_rpc_method="eth_method",
+        json_rpc_method="bub_method",
     )
     assert method.input_munger(object(), [1], {}) == [1]
 
@@ -140,7 +140,7 @@ def test_empty_input_mungers_with_input_parameters(empty):
 def test_default_munger_for_property_with_no_input_parameters():
     method = Method(
         is_property=True,
-        json_rpc_method="eth_method",
+        json_rpc_method="bub_method",
     )
     assert method.input_munger(object(), [], {}) == ()
 
@@ -152,7 +152,7 @@ def test_empty_mungers_for_property_with_no_input_parameters(empty):
     method = Method(
         is_property=True,
         mungers=empty,
-        json_rpc_method="eth_method",
+        json_rpc_method="bub_method",
     )
     assert method.input_munger(object(), [], {}) == ()
 
@@ -160,7 +160,7 @@ def test_empty_mungers_for_property_with_no_input_parameters(empty):
 def test_default_munger_for_property_with_input_parameters_raises_ValidationError():
     method = Method(
         is_property=True,
-        json_rpc_method="eth_method",
+        json_rpc_method="bub_method",
     )
     with pytest.raises(
         ValidationError, match="Parameters cannot be passed to a property"
@@ -175,7 +175,7 @@ def test_empty_mungers_for_property_with_input_parameters_raises_ValidationError
     method = Method(
         is_property=True,
         mungers=empty,
-        json_rpc_method="eth_method",
+        json_rpc_method="bub_method",
     )
     with pytest.raises(
         ValidationError, match="Parameters cannot be passed to a property"
@@ -188,7 +188,7 @@ def test_property_with_mungers_raises_ValidationError():
         Method(
             is_property=True,
             mungers=[lambda m, z, y: "success"],
-            json_rpc_method="eth_method",
+            json_rpc_method="bub_method",
         )
 
 
@@ -206,7 +206,7 @@ def test_property_with_mungers_raises_ValidationError():
         (
             {
                 "mungers": [],
-                "json_rpc_method": "eth_getBalance",
+                "json_rpc_method": "bub_getBalance",
             },
             ["only_the_first_argument_but_expects_two"],
             {},
@@ -215,20 +215,20 @@ def test_property_with_mungers_raises_ValidationError():
         (
             {
                 "mungers": [default_root_munger],
-                "json_rpc_method": "eth_getBalance",
+                "json_rpc_method": "bub_getBalance",
             },
             ["0x0000000000000000000000000000000000000000", 3],
             {},
-            ("eth_getBalance", (("0x" + "00" * 20), "0x3")),
+            ("bub_getBalance", (("0x" + "00" * 20), "0x3")),
         ),
         (
             {
                 "mungers": [default_root_munger],
-                "json_rpc_method": lambda *_: "eth_getBalance",
+                "json_rpc_method": lambda *_: "bub_getBalance",
             },
             ["0x0000000000000000000000000000000000000000", 3],
             {},
-            ("eth_getBalance", (("0x" + "00" * 20), "0x3")),
+            ("bub_getBalance", (("0x" + "00" * 20), "0x3")),
         ),
         (
             {
@@ -237,11 +237,11 @@ def test_property_with_mungers_raises_ValidationError():
                     lambda m, x, y, addr: [x, addr],
                     lambda m, x, addr: [addr, str(x)],
                 ],
-                "json_rpc_method": "eth_getBalance",
+                "json_rpc_method": "bub_getBalance",
             },
             [1, 2, 3, ("0x" + "00" * 20)],
             {},
-            ("eth_getBalance", (("0x" + "00" * 20), "1")),
+            ("bub_getBalance", (("0x" + "00" * 20), "1")),
         ),
         (
             {
@@ -250,7 +250,7 @@ def test_property_with_mungers_raises_ValidationError():
                     lambda m, x, y: [x],
                     lambda m, x: [str(x)],
                 ],
-                "json_rpc_method": "eth_getBalance",
+                "json_rpc_method": "bub_getBalance",
             },
             [1, 2, 3, 4],
             {},
@@ -259,19 +259,19 @@ def test_property_with_mungers_raises_ValidationError():
         (
             {
                 "mungers": [default_root_munger],
-                "json_rpc_method": "eth_getBalance",
+                "json_rpc_method": "bub_getBalance",
             },
             ("0x0000000000000000000000000000000000000000", 3),
             {},
-            ("eth_getBalance", ("0x0000000000000000000000000000000000000000", "0x3")),
+            ("bub_getBalance", ("0x0000000000000000000000000000000000000000", "0x3")),
         ),
         (
             {
-                "json_rpc_method": "eth_getBalance",
+                "json_rpc_method": "bub_getBalance",
             },
             ("0x0000000000000000000000000000000000000000", 3),
             {},
-            ("eth_getBalance", ("0x0000000000000000000000000000000000000000", "0x3")),
+            ("bub_getBalance", ("0x0000000000000000000000000000000000000000", "0x3")),
         ),
         (
             {
@@ -280,29 +280,29 @@ def test_property_with_mungers_raises_ValidationError():
                     lambda m, addr, x, y: [addr, x],
                     lambda m, addr, x: [addr, str(x)],
                 ],
-                "json_rpc_method": "eth_getBalance",
+                "json_rpc_method": "bub_getBalance",
             },
             [("0x" + "00" * 20), 1, 2, 3],
             {},
-            ("eth_getBalance", (("0x" + "00" * 20), "1")),
+            ("bub_getBalance", (("0x" + "00" * 20), "1")),
         ),
         (
             {
                 "mungers": None,
-                "json_rpc_method": "eth_chainId",
+                "json_rpc_method": "bub_chainId",
             },
             [],
             {},
-            ("eth_chainId", ()),
+            ("bub_chainId", ()),
         ),
         (
             {
                 "is_property": True,
-                "json_rpc_method": "eth_chainId",
+                "json_rpc_method": "bub_chainId",
             },
             [],
             {},
-            ("eth_chainId", ()),
+            ("bub_chainId", ()),
         ),
     ),
     ids=[
@@ -361,7 +361,7 @@ def return_exception_raising_formatter(_method):
 
 class FakeModule(Module):
     method = Method(
-        "eth_method",
+        "bub_method",
         mungers=[keywords],
         request_formatters=return_exception_raising_formatter,
     )
@@ -369,7 +369,7 @@ class FakeModule(Module):
 
 @pytest.fixture
 def dummy_w3():
-    return Web3(EthereumTesterProvider(), modules={"fake": FakeModule}, middlewares=[])
+    return Web3(BubbleTesterProvider(), modules={"fake": FakeModule}, middlewares=[])
 
 
 def test_munger_class_method_access_raises_friendly_error():

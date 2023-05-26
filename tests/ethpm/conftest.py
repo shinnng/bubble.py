@@ -19,10 +19,10 @@ from ethpm.tools import (
 from ethpm.uri import (
     create_latest_block_uri,
 )
-from web3 import (
+from bubble import (
     Web3,
 )
-from web3.tools import (
+from bubble.tools import (
     linker,
 )
 
@@ -78,7 +78,7 @@ MANIFESTS_V3 = {
 @pytest.fixture
 def w3():
     w3 = Web3(Web3.EthereumTesterProvider())
-    w3.eth.default_account = w3.eth.accounts[0]
+    w3.bub.default_account = w3.bub.accounts[0]
     return w3
 
 
@@ -177,7 +177,7 @@ def escrow_package(deployer, w3, ethpm_spec_dir):
     escrow_strategy = linker.linker(
         linker.deploy("SafeSendLib"),
         linker.link("Escrow", "SafeSendLib"),
-        linker.deploy("Escrow", w3.eth.accounts[0]),
+        linker.deploy("Escrow", w3.bub.accounts[0]),
     )
     escrow_deployer.register_strategy("Escrow", escrow_strategy)
     return escrow_deployer.deploy("Escrow")
@@ -211,7 +211,7 @@ def safe_math_lib_package_with_alias(deployer, w3):
 def manifest_with_no_matching_deployments(w3, tmpdir, safe_math_manifest):
     w3.testing.mine(5)
     incorrect_genesis_hash = b"\x00" * 31 + b"\x01"
-    block = w3.eth.get_block("earliest")
+    block = w3.bub.get_block("earliest")
     block_uri = create_block_uri(
         w3.to_hex(incorrect_genesis_hash), w3.to_hex(block.hash)
     )

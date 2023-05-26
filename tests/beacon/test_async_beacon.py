@@ -3,10 +3,10 @@ from random import (
     randint,
 )
 
-from web3._utils.request import (
+from bubble._utils.request import (
     _async_session_cache,
 )
-from web3.beacon import (
+from bubble.beacon import (
     AsyncBeacon,
 )
 

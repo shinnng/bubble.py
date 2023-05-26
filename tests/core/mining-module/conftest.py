@@ -7,5 +7,5 @@ def always_wait_for_mining_start(w3, wait_for_miner_start, skip_if_testrpc):
 
     wait_for_miner_start(w3)
 
-    assert w3.eth.mining
-    assert w3.eth.hashrate
+    assert w3.bub.mining
+    assert w3.bub.hashrate

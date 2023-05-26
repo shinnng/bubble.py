@@ -1,6 +1,6 @@
 import pytest
 
-from web3._utils.transactions import (
+from bubble._utils.transactions import (
     assert_valid_transaction_params,
     extract_valid_transaction_params,
     fill_transaction_defaults,
@@ -142,13 +142,13 @@ def test_fill_transaction_defaults_for_all_params(w3):
     default_transaction = fill_transaction_defaults(w3, {})
 
     assert default_transaction == {
-        "chainId": w3.eth.chain_id,
+        "chainId": w3.bub.chain_id,
         "data": b"",
-        "gas": w3.eth.estimate_gas({}),
+        "gas": w3.bub.estimate_gas({}),
         "maxFeePerGas": (
-            w3.eth.max_priority_fee + (2 * w3.eth.get_block("latest")["baseFeePerGas"])
+            w3.bub.max_priority_fee + (2 * w3.bub.get_block("latest")["baseFeePerGas"])
         ),
-        "maxPriorityFeePerGas": w3.eth.max_priority_fee,
+        "maxPriorityFeePerGas": w3.bub.max_priority_fee,
         "value": 0,
     }
 
@@ -157,14 +157,14 @@ def test_fill_transaction_defaults_for_zero_gas_price(w3):
     def gas_price_strategy(_w3, tx):
         return 0
 
-    w3.eth.set_gas_price_strategy(gas_price_strategy)
+    w3.bub.set_gas_price_strategy(gas_price_strategy)
 
     default_transaction = fill_transaction_defaults(w3, {})
 
     assert default_transaction == {
-        "chainId": w3.eth.chain_id,
+        "chainId": w3.bub.chain_id,
         "data": b"",
-        "gas": w3.eth.estimate_gas({}),
+        "gas": w3.bub.estimate_gas({}),
         "value": 0,
         "gasPrice": 0,
     }

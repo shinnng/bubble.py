@@ -31,13 +31,13 @@ block is not found, a ``BlockNotFound`` or a ``TransactionNotFound``
 error will be thrown as appropriate. This applies to the
 following web3 methods:
 
-- :meth:`~web3.eth.Eth.getTransaction` will throw a ``TransactionNotFound`` error
-- :meth:`~web3.eth.Eth.getTransactionReceipt` will throw a ``TransactionNotFound`` error
-- :meth:`~web3.eth.Eth.getTransactionByBlock` will throw a ``TransactionNotFound`` error
-- :meth:`~web3.eth.Eth.getTransactionCount` will throw a ``BlockNotFound`` error
-- :meth:`~web3.eth.Eth.getBlock` will throw a ``BlockNotFound`` error
-- :meth:`~web3.eth.Eth.getUncleCount` will throw a ``BlockNotFound`` error
-- :meth:`~web3.eth.Eth.getUncleByBlock` will throw a ``BlockNotFound`` error
+- :meth:`~web3.bub.Bub.getTransaction` will throw a ``TransactionNotFound`` error
+- :meth:`~web3.bub.Bub.getTransactionReceipt` will throw a ``TransactionNotFound`` error
+- :meth:`~web3.bub.Bub.getTransactionByBlock` will throw a ``TransactionNotFound`` error
+- :meth:`~web3.bub.Bub.getTransactionCount` will throw a ``BlockNotFound`` error
+- :meth:`~web3.bub.Bub.getBlock` will throw a ``BlockNotFound`` error
+- :meth:`~web3.bub.Bub.getUncleCount` will throw a ``BlockNotFound`` error
+- :meth:`~web3.bub.Bub.getUncleByBlock` will throw a ``BlockNotFound`` error
 
 Removed Methods
 ~~~~~~~~~~~~~~~
@@ -49,24 +49,24 @@ Removed Methods
 - ``contract.transact`` was removed for ``contract.<functions/events>.<method name>.transact``
 - ``contract.eventFilter`` was removed for ``contract.events.<event name>.createFilter``
 - ``middleware_stack`` was renamed to :meth:`~Web3.middleware_onion`
-- ``web3.miner.hashrate`` was a duplicate of :meth:`~web3.eth.Eth.hashrate` and was removed.
+- ``web3.miner.hashrate`` was a duplicate of :meth:`~web3.bub.Bub.hashrate` and was removed.
 - ``web3.version.network`` was a duplicate of :meth:`~web3.net.Net.version` and was removed.
 - ``web3.providers.tester.EthereumTesterProvider`` and ``web3.providers.tester.TestRPCProvider`` have been removed for :meth:`~web3.providers.eth_tester.EthereumTesterProvider`
-- ``web3.eth.enableUnauditedFeatures`` was removed
-- ``web3.txpool`` was moved to :meth:`~web3.geth.txpool`
+- ``web3.bub.enableUnauditedFeatures`` was removed
+- ``web3.txpool`` was moved to :meth:`~web3.node.txpool`
 - ``web3.version.node`` was removed for ``web3.clientVersion``
-- ``web3.version.ethereum`` was removed for :meth:`~web3.eth.Eth.protocolVersion`
-- Relocated personal RPC endpoints to reflect Parity and Geth implementations:
+- ``web3.version.ethereum`` was removed for :meth:`~web3.bub.Bub.protocolVersion`
+- Relocated personal RPC endpoints to reflect Parity and Bub implementations:
 
-  - ``web3.personal.listAccounts`` was removed for :meth:`~web3.geth.personal.listAccounts` or :meth:`~web3.parity.personal.listAccounts`
-  - ``web3.personal.importRawKey`` was removed for :meth:`~web3.geth.personal.importRawKey` or :meth:`~web3.parity.personal.importRawKey`
-  - ``web3.personal.newAccount`` was removed for :meth:`~web3.geth.personal.newAccount` or :meth:`~web3.parity.personal.newAccount`
-  - ``web3.personal.lockAccount`` was removed for :meth:`~web3.geth.personal.lockAccount`
-  - ``web3.personal.unlockAccount`` was removed for :meth:`~web3.geth.personal.unlockAccount` or :meth:`~web3.parity.personal.unlockAccount`
-  - ``web3.personal.sendTransaction`` was removed for :meth:`~web3.geth.personal.sendTransaction` or :meth:`~web3.parity.personal.sendTransaction`
+  - ``web3.personal.listAccounts`` was removed for :meth:`~web3.node.personal.listAccounts` or :meth:`~web3.parity.personal.listAccounts`
+  - ``web3.personal.importRawKey`` was removed for :meth:`~web3.node.personal.importRawKey` or :meth:`~web3.parity.personal.importRawKey`
+  - ``web3.personal.newAccount`` was removed for :meth:`~web3.node.personal.newAccount` or :meth:`~web3.parity.personal.newAccount`
+  - ``web3.personal.lockAccount`` was removed for :meth:`~web3.node.personal.lockAccount`
+  - ``web3.personal.unlockAccount`` was removed for :meth:`~web3.node.personal.unlockAccount` or :meth:`~web3.parity.personal.unlockAccount`
+  - ``web3.personal.sendTransaction`` was removed for :meth:`~web3.node.personal.sendTransaction` or :meth:`~web3.parity.personal.sendTransaction`
 
-- Relocated ``web3.admin`` module to ``web3.geth`` namespace
-- Relocated ``web3.miner`` module to ``web3.geth`` namespace
+- Relocated ``web3.admin`` module to ``web3.bub`` namespace
+- Relocated ``web3.miner`` module to ``web3.bub`` namespace
 
 Deprecated Methods
 ~~~~~~~~~~~~~~~~~~
@@ -74,10 +74,10 @@ Expect the following methods to be removed in v6:
 
 - ``web3.sha3`` was deprecated for :meth:`~Web3.keccak`
 - ``web3.soliditySha3`` was deprecated for :meth:`~Web3.solidityKeccak`
-- :meth:`~web3.net.Net.chainId` was deprecated for :meth:`~web3.eth.Eth.chainId`.
+- :meth:`~web3.net.Net.chainId` was deprecated for :meth:`~web3.bub.Bub.chainId`.
   Follow issue `#1293 <https://github.com/ethereum/web3.py/issues/1293>`_ for details
-- ``web3.eth.getCompilers()`` was deprecated and will not be replaced
-- :meth:`~web3.eth.getTransactionFromBlock()` was deprecated for :meth:`~Web3.getTransactionByBlock`
+- ``web3.bub.getCompilers()`` was deprecated and will not be replaced
+- :meth:`~web3.bub.getTransactionFromBlock()` was deprecated for :meth:`~Web3.getTransactionByBlock`
 
 Deprecated ConciseContract and ImplicitContract
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
